@@ -33,7 +33,7 @@ connect to a {+database-deployment+} with an application using a
 
 .. |arrow| unicode:: U+27A4
 
-|arrow| Use the **Select your language** drop-down menu to set the 
+|arrow| Use the **Select your language** drop-down menu to set the
 language of the example on this page.
 
 ----------
@@ -50,12 +50,12 @@ Prerequisites
 
    .. tab::
       :tabid: cpp
-      
+
    .. tab::
       :tabid: csharp
 
    .. tab::
-      :tabid: go   
+      :tabid: go
 
    .. tab::
       :tabid: java-sync
@@ -75,13 +75,13 @@ Prerequisites
    .. tab::
       :tabid: ruby
 
-   .. tab:: 
+   .. tab::
       :tabid: rust-async
 
-   .. tab:: 
+   .. tab::
       :tabid: rust-sync
- 
-   .. tab:: 
+
+   .. tab::
       :tabid: scala
 
    .. tab::
@@ -108,7 +108,7 @@ compatibility matrix for your :driver:`MongoDB driver </>`.
 Optimized Connection Strings for Sharded {+Clusters+} Behind a Private Endpoint
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can connect to your sharded {+cluster+} using a driver and an 
+You can connect to your sharded {+cluster+} using a driver and an
 :ref:`optimized connection string <optimized-connection-strings>`.
 
 |tls|
@@ -130,8 +130,8 @@ Connect Your Application
 ------------------------
 
 .. Attention writers: If you make changes to the following procedure
-.. please check the related procedures in the following Server docs 
-.. page(s) to see if they require changes as well: 
+.. please check the related procedures in the following Server docs
+.. page(s) to see if they require changes as well:
 .. www.mongodb.com/docs/manual/reference/connection-string/
 
 .. include:: /includes/steps-connect-to-database-deployment-driver.rst
@@ -141,9 +141,9 @@ Connect Your Application
 Driver Examples
 ---------------
 
-In the following example, you authenticate and connect to |a-service| 
-{+database-deployment+} by using a :manual:`URI connection string 
-</reference/connection-string/>`. Replace the placeholders in the example 
+In the following example, you authenticate and connect to |a-service|
+{+database-deployment+} by using a :manual:`URI connection string
+</reference/connection-string/>`. Replace the placeholders in the example
 with your credentials and deployment details.
 
 .. tabs-drivers::
@@ -262,14 +262,14 @@ with your credentials and deployment details.
       .. code-block:: go
 
          uri := "mongodb+srv://<db_username>:<db_password>@<clusterName>.mongodb.net/?retryWrites=true&w=majority"
-         
+
          clientOpts := options.Client().ApplyURI(uri).SetTimeout(10 * time.Second)
-         
+
          client, err := mongo.Connect(clientOpts)
          if err != nil {
             log.Fatalf("Failed to connect to MongoDB: %v", err)
          }
-         
+
          defer func() {
             if err = client.Disconnect(); err != nil {
                log.Fatalf("Failed to disconnect from MongoDB: %v", err)
@@ -278,7 +278,7 @@ with your credentials and deployment details.
 
          ctx := context.Background()
 
-         // Ping the primary 
+         // Ping the primary
          if err := client.Ping(ctx, readpref.Primary()); err != nil {
             log.Fatalf("Failed to ping MongoDB: %v", err)
          }
@@ -344,7 +344,7 @@ with your credentials and deployment details.
             .applyConnectionString(ConnectionString(uri))
             .serverApi(serverApi)
             .build()
-            
+
          // Create a new client and connect to the server
          val mongoClient = MongoClient.create(settings)
          val database = mongoClient.getDatabase("<databaseName>")
@@ -353,8 +353,8 @@ with your credentials and deployment details.
             val command = Document("ping", BsonInt64(1))
             val commandResult = database.runCommand(command)
             println("Pinged your deployment. You successfully connected to MongoDB!")
-         } 
-         
+         }
+
          catch (me: MongoException) {
             System.err.println(me)
          }
@@ -375,32 +375,7 @@ with your credentials and deployment details.
 
          .. include:: /includes/extracts/driver-free-tier-node.rst
 
-      .. code-block:: javascript
-
-         import mongodb from 'mongodb';
-         
-         const MongoClient = mongodb.MongoClient;
-         const uri = "mongodb+srv://<db_username>:<db_password>@<clusterName>.mongodb.net/?retryWrites=true&w=majority";
-         const client = new MongoClient(uri);
-         client.connect(err => {
-           const collection = client.db("<databaseName>").collection("<collectionName>");
-           // perform actions on the collection object
-           client.close();
-         });
-
-      .. include:: /includes/extracts/connection-details-driver.rst
-
-      .. example::
-
-         The following connection string specifies the ``cluster0`` deployment and ``test``
-         database component, and includes the ``authSource=admin`` option.
-
-         .. code-block:: javascript
-
-            var uriTestDb = "mongodb+srv://<db_username>:<db_password>@cluster0.mongodb.net/test?ssl=true&authSource=admin&w=majority";
-            MongoClient.connect(uriTestDb, function(err, db) {
-               db.close();
-            });
+      .. include:: /includes/search/node-connect.rst
 
       .. list-table::
          :header-rows: 1
@@ -583,7 +558,7 @@ with your credentials and deployment details.
 
            - `Version 7.0.0 and later <https://www.mongodb.com/docs/mongoid/7.0/>`_
 
-   .. tab:: 
+   .. tab::
       :tabid: rust-async
 
       The default async runtime used by the driver is ``tokio``. To use a
@@ -604,7 +579,7 @@ with your credentials and deployment details.
                  .await?;
                  let client = Client::with_options(client_options)?;
                  let _database = client.database("<databaseName>");
-                 
+
              // List the names of the databases in that cluster
              for db_name in client.list_database_names(None, None)? {
                  println!("{}", db_name);
@@ -622,12 +597,12 @@ with your credentials and deployment details.
            - See the {+reference-compatibility-mongodb-rust+} for the
              latest recommended driver versions.
 
-   .. tab:: 
+   .. tab::
       :tabid: rust-sync
-     
+
       Make sure you enabled the sync API. See `Enabling the sync API <https://github.com/mongodb/mongo-rust-driver#enabling-the-sync-api>`__
       for more details.
-      
+
       .. note::
 
          .. include:: /includes/extracts/driver-free-tier-rust.rst
@@ -645,7 +620,7 @@ with your credentials and deployment details.
              .database("admin")
              .run_command(doc! {"ping": 1}, None)?;
          println!("Connected successfully.");
-    
+
          // List the names of the databases in that cluster
          for db_name in client.list_database_names(None, None)? {
              println!("{}", db_name);
@@ -663,7 +638,7 @@ with your credentials and deployment details.
            - See the {+reference-compatibility-mongodb-rust+} for the
              latest recommended driver versions.
 
-   .. tab:: 
+   .. tab::
       :tabid: scala
 
       .. note::
@@ -687,7 +662,7 @@ with your credentials and deployment details.
            - See the {+reference-compatibility-mongodb-scala+} for the
              latest recommended driver versions.
 
-   .. tab:: 
+   .. tab::
       :tabid: swift-async
 
       .. note::
@@ -698,7 +673,7 @@ with your credentials and deployment details.
 
          import MongoSwift
          import NIO
-         
+
          let elg = MultiThreadedEventLoopGroup(numberOfThreads: 4)
 
          let uri = "mongodb+srv://<db_username>:<db_password>@<clusterName>.mongodb.net/?retryWrites=true&w=majority"
@@ -708,11 +683,11 @@ with your credentials and deployment details.
          )
 
          defer {
-    
+
              // clean up driver resources
              try? client.syncClose()
              cleanupMongoSwift()
-    
+
              // shut down EventLoopGroup
              try? elg.syncShutdownGracefully()
          }
@@ -730,7 +705,7 @@ with your credentials and deployment details.
            - See the {+reference-compatibility-mongodb-swift+} for the
              latest recommended driver versions.
 
-   .. tab:: 
+   .. tab::
       :tabid: swift-sync
 
       .. note::

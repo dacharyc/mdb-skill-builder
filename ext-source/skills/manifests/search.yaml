@@ -1,0 +1,39 @@
+id: search
+title: MongoDB Search
+description: Help developers implement and optimize MongoDB Search
+mainContent:
+  type: composite
+  sources:
+  - path: content-mdx/atlas/_includes/search/node-connect.mdx
+    header: Connection Strings for Search
+  - path: content-mdx/atlas/atlas-search/search-options.mdx
+    header: Search Options
+  - header: Search Query Examples
+    content: |
+      The following examples demonstrate common search patterns.
+  - path: content/atlas/source/includes/fts/quickstart/queries/simple-fts-query.js
+  - path: content/atlas/source/includes/fts/quickstart/queries/complex-fts-query.js
+  - path: content/atlas/source/includes/fts/quickstart/queries/sort-query.js
+  - header: Task-Specific Guides
+    content: |
+      For specific implementation tasks, see:
+references:
+- filename: manage-indexes.md
+  linkText: Manage Search Indexes
+  sources:
+  - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-create-index-node.mdx
+  - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-view-index-node.mdx
+  - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-edit-index-node.mdx
+  - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-delete-index-node.mdx
+- filename: write-queries.md
+  linkText: Write Search Queries
+  sources:
+  - path: content-mdx/atlas/atlas-search/path-construction.mdx
+  - path: content-mdx/atlas/atlas-search/analyzers.mdx
+maxTokens: 2500
+metadata:
+  tags:
+  - atlas
+  - search
+  - full-text-search
+  version: current
