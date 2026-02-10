@@ -1,0 +1,177 @@
+.. meta::
+   :keywords: atlas ui, atlas api
+   :description: Resolve disk space alerts in Atlas by enabling Auto-Expand Storage or manually increasing storage, and consider upgrading to a larger cluster tier for long-term solutions.
+
+.. _disk-space-used:
+
+==================
+Fix Storage Issues
+==================
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+``Disk Space % Used`` alerts indicate the percentage of used disk space
+on a partition reaches a specified threshold.
+
+.. note::
+
+   The UI displays :guilabel:`GB`, but all disk space metrics are in
+   gibibytes (GiB).
+
+
+Alert Conditions Configured by Default
+---------------------------------------
+
+|service| configures the following alert conditions by default to help you
+ensure dedicated cluster availability and prevent the cluster from going down due
+to disk exhaustion on the primary node and to maintain read availability.
+
+- :alert:`Writes have been blocked on your cluster due to critically low disk space <Writes have been blocked on your cluster due to critically low disk space>`
+  occurs when the percentage of used disk has exceeded :ref:`write-blocking-thresholds <write-blocking-thresholds>`,
+  and |service| has :ref:`blocked writes <cluster-blocking-writes>` to maintain read availability.
+
+  You can view disk metrics through :ref:`Real-Time Performance Panel <real-time-metrics-status-tab>`
+  and review :ref:`MongoDB process metrics <review-mongodb-process-metrics>`.
+
+- :alert:`Writes have been unblocked on your cluster <Writes have been unblocked on your cluster>`
+  occurs when the percentage of used disk on the primary node has fallen below the
+  :ref:`unblocking thresholds <write-blocking-thresholds>`, and |service|
+  automatically unblocks writes to the cluster. See also :ref:`Unblocking Writes <unblocking-writes>`.
+
+  This is an information-only alert that doesn't require any action on your part.
+  To prevent future write-blocking events, we recommend that you monitor your
+  cluster's disk usage. To learn more, see :ref:`Preventing Write-Blocking <write-blocking-prevention>`.
+
+Alert Conditions You Can Configure
+----------------------------------
+
+You can configure the following alert condition in the project-level 
+:ref:`alert settings <configure-alerts>` page to trigger alerts.
+
+:alert:`Disk space % used on Data Partition
+<Disk space % used on Data Partition is>` occurs when the
+percentage of disk space used on any partition that contains the
+MongoDB collection data meets or exceeds a certain threshold.
+:ref:`By default <default-alert-settings>`, the threshold is 90
+percent of the cluster's :ref:`configured storage size <scale-cluster>`.
+
+Common Triggers
+---------------
+
+The following common events can trigger ``Disk Space % Used`` alerts:
+
+- The percentage of used disk has exceeded :ref:`write-blocking-thresholds <write-blocking-thresholds>`,
+  and |service| has :ref:`blocked writes <cluster-blocking-writes>`
+  to maintain read availability.
+
+- The disk is full and :ref:`Auto-Expand Storage
+  <scale-cluster-storage>` is not enabled.
+
+- Auto-Expand Storage is enabled, but the disk filled too quickly
+  for |service| to expand the cluster's storage space. This
+  can happen during data migration.
+
+- Auto-Expand Storage is enabled, but |service| cannot expand the
+  cluster's storage space because it has reached the maximum storage
+  capacity for this cluster. For more information on cluster tier
+  limits, see the :ref:`Amazon Web Services <amazon-aws-configuration-options>`,
+  :ref:`Google Cloud Platform <google-gcp-configuration-options>`, and
+  :ref:`Microsoft Azure <microsoft-azure-configuration-options>`
+  instance configuration options.
+
+.. _disk-space-used-fix-problem:
+
+Fix the Immediate Problem
+-------------------------
+
+Consider the following actions to help resolve ``Disk Space % Used``
+alerts through the {+atlas-ui+} or API.
+
+.. tabs::
+
+   .. tab:: Atlas UI
+      :tabid: atlas-ui
+
+      - :ref:`Enable Auto-Expand Storage <scale-cluster-storage>`.
+
+        .. note::
+
+    		   If the disk fills too quickly, |service| might not be
+    		   able to expand the cluster's storage space in time,
+    		   even if Auto-Expand Storage is enabled.
+
+      - Manually increase the :guilabel:`Storage` of this cluster
+        in the :guilabel:`Cluster Tier` section of the
+        :ref:`configuration page <scale-cluster-storage>`.
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: atlas-api
+
+      - :oas-bump-atlas-op:`Enable Auto-Expand Storage
+        <updategroupcluster>` using the
+        ``autoScaling.diskGBEnabled`` parameter.
+
+        .. note::
+
+    		   If the disk fills too quickly, |service| might not be
+    		   able to expand the cluster's storage space in time,
+    		   even if Auto-Expand Storage is enabled.
+
+      - :oas-bump-atlas-op:`Increase the storage of this cluster
+        <updategroupcluster>` using the
+        ``diskSizeGB`` parameter.
+
+        .. note::
+
+           For :guilabel:`Low CPU` and :guilabel:`General` clusters, the 
+           UI displays :guilabel:`GB`, but the ``diskSizeGB`` parameter
+           value is in gibibytes (GiB).
+
+Implement a Long-Term Solution
+------------------------------
+
+Consider the following long-term solutions to help resolve 
+``Disk Space % Used`` alerts through the {+atlas-ui+} or API.
+
+.. tabs::
+
+   .. tab:: Atlas UI
+      :tabid: atlas-ui
+
+      If you have reached the maximum storage capacity for this
+      cluster, upgrade to a larger cluster tier in the
+      :guilabel:`Cluster Tier` section of the 
+      :ref:`configuration page <scale-cluster-instance>`.
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: atlas-api
+
+      If you have reached the maximum storage capacity for this
+      cluster, :oas-bump-atlas-op:`specify a larger cluster tier
+      <updategroupcluster>` using the
+      ``replicationSpecs[n].regionConfigs[m].electableSpecs.instanceSize``
+      parameter.
+
+Monitor Your Progress
+---------------------
+
+You can observe a high percentage of used disk space in the following
+ways:
+
+- In the cluster :ref:`metrics <monitor-cluster-metrics>`, the
+  :guilabel:`Disk Usage` graph displays the used disk space in
+  yellow. This indicates that the used disk space is approximately
+  70 percent of the |service| cluster's :ref:`configured storage
+  size <scale-cluster-instance>`.
+
+- |service| nodes are unhealthy, because the
+  used disk space reached the cluster's
+  :ref:`configured storage size <scale-cluster-instance>`.
+
+- The cluster :ref:`blocks writes <cluster-blocking-writes>` and connections from the client.

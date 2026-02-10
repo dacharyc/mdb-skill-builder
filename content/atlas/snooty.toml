@@ -1,0 +1,1172 @@
+name = "cloud-docs"
+title = "Atlas"
+
+sharedinclude_root = "https://raw.githubusercontent.com/10gen/docs-shared/main/"
+
+intersphinx = [ "https://www.mongodb.com/docs/manual/objects.inv",
+                "https://www.mongodb.com/docs/drivers/objects.inv",
+                "https://www.mongodb.com/docs/database-tools/objects.inv",
+                "https://www.mongodb.com/docs/mongocli/current/objects.inv",
+                "https://www.mongodb.com/docs/mongodb-shell/objects.inv",
+                "https://www.mongodb.com/docs/atlas/app-services/objects.inv",
+                "https://www.mongodb.com/docs/languages/python/pymongo-driver/objects.inv",
+                "https://www.mongodb.com/docs/drivers/csharp/current/objects.inv",
+                "https://www.mongodb.com/docs/drivers/go/current/objects.inv",
+                "https://www.mongodb.com/docs/drivers/java/sync/current/objects.inv",
+                "https://www.mongodb.com/docs/drivers/kotlin/coroutine/current/objects.inv",
+                "https://www.mongodb.com/docs/languages/kotlin/kotlin-sync-driver/current/objects.inv",
+                "https://www.mongodb.com/docs/drivers/node/current/objects.inv",
+                "https://www.mongodb.com/docs/php-library/current/objects.inv",
+                "https://www.mongodb.com/docs/drivers/rust/current/objects.inv",
+                "https://www.mongodb.com/docs/languages/scala/scala-driver/current/objects.inv",
+                "https://www.mongodb.com/docs/ruby-driver/current/objects.inv",
+                "https://www.mongodb.com/docs/charts/objects.inv",
+                "https://www.mongodb.com/docs/atlas/architecture/current/objects.inv",
+                "https://www.mongodb.com/docs/relational-migrator/objects.inv",
+                "https://www.mongodb.com/docs/mongosync/current/objects.inv",
+                "https://www.mongodb.com/docs/mcp-server/objects.inv",
+                "https://www.mongodb.com/docs/drivers/rust/current/objects.inv",
+                "https://www.mongodb.com/docs/compass/current/objects.inv",
+                "https://www.mongodb.com/docs/kubernetes/current/objects.inv",
+                "https://www.mongodb.com/docs/voyageai/objects.inv",
+                "https://www.mongodb.com/docs/sql-interface/objects.inv",
+              ]
+
+toc_landing_pages = [
+    "/alert-resolutions",
+    "/alerts",
+    "/analyze-slow-queries",
+    "/api",
+    "/api/atlas-admin-api",
+    "/api/data-api",
+    "/api/versioned-api-overview",
+    "/archive-snapshot",
+    "/atlas-cli",
+    "/atlas-operator",
+    "/atlas-search",
+    "/atlas-ui",
+    "/atlas-ui/collections",
+    "/atlas-ui/documents",
+    "/atlas-ui/query/filter",
+    "/atlas-ui/query-with-natural-language",
+    "/atlas-ui/create-agg-pipeline",
+    "/atlas-ui-authorization",
+    "/atlas-ui/triggers",
+    "/atlas-ui/triggers/functions",
+    "/atlas-ui/triggers/data-sources",
+    "/backup-restore-cluster",
+    "/backup/cloud-backup/cloud-backup-encryption",
+    "/backup/cloud-backup/restore-overview",
+    "/backup/cloud-backup/overview",
+    "/backup/cloud-backup/scheduling",
+    "/bi-connection",
+    "/billing",
+    "/billing/cluster-configuration-costs",
+    "/create-connect-deployments",
+    "/cloud-providers-regions",
+    "/cluster-additional-settings",
+    "/cluster-configuration",
+    "/cluster-lifecycle",
+    "/cluster-tier",
+    "/configure-api-access",
+    "/connect-to-database-deployment",
+    "/create-database-deployment",
+    "/data-lake",
+    "/database-auditing",
+    "/faq",
+    "/getting-started",
+    "/global-clusters",
+    "/import",
+    "/integrate",
+    "/infrastructure",
+    "/import/monitor-migrations",
+    "/import/live-migration-verification",
+    "/live-migration",
+    "/manage-clusters",
+    "/manage-database-deployments",
+    "/management/organizations/organization-security",
+    "/manage-flex-clusters",
+    "/monitor-cluster-metrics",
+    "/monitoring-alerts",
+    "/online-archive/overview",
+    "/organizations-projects",
+    "/partner-integrations",
+    "/pause-terminate-cluster",
+    "/performance-advisor",
+    "/performance-advisor/schema-suggestions",
+    "/production-notes",
+    "/reference/api/alerts",
+    "/reference/api/database-users/",
+    "/reference/api/custom-roles/",
+    "/reference/api/access-lists/",
+    "/reference/api/whitelist/",
+    "/reference/api/organizations/",
+    "/reference/api/invoices/",
+    "/reference/api/projects/",
+    "/reference/api/teams/",
+    "/reference/api/clusters/",
+    "/reference/api/clusters-advanced/",
+    "/reference/api/global-clusters/",
+    "/reference/api/alert-configurations/",
+    "/reference/api/third-party-integration-settings/",
+    "/reference/api/maintenance-windows/",
+    "/reference/api/x509-configuration/",
+    "/reference/api/ldaps-configuration/",
+    "reference/api/federation-configuration",
+    "/reference/api/atlas-search/",
+    "/reference/api/checkpoints/",
+    "/reference/api/cloud-backup/backup/backups/",
+    "/reference/api/cloud-backup/restore/restores/",
+    "/reference/api/cloud-backup/schedule/schedules/",
+    "/reference/api/shared-backup/backup/backups/",
+    "/reference/api/shared-backup/restore/restores/",
+    "/reference/api/online-archive/",
+    "/reference/api/vpc/",
+    "/reference/api/private-endpoints/",
+    "/reference/api/private-endpoint/",
+    "/reference/api/apiKeys/",
+    "/reference/api/api-key/",
+    "/reference/api/whitelist-api/",
+    "/reference/api/monitoring-and-logs/",
+    "/reference/api/performance-advisor/",
+    "/reference/api/auditing/",
+    "/reference/api/encryption-at-rest/",
+    "/reference/api/user/",
+    "/reference/api/cloud-provider-access/",
+    "/reference/api/events/",
+    "/reference/api/access-tracking/",
+    "/reference/api/indexes/",
+    "/reference/api/aws-custom-dns/",
+    "/reference/atlas-operator/configure-ak8so-access-to-atlas",
+    "/reference/atlas-operator/custom-resources",
+    "/reference/cloud-providers",
+    "/reference/limitations",
+    "/atlas-search/operators-and-collectors/",
+    "/atlas-search/analyzers",
+    "/atlas-search/best-practices",
+    "/atlas-search/analyzers/custom",
+    "/atlas-search/create-queries",
+    "/atlas-search/define-field-mappings",
+    "/atlas-search/design-patterns",
+    "/atlas-search/accuracy",
+    "/atlas-search/query-ref",
+    "atlas-search/aggregation-stages/search/",
+    "atlas-search/aggregation-stages/searchMeta/",
+    "/atlas-search/manage-indexes",
+    "/atlas-search/searching",
+    "/atlas-search/performance-options",
+    "/atlas-search/query-syntax",
+    "/atlas-search/explain",
+    "/atlas-search/performance",
+    "/atlas-search/searching",
+    "/atlas-search/tutorial",
+    "/atlas-search/index-definitions",
+    "/atlas-search/create-index",
+    "/atlas-search/tutorial/build-applications",
+    "/atlas-search/tutorial/cross-collection-tutorials",
+    "/atlas-search/scoring",
+    "/atlas-search/search-options",
+    "/atlas-search/tutorials",
+    "/atlas-vector-search/vector-search-overview",
+    "/atlas-vector-search/vector-search-stage",
+    "/atlas-vector-search/benchmark",
+    "/atlas-vector-search/rag",
+    "/atlas-vector-search/hybrid-search",
+    "/atlas-vector-search/use-cases",
+    "/ai-integrations",
+    "/ai-integrations/crewai",
+    "/ai-integrations/langchain",
+    "/ai-integrations/langgraph",
+    "/ai-integrations/langgraph-js",
+    "/ai-integrations/amazon-bedrock",
+    "/ai-integrations/google-vertex-ai",
+    "/atlas-vector-search/hybrid-search",
+    "/atlas-stream-processing/manage-connection-registry",
+    "/atlas-stream-processing/stream-aggregation-expression",
+    "/atlas-stream-processing/stream-aggregation",
+    "/data-federation",
+    "/data-federation/admin/manage-namespace-catalog-cli/",
+    "/data-federation/admin/query-with-sql",
+    "/data-federation/config/config-data-stores",
+    "/data-federation/config/config-atlas-cluster/",
+    "/data-federation/config/config-aws-s3/",
+    "/data-federation/config/config-gcp-bucket/",
+    "/data-federation/config/config-oa/",
+    "/data-federation/config/config-azure-blob/",
+    "/data-federation/config/config-http-endpoint/",
+    "/data-federation/admin/manage-federated-database",
+    "/data-federation/query/sql/errors",
+    "/data-federation/query/query-federated-database",
+    "/data-federation/query/query-with-sql",
+    "/data-federation/query/sql/getting-started",
+    "/data-federation/query/sql/connect",
+    "/data-federation/query/sql/run-queries",
+    "/data-federation/query/sql/schema-management",
+    "/data-federation/query/sql/reference",
+    "/data-federation/supported-unsupported/supported-data-formats/",
+    "/data-federation/supported-unsupported/mql-support",
+    "/data-federation/supported-unsupported/supported-aggregation",
+    "/data-federation/tutorial/connect",
+    "/data-federation/tutorial/configure-connection",
+    "/data-federation/tutorial/getting-started",
+    "/data-federation/adf-overview/overview",
+    "/atlas-search/tutorial/pagination-tutorial",
+    "/data-federation/tutorials",
+    "/reference/atlas-operator/ak8so-private-link/",
+    "/restoration",
+    "/sample-data",
+    "/sample-data/available-sample-datasets/",
+    "/scale-cluster",
+    "/sdk",
+    "/security/federated-authentication",
+    "/security-add-mongodb-users",
+    "/security-aws-kms",
+    "/security-azure-kms",
+    "/security-gcp-kms",
+    "/security-kms-encryption",
+    "/security-ldaps",
+    "/security-multi-factor-authentication",
+    "/security-oidc",
+    "/security-configure-private-endpoints",
+    "/security/config-db-auth",
+    "/security/cloud-provider-access",
+    "/security/quick-start",
+    "/security/set-up-unified-aws-access/",
+    "/setup-cluster-security",
+    "/tags",
+    "/terminate-flex-clusters",
+    "/tutorial/create-new-cluster",
+    "/tutorial/manage-organizations",
+    "/tutorial/manage-projects",
+    "/tutorial/manage-users",
+    "/tutorial/test-resilience",
+    "/tutorial/third-party-service-integrations",
+    "/unsupported-commands",
+    "/release-notes",
+    "/what-is-a-cluster",
+]
+
+[constants]
+adf = "Atlas Data Federation"
+ak8so = "Atlas Kubernetes Operator"
+app-services = "App Services"
+atlas-admin-api = "Atlas Administration API"
+atlas-app-services = "Atlas App Services"
+atlas-arch-center = "Atlas Architecture Center"
+atlas-cli = "Atlas CLI"
+Atlas-Flex = "Atlas Flex"
+atlas-go-sdk = "Atlas Go :abbr:`SDK (Software Development Kit)`"
+atlas-go-to = "Atlas Goto"
+atlas-sp = "Atlas Stream Processing"
+atlas-ui = "Atlas UI"
+aws = ":abbr:`AWS (Amazon Web Services)`"
+aws-kinesis = "AWS Kinesis"
+aws-msk = "AWS MSK"
+aws-bedrock = "Amazon Bedrock"
+aws-bedrock-kb = "Amazon Bedrock Knowledge Base"
+avs = "MongoDB Vector Search"
+avs-filter-types = "boolean, date, objectId, numeric, string, and UUID values, including arrays of these types"
+aws-pl = "AWS PrivateLink"
+asql = "MongoSQL"
+abic = "Atlas BI Connector"
+arp = "Atlas Resource Policy"
+arps = "Atlas Resource Policies"
+azure = "Microsoft Azure"
+az-bs = "Azure Blob Storage"
+az-pl = "Azure Private Link"
+bcp = "Backup Compliance Policy"
+mdb-tools-version = "100.10.0"
+cdn = ":abbr:`CDN (Content Delivery Network)`"
+cedar = "`Cedar policy language <https://docs.cedarpolicy.com/>`__"
+charts = "MongoDB Charts"
+cis = "Cloud-based initial sync"
+cloud-backup = "cloud backup"
+Cloud-Backup = "Cloud Backup"
+Cloud-backup = "Cloud backup"
+Cluster = "Cluster"
+cluster = "cluster"
+Clusters = "Clusters"
+clusters = "clusters"
+cli-bin = "appservices"
+Compass = "`Compass <https://www.mongodb.com/try/download/compass>`__"
+MongoDB-Enterprise = "`MongoDB Enterprise <https://www.mongodb.com/try/download/enterprise>`__"
+data-api = "Data API"
+df = "Data Federation"
+data-explorer = "Data Explorer"
+Database-deployment = "Cluster"
+database-deployment = "cluster"
+Database-deployments = "Clusters"
+database-deployments = "clusters"
+Database-Deployment = "Cluster"
+Database-Deployments = "Clusters"
+Dedicated-cluster = "Dedicated cluster"
+dedicated-cluster = "dedicated cluster"
+Dedicated-clusters = "Dedicated clusters"
+dedicated-clusters = "dedicated clusters"
+Dedicated-Cluster = "Dedicated Cluster"
+Dedicated-Clusters = "Dedicated Clusters"
+Deployment = "Deployment"
+deployment = "deployment"
+Deployments = "Deployments"
+deployments = "deployments"
+encrypt-at-rest = "Encryption at Rest using Customer Key Management"
+ecosystem = "`MongoDB Partner Ecosystem Catalog <https://cloud.mongodb.com/ecosystem>`__"
+FDI = "Federated Database Instance"
+fdi = "federated database instance"
+Fdi = "Federated database instance"
+Flex-cluster = "Flex cluster"
+Flex-clusters = "Flex clusters"
+Flex-Cluster = "Flex Cluster"
+Flex-Clusters = "Flex Clusters"
+Free-cluster = "Free cluster"
+# free-cluster = "free cluster" # per product, Free is always cap
+Free-clusters = "Free clusters"
+# free-clusters = "free clusters" # per product, Free is always cap
+Free-Cluster = "Free Cluster"
+Free-Clusters = "Free Clusters"
+fts = "MongoDB Search"
+google-psc = "Private Service Connect"
+gcp = "Google Cloud"
+gcs = "Google Cloud Storage"
+gcp-psc = "GCP Private Service Connect"
+vertex-engine = "Vertex AI Agent Engine"
+vertex-engine-short = "Agent Engine"
+idp-full = "Identity Provider"
+http-digest = "`HTTP Digest Authentication <http://en.wikipedia.org/wiki/Digest_access_authentication>`__"
+jwt = ":abbr:`JWT (JSON Web Token)`"
+kafka = "`Apache Kafka <https://kafka.apache.org/>`__"
+kafka-topic = "`Apache Kafka Topic <https://kafka.apache.org/documentation/#intro_concepts_and_terms/>`__"
+kafka-topics = "`Apache Kafka Topics <https://kafka.apache.org/documentation/#intro_concepts_and_terms/>`__"
+k8s = "Kubernetes"
+latest-mongodb-eol = "5.0"
+managed-config = "Atlas-managed config server"
+managed-configs = "Atlas-managed config servers"
+Managed-Configs = "Atlas-Managed Config Servers"
+mcli = "MongoDB CLI"
+mcli-long = "MongoDB Command Line Interface (``mongocli``)"
+MongoDB-Realm = "Realm"
+mongomirror-version = "0.13.2"
+mongosh = ":binary:`~bin.mongosh`"
+mongodbsh = "MongoDB Shell"
+mql = ":abbr:`MQL (MongoDB Query Language)`"
+oauth2 = "OAuth 2.0"
+oauth-2 = "`OAuth 2.0 <https://oauth.net/2/>`__"
+oidc = ":abbr:`OIDC (OpenID Connect)`"
+Online-Archive = "Online Archive"
+PIT-Restore = "Continuous Cloud Backup"
+pit-restore = "continuous cloud backup"
+pkce = ":abbr:`PKCE (Proof Key of Code Exchange)`"
+playground = "MongoDB Search Playground"
+Realm = "Realm"
+rpo = ":abbr:`RPO (Recovery Point Objective)`"
+rto = ":abbr:`RTO (Recovery Time Objective)`"
+schema-builder = "MongoDB SQL Schema Builder"
+sdk = ":abbr:`SDK (Software Development Kit)`"
+service = "Atlas"
+service-api-v1-base-uri = "https://cloud.mongodb.com/api/atlas/v1.0"
+Serverless-instance = "Serverless instance"
+# serverless-instance = "serverless instance" # per product, Serverless is always cap
+Serverless-Instance = "Serverless Instance"
+Serverless-instances = "Serverless instances"
+# serverless-instances = "serverless instances"  # per product, Serverless is always capitalized. Keeping # these refs because of flex-migration topic
+# in atlas
+Serverless-Instances = "Serverless Instances"
+spw = "stream processing workspace"
+SPW = "Stream Processing Workspace"
+sql-interface = "SQL Interface"
+sql-odbc-version = "1.4.3"
+tgw = "Transit Gateway"
+terraform = "Terraform"
+triggers-log-retention-time = "10 days"
+reference-compatibility-mongodb-c = "`MongoDB compatibility matrix <https://www.mongodb.com/docs/languages/c/c-driver/current/#compatibility>`__"
+reference-compatibility-mongodb-cpp = "`MongoDB compatibility matrix <https://www.mongodb.com/docs/languages/cpp/cpp-driver/current/#compatibility>`__"
+reference-compatibility-mongodb-csharp = ":driver:`MongoDB compatibility matrix </csharp/current/#compatibility>`"
+reference-compatibility-mongodb-go = ":driver:`MongoDB compatibility matrix </go/current/compatibility>`"
+reference-compatibility-mongodb-java = ":driver:`MongoDB compatibility matrix </java/sync/current/compatibility>`"
+reference-compatibility-mongodb-kotlin = ":driver:`MongoDB compatibility matrix </kotlin/coroutine/current/compatibility>`"
+reference-compatibility-mongodb-reactive-streams = "`MongoDB compatibility matrix <https://www.mongodb.com/docs/languages/java/reactive-streams-driver/current/#compatibility>`__"
+reference-compatibility-mongodb-node = ":driver:`MongoDB compatibility matrix </node/current/compatibility>`"
+reference-compatibility-mongodb-perl = ":driver:`MongoDB compatibility matrix </perl#compatibility>`"
+reference-compatibility-mongodb-php = ":driver:`MongoDB compatibility matrix </php-drivers/#compatibility>`"
+reference-compatibility-mongodb-python = "`MongoDB compatibility matrix <https://www.mongodb.com/docs/languages/python/pymongo-driver/current/#compatibility>`__"
+reference-compatibility-mongodb-motor = ":driver:`MongoDB compatibility matrix </motor#compatibility>`"
+reference-compatibility-mongodb-ruby = "`MongoDB compatibility matrix <https://www.mongodb.com/docs/ruby-driver/current/reference/driver-compatibility>`__"
+reference-compatibility-mongodb-rust = ":driver:`MongoDB compatibility matrix </rust/current/#compatibility>`"
+reference-compatibility-mongodb-scala = "`MongoDB compatibility matrix <https://www.mongodb.com/docs/languages/scala/scala-driver/current/#compatibility>`__"
+reference-compatibility-mongodb-swift = ":driver:`MongoDB compatibility matrix </swift/#compatibility>`"
+ios-store = "https://apps.apple.com/us/app/"
+play-store = "https://play.google.com/store/apps/"
+vault = "`HashiCorp Vault <https://www.vaultproject.io/>`__"
+voyage-api = "Embedding and Reranking API"
+voyage-api-full = "Atlas Embedding and Reranking API"
+avs-playground = "MongoDB Vector Search Playground"
+wif = "Workforce Identity Federation"
+workload = "Workload Identity Federation"
+
+[substitutions]
+service-register = ":mdbacct:`MongoDB Atlas registration page </register>`"
+service-login = ":mdbacct:`MongoDB Atlas login page </login>`"
+2fa = ":abbr:`2FA (Two Factor Authentication)`"
+a-service = "an Atlas"
+A-service = "An Atlas"
+ach = ":abbr:`ACH (Automated Clearing House)`"
+aki = ":abbr:`AKI (Azure Key Identifier)`"
+akv = ":abbr:`AKV (Azure Key Vault)`"
+ak8so = "Atlas Kubernetes Operator"
+ann = ":abbr:`ANN (Approximate Nearest Neighbor)`"
+api = ":abbr:`API (Application Programming Interface)`"
+arn = ":abbr:`ARN (Amazon Resource Name)`"
+atlas-sp = "Atlas Stream Processing"
+aws = ":abbr:`AWS (Amazon Web Services)`"
+AWS = ":abbr:`AWS (Amazon Web Services)`"
+aws-burstable-instances = "`AWS burstable instances <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html>`__"
+aws-eni = ":abbr:`ENI (Elastic Network Interface)`"
+azure = ":abbr:`Azure (Microsoft Azure)`"
+azure-ad = "Microsoft Entra ID"
+azure-disk-bursting = "`Azure disk bursting <https://learn.microsoft.com/en-us/azure/virtual-machines/disk-bursting>`__"
+bi = ":abbr:`BI (Business Intelligence)`"
+bic-full = ":bic:`MongoDB Connector for BI </>`"
+bic-official = "MongoDB Connector for Business Intelligence for Atlas"
+bic-short = ":bic:`BI Connector </>`"
+bic-short-no-link = "BI Connector"
+bic = "BI Connector for Atlas"
+bson = ":abbr:`BSON (Binary Javascript Object Notation)`"
+certauth = "Certificate Authority"
+charts = "MongoDB Charts"
+charts-short = "Charts"
+checkmark = "unicode:: U+2713"
+cidr = ":abbr:`CIDR (Classless Inter-Domain Routing)`"
+cifs = ":abbr:`CIFS (Common Internet File System)`"
+cloudgov = "MongoDB Atlas for Government"
+cloudgov-short = "AtlasGov"
+cps = ":abbr:`CPS (Cloud Provider Snapshots)`"
+cmk = ":abbr:`CMK (customer-managed key)`"
+com = "Cloud Manager or Ops Manager"
+compass = "MongoDB Compass"
+copy = "unicode:: U+000A9"
+cpu = ":abbr:`CPU (Central Processing Unit)`"
+csv = ":abbr:`CSV (Comma-Separated Values)`"
+cvc = ":abbr:`CVC (Card Verification Code)`"
+datadog = "`Datadog <https://www.datadoghq.com/>`__"
+dhcp = ":abbr:`DHCP (Dynamic Host Configuration Protocol)`"
+dns = ":abbr:`DNS (Domain Name System)`"
+Epoch-time-ms = "Timestamp in the number of milliseconds that have elapsed since the `UNIX epoch <https://en.wikipedia.org/wiki/Unix_time?oldid=828172017>`__"
+epoch-time-ms = "timestamp in the number of milliseconds that have elapsed since the `UNIX epoch <https://en.wikipedia.org/wiki/Unix_time?oldid=828172017>`__"
+Epoch-time = "Timestamp in the number of seconds that have elapsed since the `UNIX epoch <https://en.wikipedia.org/wiki/Unix_time?oldid=828172017>`__"
+epoch-time = "timestamp in the number of seconds that have elapsed since the `UNIX epoch <https://en.wikipedia.org/wiki/Unix_time?oldid=828172017>`__"
+enn = ":abbr:`ENN (Exact Nearest Neighbor)`"
+erd = "entity-relationship diagram"
+erd-title = "Entity-Relationship Diagram"
+fcv = ":abbr:`FCV (Feature Compatibility Version)`"
+fcv-link = ":dbcommand:`FCV <setFeatureCompatibilityVersion>`"
+fido =":abbr:`FIDO (Fast Identity Online)`"
+fido2 =":abbr:`FIDO2 (Fast Identity Online version 2)`"
+fim = ":abbr:`FIM (Federated Identity Management)`"
+fmc = ":abbr:`FMC (Federation Management Console)`"
+fqdn = ":abbr:`FQDN (fully qualified domain name)`"
+fts = "MongoDB Search"
+gcp = "Google Cloud"
+gcp-cpu-bursting = "`GCP CPU Bursting <https://cloud.google.com/compute/docs/general-purpose-machines#cpu-bursting>`__"
+global-write-clusters = "Global Clusters"
+global-write-cluster = "Global Cluster"
+global-write = "Global Writes"
+hmac = ":abbr:`HMAC (hash-based message authentication code)`"
+hnsw = "`Hierarchical Navigable Small Worlds <https://arxiv.org/abs/1603.09320>`__"
+html = ":abbr:`HTML (Hypertext Markup Language)`"
+https = ":abbr:`HTTPS (Secure HyperText Transport Protocol)`"
+http = ":abbr:`HTTP (HyperText Transport Protocol)`"
+iam = ":abbr:`IAM (Identity and Access Management)`"
+iana = ":abbr:`IANA (Internet Assigned Numbers Authority)`"
+idps = ":abbr:`IdPs (Identity Providers)`"
+idps-full = "Identity Providers"
+idp = ":abbr:`IdP (Identity Provider)`"
+idp-full = "Identity Provider"
+inr = ":abbr:`INR (Indian Rupees)`"
+iops = ":abbr:`IOPS (Input/Output Operations per Second)`"
+ipaddr = ":abbr:`IP (Internet Protocol)`"
+ipv4 = ":abbr:`IPv4 (Internet Protocol version 4)`"
+ipv6 = ":abbr:`IPv6 (Internet Protocol version 6)`"
+iso8601-duration = "Duration in :wikipedia:`ISO 8601 <ISO_8601?oldid=962856429#Durations>` notation"
+iso8601-time = "Timestamp in :wikipedia:`ISO 8601 <ISO_8601?oldid=962856429>` date and time format in |utc|"
+iso8601 = ":wikipedia:`ISO 8601 <ISO_8601?oldid=962856429>`"
+iso3166-1a2 = ":wikipedia:`ISO-3166-1 alpha 2 <ISO_3166-1_alpha-2>`"
+iso3166-2 = ":wikipedia:`ISO-3166-2 <ISO_3166-2>`"
+isp = ":abbr:`ISP (Internet Service Provider)`"
+jdbc = ":abbr:`JDBC (Java Database Connectivity)`"
+jwt = "JWT"
+jdk = ":abbr:`JDK (Java Development Kit)`'"
+jira = "`Jira <https://jira.mongodb.org>`__"
+jre = ":abbr:`JRE (Java Runtime Environment)`"
+json = ":abbr:`JSON (Javascript Object Notation)`"
+k8s = "Kubernetes"
+k8s-Ns = "`Namespace <https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>`__"
+k8s-ns = "`namespace <https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>`__"
+k8s-nss = "`namespaces <https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>`__"
+k8s-secret = "`secret <https://kubernetes.io/docs/concepts/configuration/secret/>`__"
+k8s-secrets = "`secrets <https://kubernetes.io/docs/concepts/configuration/secret/>`__"
+k8s-finalizers = "`finalizers <https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers/>`__"
+kdc = ":abbr:`KDC (Key Distribution Center)`"
+kmip = ":abbr:`KMIP (Key Management Interoperability)`"
+kms = ":abbr:`KMS (Key Management Service)`"
+knn = ":abbr:`kNN (K-nearest neighbors)`"
+ldaps = ":abbr:`LDAPS (Secure Lightweight Directory Access Protocol)`"
+ldap = ":abbr:`LDAP (Lightweight Directory Access Protocol)`"
+llm = ":abbr:`LLM (Large Language Model)`"
+mcli = "MongoDB Command Line Interface"
+mdb-dev-center = "`MongoDB Developer Center <https://www.mongodb.com/developer/>`__"
+mdb-support = "`MongoDB Support <https://support.mongodb.com/welcome>`__"
+mdb-feedback = "`MongoDB Feedback <https://feedback.mongodb.com/>`__"
+mfa-long = "multi-factor authentication"
+mfa = ":abbr:`MFA (multi-factor authentication)`"
+mfa-short = ":abbr:`MFA (multi-factor authentication)`"
+ml = ":abbr:`ML (Machine Learning)`"
+mms-full = "MongoDB Cloud Manager"
+mms = "Cloud Manager"
+mongodump = ":binary:`~bin.mongodump`"
+mongod = ":binary:`~bin.mongod`"
+mongomirror = ":binary:`~bin.mongomirror`"
+mongorestore = ":binary:`~bin.mongorestore`"
+mongoimport = ":binary:`~bin.mongoimport`"
+mongoexport = ":binary:`~bin.mongoexport`"
+mongos = ":binary:`~bin.mongos`"
+mongosync = "`Mongosync <https://www.mongodb.com/docs/mongosync/current/>`__"
+mongosync-platforms = "`mongosync platforms <https://www.mongodb.com/docs/mongosync/current/installation/>`__"
+mongosync-limitations = "`Mongosync Limitations <https://www.mongodb.com/docs/mongosync/current/reference/limitations/#limitations>`__"
+mongosync-verification = "`Mongosync: Verify Data Transfer <https://www.mongodb.com/docs/mongosync/current/reference/verification/>`__"
+mongosync-oplog-sizing = "`oplog Sizing <https://www.mongodb.com/docs/mongosync/current/reference/oplog-sizing/>`__"
+nfs = ":abbr:`NFS (Network File System)`"
+nvme-clusters = "clusters with local :ref:`NVMe SSDs <nvme-storage>`"
+nvme = ":abbr:`NVMe (non-volatile memory express)`"
+odbc = ":abbr:`ODBC (Open Database Connectivity)`"
+oidc = ":abbr:`OIDC (OpenID Connect)`"
+onprem-full ="MongoDB Ops Manager"
+onprem = "Ops Manager"
+pa = "Performance Advisor"
+pagerduty = "`PagerDuty <https://www.pagerduty.com/>`__"
+pcre = ":abbr:`PCRE (Perl Compatible Regular Expressions)`"
+pem = ":abbr:`PEM (Privacy Enhanced Mail)`"
+pit = ":abbr:`PIT (Point in Time)`"
+piv = ":abbr:`PIV (Personal Identity Verification)`"
+prometheus = "`Prometheus <https://prometheus.io/>`__"
+rag = ":abbr:`RAG (Retrieval-Augmented Generation)`"
+rdp = ":abbr:`RDP (Remote Desktop Protocol)`"
+rtpp = ":abbr:`RTPP (Real-Time Performance Panel)`"
+rbi = ":abbr:`RBI (Reserve Bank of India)`"
+restapi = ":abbr:`REST (Representational State Transfer)` :abbr:`API (Application Programming Interface)`"
+rest = ":abbr:`REST (Representational State Transfer)`"
+s3 = ":abbr:`S3 (Simple Storage Service)`"
+sak = ":abbr:`SAK (Service Account Key)`"
+saml = ":abbr:`SAML (Security Assertion Markup Language)`"
+sca = ":abbr:`SCA (Strong Customer Authentication)`"
+scsi = ":abbr:`SCSI (Small Computer System Interface)`"
+service-fullname = "MongoDB Atlas"
+service-pricing = "`Atlas pricing page <https://www.mongodb.com/cloud/atlas/pricing>`__"
+service-terraform = "`MongoDB & HashiCorp Terraform <https://www.mongodb.com/atlas/hashicorp-terraform>`__"
+terraform-atlas-provider = "`HashiCorp Terraform MongoDB Atlas Provider <https://registry.terraform.io/providers/mongodb/mongodbatlas/latest>`__"
+service-vault = "`MongoDB & HashiCorp Vault <https://www.mongodb.com/atlas/hashicorp-vault>`__"
+service = "Atlas"
+Service = "Atlas"
+slo = ":abbr:`SLO (Single Logout)`"
+sms = ":abbr:`SMS (short message service)`"
+smtp = ":abbr:`SMTP (Simple Mail Transport Protocol)`"
+sni = ":abbr:`SNI (Server Name Indication)`"
+snmp = ":abbr:`SNMP (Simple Network Management Protocol)`"
+spn = ":abbr:`SPN (Service Principal Name)`"
+srv = ":abbr:`SRV (DNS Service Record)`"
+ssd = ":abbr:`SSD (Solid State Disk)`"
+ssl = ":abbr:`SSL (Secure Sockets Layer)`"
+sso = ":abbr:`SSO (Single Sign-On)`"
+realm-docs = "Realm"
+tcp = ":abbr:`TCP (Transmission Control Protocol)`"
+times = "unicode:: U+000D7"
+tls-ssl = ":abbr:`TLS (Transport Layer Security)`/:abbr:`SSL (Secure Sockets Layer)`"
+tls = ":abbr:`TLS (Transport Layer Security)`"
+totp = ":abbr:`TOTP (Time-based One-time Password Algorithm)`"
+u2f = ":abbr:`U2F (Universal 2nd Factor)`"
+udp = ":abbr:`UDP (User Datagram Protocol)`"
+ui-org-menu = ":icon-mms:`office` :guilabel:`Organizations` menu"
+upn = ":abbr:`UPN (User Principal Name)`"
+uri = ":abbr:`URI (Uniform Resource Identifier)`"
+url = ":abbr:`URL (Uniform Resource Locator)`"
+urls = ":abbr:`URLs (Uniform Resource Locators)`"
+usd = ":abbr:`USD (United States Dollars)`"
+utc = ":abbr:`UTC (Coordinated Universal Time)`"
+vat = ":abbr:`VAT (Value Added Tax)`"
+voyage = "Voyage AI"
+gst = ":abbr:`GST (Goods and Services Tax)`"
+pst = ":abbr:`PST (Provincial Sales Tax)`"
+vpc = ":abbr:`VPC (Virtual Private Cloud)`"
+yaml = ":abbr:`YAML (Yet Another Markup Language)`"
+vercel = "`Vercel <https://www.vercel.com/>`__"
+vercel-mdb = "`MongoDB Atlas Integration in Vercel <https://www.vercel.com/integrations/mongodbatlas>`__"
+vercel-dynamic = "`dynamic IP addresses <https://www.vercel.com/support/articles/how-to-allowlist-deployment-ip-address>`__"
+workload = "Workload Identity Federation"
+
+
+[[banners]]
+# Atlas Resource Policies banner for new features
+targets = [
+        "atlas-resource-policies.txt",
+        ]
+variant = "info"
+value = """\
+        As of December 2025, you can now use {+arps+} to: 
+
+        * Enforce minimum and maximum disk size for all clusters.
+        * Enforce a specific cluster topology (replica set, sharded cluster, or global cluster).
+        * Enforce a minimum and maximum number of shards for sharded clusters.
+        """
+
+[[banners]]
+
+# knnBeta operator deprecation
+targets = [
+        "atlas-search/operators-collectors/knn-beta.txt",
+        "atlas-search/field-types/knn-vector.txt"
+        ]
+variant = "warning"
+value = """\
+        The Atlas Search knnVector field type and knnBeta operator are now deprecated. Instead, we recommend that you use the :atlas:`vector </atlas-search/field-types/vector-type/>` index type and :atlas:`vectorSearch </atlas-search/operators-collectors/vectorSearch/>` operator in your $search pipeline stage.
+        """
+
+[[banners]]
+# dark mode/appearance in public preview
+targets = [
+    "personalization.txt"
+]
+variant = "warning"
+value = """
+        Appearance is available as a Preview feature. The feature and the corresponding documentation might change at any time during the Preview period. To learn more, see `Preview Features <https://www.mongodb.com/docs/preview-features/>`__.
+        """
+
+[[banners]]
+# temporary banner for Atlas Search RN
+targets = [
+    "atlas-search/changelog.txt",
+]
+
+variant = "warning"
+value = """
+        Atlas Vector Search is now generally available for both your development and production deployments. To learn more about the MongoDB Vector Search release, see the :atlas:`Atlas Vector Search Changelog </atlas-vector-search/changelog>`.
+        """
+
+[[banners]]
+# dateFacet outdated 
+targets = [
+    "atlas-search/field-types/date-facet-type.txt",
+]
+variant = "warning"
+value = """\
+        dateFacet is now outdated. Use :ref:`date <bson-data-types-date>` instead. To learn more, see :ref:`fts-facet-type-differences`.
+        """
+
+[[banners]]
+# numberFacet outdated
+targets = [
+    "atlas-search/field-types/number-facet-type.txt",
+]
+variant = "warning"
+value = """\
+        numberFacet is now outdated. Use :ref:`number <bson-data-types-number>` instead. To learn more, see :ref:`fts-facet-type-differences`.
+        """
+
+[[banners]]
+# stringFacet outdated
+targets = [
+    "atlas-search/field-types/string-facet-type.txt",
+]
+variant = "warning"
+value = """\
+        stringFacet is now outdated. Use :ref:`token <bson-data-types-token>` instead. To learn more, see :ref:`fts-facet-type-differences`.
+        """
+
+[[banners]]
+# mongomirror EOL
+targets = [
+    "reference/mongomirror.txt",
+    "import/mongomirror.txt",
+    "release-notes/mongomirror.txt",
+    "reference/mongomirror-old-versions.txt"
+]
+variant = "warning"
+value = """\
+        Mongomirror is End of Life (EOL) as of July 31st 2025, with `mongosync <https://www.mongodb.com/docs/mongosync/current/>`__ taking its place. MongoDB will no longer provide any updates, security patches, or support of any kind. Mongosync provides significant enhancements in features, performance, and reliability compared to mongomirror. Please note that direct migration into Atlas with mongosync will only be supported for source cluster versions 5.0 and above. For other migration options, please refer to our :ref:`self-managed tools <self-managed-migration>`. If you choose to use mongomirror past its EOL date, please note that mongomirror is only compatible with MongoDB 6.0 and below. Attempts to use mongomirror against newer versions may fail to connect or encounter other errors, which may or may not be silent.
+        """
+
+[[banners]]
+# Azure Service Connector preview
+targets = [
+        "tutorial/azure-service-connector.txt"
+        ]
+variant = "warning"
+value = """\
+        Azure Service Connector for Atlas is available as a Preview feature. The feature and the corresponding documentation might change at any time during the Preview period. To learn more, see `Preview Features <https://www.mongodb.com/docs/preview-features/>`__.
+        """
+
+[[banners]]
+# Atlas Search query analytics feature deprecation
+targets = [
+        "atlas-search/view-query-analytics.txt",
+        "atlas-search/tracking.txt"
+        ]
+variant = "warning"
+value = """\
+            This `Preview feature <https://www.mongodb.com/docs/preview-features/>`__ is now deprecated. The official end-of-life and complete removal of support will occur in February 2026. Therefore, for all ``$search.tracking`` requests, Atlas will no longer collect query data for display in the Atlas UI and the UI for this feature will be removed. If you have any questions or need further assistance, reach out to our support team from the MongoDB Support Portal or contact your Account Executive.
+        """
+
+[[banners]]
+# DOCSP-50503 Automated Embedding in Private Preview
+targets = [
+        "atlas-vector-search/automated-embedding.txt"
+        ]
+variant = "warning"
+value = """\
+            This feature is in Private Preview. The feature and the corresponding documentation might change at any time during the Preview period. Therefore, do not use this feature in Production. To learn more, see `Preview Features <https://www.mongodb.com/docs/preview-features/>`__. To enable this feature for your M10 or higher cluster in your development or test environment, contact your account team. There are no charges for using this feature during the Preview period. However, standard charges for Atlas clusters still apply. To learn more, see the `MongoDB Pricing <https://www.mongodb.com/pricing>`__ page.\
+        """
+
+[[banners]]
+# DOCSP-56098 Automated Embedding in Private Preview for Community Edition
+targets = [
+        "atlas-vector-search/crud-embeddings/create-embeddings-automatic.txt"
+        ]
+variant = "warning"
+value = """\
+            Automated embedding is available as a Preview feature only for MongoDB Community Edition v8.2 and later. The feature and the corresponding documentation might change at anytime during the Preview period. To learn more, see `Preview Features <https://www.mongodb.com/docs/preview-features/>`__.\
+        """
+
+[[banners]]
+# DOCSP-47898 Search with On-Prem deployments in Public Preview
+targets = [
+        "atlas-vector-search/tutorials/vector-search-quick-start.txt",
+        "atlas-search/tutorial.txt"
+        ]
+variant = "warning"
+value = """\
+        MongoDB Search and MongoDB Vector Search with MongoDB Community is in Preview. The feature and the corresponding documentation might change at any time during the Preview period. To learn more, see `Preview Features <https://www.mongodb.com/docs/preview-features/>`__.\
+        """
+
+[[banners]]
+# $scoreFusion and $rankFusion in preview
+targets = [
+        "atlas-vector-search/hybrid-search/vector-search-with-full-text-search.txt",
+        "atlas-vector-search/hybrid-search/vector-search-with-rankfusion.txt"
+        ]
+variant = "warning"
+value = """\
+            The ``$rankFusion`` and ``$scoreFusion`` stages are available as Preview features. To learn more, see `Preview Features <https://www.mongodb.com/docs/preview-features/>`__.\
+        """ 
+
+[[banners]]
+# Search vector type and vectorSearch operator in preview
+targets = [
+        "atlas-search/field-types/vector-type.txt",
+        "atlas-search/operators-collectors/vectorSearch.txt"
+        ]
+variant = "warning"
+value = """\
+            The ``vector`` field type and ``vectorSearch`` operator are available as Preview features. The feature and the corresponding documentation might change at any time during the Preview period. To learn more, see `Preview Features <https://www.mongodb.com/docs/preview-features/>`__.\
+        """ 
+
+[[banners]]
+#BI Connector for Atlas EOL
+targets = [
+        "bi-connection.txt",
+        "tutorial/create-system-dsn.txt",
+        "tutorial/connect-bic-excel.txt",
+        "tutorial/connect-bic-tableau.txt",
+        "tutorial/connect-bic-tableau.txt",
+        "tutorial/connect-bic-qlik.txt",
+        "tutorial/connect-bic-workbench.txt",
+        "tutorial/connect-bic-powerbi.txt"
+        ]
+variant = "warning"
+value = """\
+            The MongoDB Connector for Business Intelligence for Atlas and on-premises reaches end-of-life (EOL) and will no longer be supported after September 2026. For all new projects, we recommend using the new MongoDB SQL Interface to connect to Atlas or Enterprise Advanced deployments. The SQL Interface offers improved performance, a simplified setup, and enhanced features. To learn more, see `Connect With SQL <https://www.mongodb.com/docs/atlas/data-federation/query/connect-with-sql-overview/>`__.
+        """
+
+[[banners]]
+# Push-Based Log Export (PBLE) deprecation
+targets = [
+        "push-logs.txt"
+        ]
+variant = "warning"
+value = """\
+        Push-based log exporting is deprecated and scheduled for retirement on **February 4, 2027**. This feature is replaced by the new log export integration that offers 1-minute export intervals, AWS KMS encryption, support for Multi-Region Access Points, and lets you selectively route different log types to specific buckets. To learn more, see `Export Logs to AWS S3 Buckets <https://www.mongodb.com/docs/atlas/export-logs-external-sinks/>`__.
+        """
+
+[[associated_products]]
+name = "atlas-cli"
+versions = ["master", "v1.4", "v1.3", "v1.2", "v1.1", "v1.0"]
+
+[[associated_products]]
+name = "atlas-operator"
+versions = ["master", "v2.3", "v2.2", "v2.1", "v2.0", "v1.9"]
+
+[[composables]]
+id = "deployment-type"
+title = "Deployment Type"
+default = "atlas"
+options = [
+   {id = "atlas", title = "Atlas (Cloud)"},
+   {id = "local", title = "Atlas (Local)"},
+   {id = "self", title = "Self-Managed (On-Premises)"},
+   {id = "local-onprem", title = "Atlas (Local) or Self-Managed (On-Premises)"},
+]
+
+# For pages with programmatic access options
+[[composables]]
+id = "programmatic-access"
+title = "Authentication Method"
+default = "service-account"
+options = [
+   {id = "service-account", title = "Service Account"},
+   {id = "api-key", title = "API Key"},
+]
+
+[[composables]]
+id = "interface"
+title = "Interface"
+default = "mongosh"
+options = [
+   {id = "compass", title = "Compass"},
+   {id = "mongosh", title = "MongoDB Shell"},
+   {id = "atlas-ui", title = "Atlas UI"},
+   {id = "driver", title = "Driver"},
+   {id = "playground", title = "Search Playground"},
+   {id = "atlas-cli", title = "Atlas CLI"},
+   {id = "atlas-api", title = "Atlas Administration API"},
+]
+
+[[composables]]
+id = "interface-default-atlas-cli"
+title = "Interface"
+default = "atlas-cli"
+options = [
+   {id = "atlas-cli", title = "Atlas CLI"},
+   {id = "atlas-ui", title = "Atlas UI"},
+   {id = "admin-api", title = "Admin API"},
+]
+
+[[composables]]
+id = "private-link"
+title = "Private Link Connector"
+default = "aws-confluent"
+options = [
+   {id = "aws-confluent", title = "AWS Confluent"},
+   {id = "aws-msk", title = "AWS MSK"},
+   {id = "azure-eventhub", title = "Microsoft Azure Eventhub"},
+   {id = "azure-confluent", title = "Microsoft Azure Confluent"},
+   {id = "gcp-confluent", title = "GCP Confluent"},   
+]
+
+[[composables]]
+id = "language"
+title = "Language"
+default = "nodejs"
+dependencies = [{interface = "driver"}]
+options = [
+  {id = "c", title = "C"},
+  {id = "csharp", title = "C#"},
+  {id = "cpp", title = "C++"},
+  {id = "go", title = "Go"},
+  {id = "java-async", title = "Java (Async)"},
+  {id = "java-sync", title = "Java (Sync)"},
+  {id = "kotlin", title = "Kotlin"},
+  {id = "kotlin-coroutine", title = "Kotlin (Coroutine)"},
+  {id = "motor", title = "Motor"},
+  {id = "nodejs", title = "Node.js"},
+  {id = "php", title = "PHP"},
+  {id = "python", title = "Python"},
+  {id = "ruby", title = "Ruby"},
+  {id = "rust", title = "Rust"},
+  {id = "scala", title = "Scala"},
+]
+
+[[composables]]
+id = "embedding-model"
+title = "Embedding Model"
+default = "voyage"
+options = [
+   {id = "voyage", title = "Voyage AI"},
+   {id = "openai", title = "OpenAI"},
+   {id = "open-source", title = "Open-source"},
+]
+
+[[composables]]
+id = "embedding"
+title = "Embeddings"
+default = "Automated"
+options = [
+   {id = "auto", title = "Automatically Generate"},
+   {id = "byo", title = "Use Existing"},
+]
+
+[[composables]]
+id = "pipeline-stage"
+title = "Pipeline Stage"
+default = "rank-fusion"
+options = [
+   {id = "rank-fusion", title = "$rankFusion"},
+   {id = "score-fusion", title = "$scoreFusion"},
+]
+
+[[composables]]
+id = "llm"
+title = "LLM"
+default = "openai"
+options = [
+   {id = "openai", title = "OpenAI"},
+   {id = "open-source", title = "Open-source"},
+]
+
+[[composables]]
+id = "data-source"
+title = "Data Source"
+default = "new"
+options = [
+   {id = "new", title = "New Data"},
+   {id = "existing", title = "Existing Data"}
+]
+
+[[composables]]
+id = "vector-search-type"
+title = "Vector Search"
+default = "ann"
+options = [
+   {id = "ann", title = "Approximate Nearest Neighbor"},
+   {id = "enn", title = "Exact Nearest Neighbor"}
+]
+
+[[composables]]
+id = "prefilter-type"
+title = "Prefilter"
+default = "compound"
+options = [
+   {id = "compound", title = "Compound"},
+   {id = "fuzzy", title = "Fuzzy"}
+]
+
+[[composables]]
+id = "language-no-interface"
+title = "Language"
+default = "python"
+options = [
+  {id = "c", title = "C"},
+  {id = "csharp", title = "C#"},
+  {id = "cpp", title = "C++"},
+  {id = "go", title = "Go"},
+  {id = "java-async", title = "Java (Async)"},
+  {id = "java-sync", title = "Java (Sync)"},
+  {id = "kotlin", title = "Kotlin"},
+  {id = "kotlin-coroutine", title = "Kotlin (Coroutine)"},
+  {id = "motor", title = "Motor"},
+  {id = "nodejs", title = "Node.js"},
+  {id = "php", title = "PHP"},
+  {id = "python", title = "Python"},
+  {id = "ruby", title = "Ruby"},
+  {id = "scala", title = "Scala"},
+]
+
+[[composables]]
+id = "connection-type"
+title = "Connection Type"
+default = "public"
+options = [
+  {id = "public", title = "Public"},
+  {id = "private-link", title = "PrivateLink"},
+]
+  
+[[composables]]
+id = "interface-atlas-only"
+title = "Interface"
+default = "driver"
+dependencies = [{deployment-type = "atlas"}]
+options = [
+  {id = "atlas-ui", title = "Atlas UI"},
+  {id = "driver", title = "Driver"},
+  {id = "mongosh", title = "MongoDB Shell"},
+]
+
+[[composables]]
+id = "interface-local-only"
+title = "Interface"
+default = "driver"
+dependencies = [{deployment-type = "local"}]
+options = [
+  {id = "atlas-ui", title = "Atlas UI"},
+  {id = "driver", title = "Driver"},
+  {id = "mongosh", title = "MongoDB Shell"},
+]
+
+[[composables]]
+id = "language-atlas-only"
+title = "Language"
+default = "nodejs"
+dependencies = [{interface-atlas-only = "driver"}]
+options = [
+  {id = "c", title = "C"},
+  {id = "csharp", title = "C#"},
+  {id = "cpp", title = "C++"},
+  {id = "go", title = "Go"},
+  {id = "java-async", title = "Java (Async)"},
+  {id = "java-sync", title = "Java (Sync)"},
+  {id = "kotlin", title = "Kotlin"},
+  {id = "kotlin-coroutine", title = "Kotlin (Coroutine)"},
+  {id = "motor", title = "Motor"},
+  {id = "nodejs", title = "Node.js"},
+  {id = "php", title = "PHP"},
+  {id = "python", title = "Python"},
+  {id = "ruby", title = "Ruby"},
+  {id = "rust", title = "Rust"},
+  {id = "scala", title = "Scala"},
+  {id = "atlas-ui", title = "Atlas UI"},
+]
+
+[[composables]]
+id = "language-atlas-only-2"
+title = "Language"
+default = "nodejs"
+dependencies = [{deployment-type = "atlas"}]
+options = [
+  {id = "c", title = "C"},
+  {id = "csharp", title = "C#"},
+  {id = "cpp", title = "C++"},
+  {id = "go", title = "Go"},
+  {id = "java-async", title = "Java (Async)"},
+  {id = "java-sync", title = "Java (Sync)"},
+  {id = "kotlin", title = "Kotlin"},
+  {id = "kotlin-coroutine", title = "Kotlin (Coroutine)"},
+  {id = "motor", title = "Motor"},
+  {id = "nodejs", title = "Node.js"},
+  {id = "php", title = "PHP"},
+  {id = "python", title = "Python"},
+  {id = "ruby", title = "Ruby"},
+  {id = "rust", title = "Rust"},
+  {id = "scala", title = "Scala"},
+  {id = "atlas-ui", title = "Atlas UI"},
+]
+
+
+[[composables]]
+id = "language-local-only"
+title = "Language"
+default = "nodejs"
+dependencies = [{interface-local-only = "driver"}]
+options = [
+  {id = "c", title = "C"},
+  {id = "csharp", title = "C#"},
+  {id = "cpp", title = "C++"},
+  {id = "go", title = "Go"},
+  {id = "java-async", title = "Java (Async)"},
+  {id = "java-sync", title = "Java (Sync)"},
+  {id = "kotlin", title = "Kotlin"},
+  {id = "kotlin-coroutine", title = "Kotlin (Coroutine)"},
+  {id = "motor", title = "Motor"},
+  {id = "nodejs", title = "Node.js"},
+  {id = "php", title = "PHP"},
+  {id = "python", title = "Python"},
+  {id = "ruby", title = "Ruby"},
+  {id = "rust", title = "Rust"},
+  {id = "scala", title = "Scala"},
+]
+
+[[composables]]
+id = "sp-connections"
+title = "Connection Type"
+default = "kafka"
+options = [
+   {id = "kafka", title = "Kafka Connection"},
+   {id = "atlas", title = "Atlas Connection"},
+   {id = "kinesis", title = "AWS Kinesis Connection"},
+   {id = "https", title = "HTTPS Connection"},
+   {id = "s3", title = "S3 Connection"},
+   {id = "external", title = "External Function Connection"},
+   {id = "schema-registry", title = "Schema Registry"},
+]
+
+[[composables]]
+id = "os"
+title = "Operating System"
+default = "macos"
+dependencies = [{deployment-type = "self"}]
+options = [
+   {id = "macos", title = "macOS"},
+   {id = "windows", title = "Windows"},
+   {id = "linux", title = "Linux"},
+]
+
+[[composables]]
+id = "sql-driver"
+title = "Driver"
+default = "power-bi"
+options = [
+   {id = "power-bi", title = "Power BI"},
+   {id = "tableau", title = "Tableau"},
+   {id = "dbeaver", title = "DBeaver"},
+   {id = "odbc", title = "ODBC Driver"},
+   {id = "jdbc", title = "JDBC Driver"},
+]
+
+[[composables]]
+id = "auth-method"
+title = "Authentication Method"
+default = "password"
+options = [
+   {id = "x509", title = "X.509"},
+   {id = "aws-iam", title = "AWS IAM"},
+   {id = "ldap", title = "LDAP"},
+   {id = "oidc", title = "OIDC"},
+   {id = "password", title = "Username/Password (SCRAM)"}
+]
+
+[[composables]]
+id = "cloud-provider"
+title = "Cloud Provider"
+default = "aws"
+options = [
+   {id = "aws", title = "AWS"},
+   {id = "azure", title = "Microsoft Azure"},
+   {id = "gcp", title = "GCP"},
+]
+
+[[composables]]
+id = "adf-cloud-provider"
+title = "Cloud Provider"
+default = "aws"
+options = [
+  {id = "aws", title = "AWS S3"},
+  {id = "azure", title = "Microsoft Azure"},
+  {id = "gcp", title = "Google Cloud"},
+  {id = "http", title = "HTTP"},
+  {id = "atlas", title = "Atlas Clusters"},
+  {id = "oa", title = "Online Archive"},
+]
+
+[[composables]]
+id = "authentication-method"
+title = "Authentication Method"
+default = "aws-iam"
+options = [
+  {id = "aws-iam", title = "AWS IAM"},
+  {id = "x509", title = "X.509"},
+]
+
+[[composables]]
+id = "index-creation-method"
+title = "Index Creation Method"
+default = "driver"
+options = [
+  {id = "atlas-ui", title = "Atlas UI"},
+  {id = "driver", title = "Driver"},
+  {id = "atlas-cli", title = "Atlas CLI"},
+]
+
+# For pages that require you to choose Project Alerts or Organization Alerts
+[[composables]]
+id = "alert-scope"
+title = "Alerts for:"
+default = "project"
+options = [
+   {id = "project-alert", title = "Project"},
+   {id = "org-alert", title = "Organization"},
+]

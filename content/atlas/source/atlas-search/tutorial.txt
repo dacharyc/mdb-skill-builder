@@ -1,0 +1,95 @@
+.. _fts-tutorial-ref:
+.. _create-fts-index:
+
+==========================
+MongoDB Search Quick Start
+==========================
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: programming_language
+   :values: csharp, java, javascript/typescript, python, shell, go, kotlin
+   
+.. meta::
+   :keywords: code example, sample dataset, Node.js, MongoDB Shell, search tester, MongoDB Atlas, C#, Java (Sync), Kotlin (Coroutine), Atlas CLI, Python, JSON, java sync, atlas ui, node.js, go, prerequisites, role required
+   :description: Learn how to get started with MongoDB Search by creating a search index, querying your collection, and processing your search results.
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |search-type| replace:: :guilabel:`MongoDB Search`
+.. |index-name| replace:: ``default``
+.. |collection| replace:: ``movies`` collection
+.. |collection-name| replace:: ``movies`` collection
+.. |database| replace:: ``sample_mflix`` database
+.. |database-name| replace:: ``sample_mflix`` database
+.. |index-name| replace:: ``default``
+
+.. composable-tutorial::
+   :options: deployment-type, language-atlas-only-2
+   :defaults: atlas, atlas-ui
+
+   .. selected-content:: 
+      :selections: atlas, atlas-ui
+
+      .. include:: /includes/search/atlasui-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: atlas, shell
+
+      .. include:: /includes/search/shell-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: atlas, compass
+
+      .. include:: /includes/search/compass-quick-start-atlas.rst
+   
+   .. selected-content:: 
+      :selections: atlas, csharp
+
+      .. include:: /includes/search/csharp-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: atlas, go
+
+      .. include:: /includes/search/go-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: atlas, java-sync
+
+      .. include:: /includes/search/java-sync-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: atlas, kotlin-coroutine
+
+      .. include:: /includes/search/kotlin-coroutine-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: atlas, nodejs
+
+      .. include:: /includes/search/nodejs-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: atlas, python
+
+      .. include:: /includes/search/python-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: atlas, rust
+
+      .. include:: /includes/search/rust-quick-start-atlas.rst
+
+   .. selected-content:: 
+      :selections: self, None
+
+      .. include:: /includes/search/on-prem-quick-start.rst
+
+.. toctree::
+   :titlesonly:
+
+   </atlas-search/tutorial/facet-tutorial>
+   </atlas-search/tutorial/partial-match>

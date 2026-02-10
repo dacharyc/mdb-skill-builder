@@ -1,0 +1,143 @@
+.. _oa-config-private-endpoint:
+
+=============================================
+Set Up a Private Endpoint for Online Archives
+=============================================
+
+.. meta::
+   :description: Set up AWS private endpoints for Online Archives using Atlas UI or API, requiring Project Owner access and AWS account permissions.
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. composable-tutorial::
+   :options: cloud-provider, interface
+   :defaults: aws, atlas-ui
+
+   MongoDB supports |aws| and |azure| private endpoints for {+Online-Archive+}\s. 
+   You can set up the private endpoints from the {+atlas-ui+} 
+   and {+atlas-admin-api+}.
+
+   .. note:: 
+
+      You can set up private endpoints for a dedicated cluster. To learn 
+      more, see :ref:`private-endpoint`.
+
+   Required Access 
+   ---------------
+
+   To set up a private endpoint for an {+Online-Archive+}, you must have 
+   :authrole:`Project Owner` access or higher to the project.
+
+   Prerequisites 
+   -------------
+
+   .. selected-content::
+      :selections: aws, atlas-ui
+
+      .. include:: /includes/prereqs-oa-config-private-endpoint-aws.rst
+
+   .. selected-content::
+      :selections: aws, atlas-api
+
+      .. include:: /includes/prereqs-oa-config-private-endpoint-aws.rst
+
+   .. selected-content::
+      :selections: azure, atlas-ui
+
+      .. include:: /includes/prereqs-oa-config-private-endpoint-azure.rst
+
+   .. selected-content::
+      :selections: azure, atlas-api
+
+      .. include:: /includes/prereqs-oa-config-private-endpoint-azure.rst
+
+   .. note:: 
+
+      You can't use your |service| cluster :ref:`private endpoint ID
+      <private-endpoint>` for an {+Online-Archive+}. The {+Online-Archive+}
+      endpoint ID must be different from your |service| cluster endpoint
+      ID, if you have one. 
+
+   .. _oa-config-private-endpoint-procedure:
+
+   Procedure 
+   ---------
+
+   .. selected-content::
+      :selections: aws, atlas-ui
+
+      You can create a new private endpoint or add an existing private 
+      endpoint for an {+Online-Archive+} through your {+atlas-ui+}. To set up the private endpoint:
+
+      .. tabs:: 
+
+         .. tab:: AWS
+            :tabid: aws
+
+            .. tabs:: 
+
+               .. tab:: Create New Endpoint 
+                  :tabid: create-new 
+
+                  .. include:: /includes/steps-create-new-privatelink-oa-adf-aws.rst
+
+               .. tab:: Add Existing Endpoint 
+                  :tabid: add-existing
+
+                  .. include:: /includes/steps-adf-add-existing-privatelink-aws.rst
+
+         .. tab:: Azure
+            :tabid: azure
+
+            .. tabs:: 
+
+               .. tab:: Create New Endpoint 
+                  :tabid: create-new 
+
+                  .. include:: /includes/steps-adf-create-privatelink-azure.rst
+
+   .. selected-content::
+      :selections: aws, atlas-api
+
+      To configure a private endpoint for an online archive from the API, 
+      send a ``POST`` request with the private endpoint ID to the 
+      :oas-bump-atlas-op:`privateNetworkSettings 
+      <creategroupprivatenetworksettingendpointid>` endpoint. 
+
+      - If the endpoint ID already exists and there is no change to 
+        the comment associated with the endpoint, |service| makes no change 
+        to the endpoint ID list.
+      - If the endpoint ID already exists and there is a change to the 
+        associated comment, |service| updates the ``comment`` value only in 
+        the endpoint ID list.
+      - If the endpoint ID doesn't exist, |service| appends the new endpoint 
+        to the list of endpoints in the endpoint ID list.
+
+      To learn more about the syntax and options, see :oas-bump-atlas-op:`API 
+      <creategroupprivatenetworksettingendpointid>`.
+ 
+   .. selected-content::
+      :selections: azure, atlas-api
+
+      To configure a private endpoint for an online archive from the API, 
+      send a ``POST`` request with the private endpoint ID to the 
+      :oas-bump-atlas-op:`privateNetworkSettings 
+      <creategroupprivatenetworksettingendpointid>` endpoint. 
+
+      - If the endpoint ID already exists and there is no change to
+        the comment associated with the endpoint, |service| makes no change
+        to the endpoint ID list.
+      - If the endpoint ID already exists and there is a change to the
+        associated comment, |service| updates the ``comment`` value only in
+        the endpoint ID list.
+      - If the endpoint ID doesn't exist, |service| appends the new endpoint
+        to the list of endpoints in the endpoint ID list.
+
+      To learn more about the syntax and options, see :oas-bump-atlas-op:`API 
+      <creategroupprivatenetworksettingendpointid>`.

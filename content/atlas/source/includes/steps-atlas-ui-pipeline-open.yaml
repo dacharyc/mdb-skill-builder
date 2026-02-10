@@ -1,0 +1,25 @@
+---
+title: "Select the database for the collection on the left side of the Data Explorer."
+level: 4
+ref: atlas-ui-select-db
+
+---
+title: "Select the collection on the left side or in the main panel of the Data Explorer."
+level: 4
+ref: atlas-ui-select-collection
+content: |
+   The main panel displays the :guilabel:`Find`, :guilabel:`Indexes`,
+   and :guilabel:`Aggregation` views.
+---
+title: "Select the :guilabel:`Aggregation` view."
+level: 4
+ref: atlas-ui-select-find
+content: |
+   When you first open the :guilabel:`Aggregation` view, |service|
+   displays an empty aggregation pipeline.
+
+   .. figure:: /images/empty-agg-pipeline.png
+      :figwidth: 696px
+      :alt: Initial view of aggregation pipeline builder.
+
+...

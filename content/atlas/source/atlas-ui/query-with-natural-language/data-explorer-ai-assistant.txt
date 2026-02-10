@@ -1,0 +1,399 @@
+.. _de-ai-assistant:
+
+======================================
+Intelligent Assistant in Data Explorer
+======================================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+The intelligent assistant is an AI-powered tool designed for integrated MongoDB 
+development support in {+data-explorer+}. It answers natural language
+questions, assists with debugging errors, and provides guidance for performance 
+optimization.
+
+.. Attention writers: If you make changes to the following file, please check
+.. the related page(s) in the Compass docs to see if they require changes as 
+.. well: www.mongodb.com/docs/compass/query-with-natural-language/compass-ai-assistant/
+
+Enable AI Features
+------------------
+
+To use the intelligent assistant in {+data-explorer+}, first enable AI features
+in settings. 
+
+At the organizational level:
+
+.. procedure::
+    :style: normal 
+
+    .. include:: /includes/nav/steps-org-settings.rst
+    
+    .. step:: Enable Generative AI features. 
+    
+    Set the :guilabel:`Enable Atlas features that use generative AI` 
+    toggle to :guilabel:`on`.
+
+At the project level:
+
+.. procedure::
+    :style: normal 
+
+    .. include:: /includes/nav/steps-project-settings.rst
+
+    .. step:: Enable Generative AI features. 
+
+       Set the :guilabel:`Enable Data Explorer Generative AI Features` toggle to
+       :guilabel:`on`. 
+
+    .. step:: (Optional) Read MongoDB's GenAI FAQs.
+
+       For more information about generative AI usage in {+data-explorer+}, see:
+
+       - :ref:`atlas-ui-ai-data-usage`
+       - `FAQ For MongoDB Generative AI Features <https://www.mongodb.com/docs/generative-ai-faq/>`__
+
+Access the Intelligent Assistant
+--------------------------------
+
+To access the intelligent assistant:
+
+.. procedure::
+   :style: normal
+   
+   .. include:: /includes/nav/steps-data-explorer.rst
+    
+    .. step:: Go to the intelligent assistant.
+      
+       In {+data-explorer+}, click the sidebar panel with the sparkle
+       :icon-lg:`Sparkle` icon.
+       
+       The assistant opens, where you can ask a variety of questions 
+       related to your query outputs, explain plan statistics, and more.
+
+.. figure:: /images/de-collapse.png
+   :figwidth: 1200px
+   :alt: {+data-explorer+} Page with collapsed AI Drawer
+
+   Figure 1. {+data-explorer+} home page with the assistant collapsed.
+
+.. figure:: /images/de-expand.png
+   :figwidth: 1200px
+   :alt: {+data-explorer+}Page with opened AI drawer
+   
+   Figure 2. The {+data-explorer+} home page with the assistant expanded.  
+
+.. _de-read-only-tools:
+
+Read-Only Tools
+---------------
+
+Read-only tools in the {+data-explorer+}'s assistant fetch context from your 
+current task or execute database operations against your connected MongoDB 
+deployment with human approval. Unlike conversational responses, these tools 
+may perform actual database queries and return live data from your database.
+
+Assistant tools exhibit the following key characteristics:
+
+- **Read-only:** Tools cannot modify, insert, update, or delete data.
+- **User-approved:** Every tool execution requires explicit user confirmation.
+- **Contextual:** The assistant accounts for your current database, collection,
+  and connection when deciding to call tools.
+- **Live data:** Results come from your connected MongoDB deployment in real-time.
+
+Data Explorer Tools
+~~~~~~~~~~~~~~~~~~~
+
+The following tools fetch sensitive content for users and require confirmation.
+These tools do not interact with the database, but require user confirmation 
+before use: 
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Data Explorer Tool Name
+     - Description
+
+   * - ``get-current-query``
+     - Extracts active MongoDB query parameters from the query bar
+
+   * - ``get-current-pipeline``
+     - Extracts active aggregation pipeline from the aggregation builder
+
+Database Tools
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Database Tool Name
+     - Description
+
+   * - ``list-databases``
+     - Displays all databases available in your MongoDB deployment with their 
+       storage sizes.
+
+   * - ``list-collections``
+     - Shows all collections within a specific database.
+
+   * - ``find``
+     - Retrieves actual documents from a collection that match specific search 
+       criteria. 
+
+   * - ``count``
+     - Quickly returns the total number of documents in a collection without
+       retrieving the documents themselves. 
+
+   * - ``aggregate``
+     - Performs complex data processing operations like grouping, filtering,
+       transforming, and calculating statstics across documents. 
+
+   * - ``collection-indexes``
+     - Lists all indexes defined on a collection.
+
+   * - ``collection-schema``
+     - Analyzes a collection to reveal the structure of documents, including 
+       field names and data types. 
+
+   * - ``collection-storage-size``
+     - Reports the physical disk space occupied by a collection, including both
+       data and indexes. 
+
+   * - ``db-stats``
+     - Provides a comprehensive overview of database health, including collection
+       counts, document totals, storage usage, and index statistics. 
+
+   * - ``mongodb-logs``
+     - Retrieves recent server logs for troubleshooting, performance monitoring,
+       and security auditing. 
+
+   * - ``explain``
+     - Shows the detailed query execution plan and performance statistics, 
+       revealing how MongoDB processes a query and whether it uses indexes. 
+
+.. note::
+
+   The aggregation pipeline stages ``$out`` and ``$merge`` are not supported in 
+   tool calling because they perform write operations. The assistant only 
+   supports read-only tools. 
+
+Example Flow
+~~~~~~~~~~~~
+
+.. procedure::
+   :style: connected
+
+   .. step:: Enable Tools
+      
+      Tools are enabled by default, but you can toggle them on or off using the
+      :guilabel:`Tools` button in the input bar. 
+
+   .. step:: Set Up Your Environment
+      
+      Make sure you have an active connection and are viewing the relevant page.
+      To ask a question, you must be on a tab that relates to your active 
+      connection. 
+
+   .. step:: Ask a Database Question
+
+      Submit a prompt inquiring about your data, for example: "List all databases".
+
+   .. step:: Review the Tool Card
+
+      The assistant detects your intent and displays a tool card in a pending
+      state. This list enumerates the possible elements that the tool card can
+      show:
+
+      - Tool name operation
+      - Deployment (host/endpoint)
+      - Database and collection being queried 
+      - Any parameters or filters
+      - :guilabel:`Run` and :guilabel:`Cancel` buttons
+
+      For the above example, the tool card shows for "list-databases".
+
+   .. step:: Click Run
+
+   .. step:: View Results
+
+      Example result:
+
+      .. code-block::
+         :copyable: false
+
+         Here are the databases found on your MongoDB deployment:
+
+         - sample_mflix (Size: 183,685,120 bytes)
+         - admin (Size: 364,544 bytes)
+         - local (Size: 21,907,722,240 bytes)
+      
+         If you want details about collections in any of these databases, 
+         just let me know!
+
+Examples
+--------
+
+The following scenarios show several uses of the intelligent assistant in 
+{+data-explorer+}.
+
+Explain Plan
+~~~~~~~~~~~~
+
+Ask the intelligent assistant to analyze the output of your |compass| query:
+
+.. io-code-block::
+    :copyable: true
+
+    .. input::
+
+       Interpret this explain plan for me.
+
+    .. output:: 
+
+       ## Summary
+       - **Query Logic:** This pipeline counts the number of Italian restaurants in Manhattan by first filtering documents and then aggregating the count.
+       - **Performance:** Fair
+       - **Recommendations:** Create a compound index on `{ borough: 1, cuisine: 1 }` to optimize document retrieval.
+
+       ## Details
+
+       ### Query Logic
+       1. `$match`: Filters documents where `borough` is "Manhattan" and `cuisine` is "Italian".
+       2. `$count`: Counts the number of documents matching the filter and outputs the total.
+
+       ### Performance Analysis
+       - The winning plan uses an index scan on the `cuisine` field (`cuisine_1`) and applies an in-memory filter for `borough` ("Manhattan").
+       - Both `totalKeysExamined` and `totalDocsExamined` are high (43,207), which implies that every document with `cuisine: "Italian"` is examined and then filtered by `borough`.
+       - No compound index exists, meaning MongoDB cannot efficiently combine both filter criteria in a single index lookup.
+       - The pipeline does properly filter before counting, but index usage is only partial, causing increased resource usage.
+
+       ### Recommendations
+       - Create a compound index on `{ borough: 1, cuisine: 1 }` to allow MongoDB to retrieve documents matching both criteria directly from the index, minimizing documents examined.
+       - This optimization will reduce execution time and system load without changing the output of your aggregation pipeline.
+
+       Below is the recommended Aggregation Pipeline. This optimized Aggregation Pipeline will leverage the compound index to scan fewer documents, as both filter criteria are present in the index.
+
+       ```json
+       [
+         { "$match": { "borough": "Manhattan", "cuisine": "Italian" } },
+         { "$count": "totalItalianRestaurants" }
+       ]
+       ```
+
+       ### Follow-Up Questions
+       1. How do I create a compound index in MongoDB Compass or via a shell command?
+       2. What other fields should I consider adding to my indexes for restaurant lookups?
+       3. How can I further optimize aggregations when working with larger datasets?
+
+
+User questions
+~~~~~~~~~~~~~~
+
+The following examples demonstrate questions you can ask the intelligent assistant about 
+{+data-explorer+} functions and queries.
+
+.. io-code-block::
+    :copyable: true
+
+    .. input::
+
+       How is MongoDB data modeling different from data modeling with a relational
+       database?
+
+    .. output:: 
+
+       MongoDB data modeling differs from relational database (RDBMS) data 
+       modeling in some important ways:
+
+       1. Document-Oriented vs. Table-Oriented
+
+         - MongoDB stores data as flexible, hierarchical JSON-like documents.
+         - Relational databases use tables with fixed schemas and columns.
+
+       2. Schema Flexibility
+       
+         - In MongoDB, collections can contain documents with different structures. Schema enforcement is optional.
+         - RDBMS tables have a strict schema that enforces data types and relationships.
+
+       3. Embedding vs. Normalization
+
+         - MongoDB encourages embedding related data inside documents when appropriate (denormalization). Example: An order document may include an array of items directly inside it.
+         - Relational databases emphasize normalization—splitting data across tables connected by foreign keys.
+
+       4. Relationships
+
+         - MongoDB does support references between documents (similar to foreign keys), but joins are less central and not as efficient as in RDBMS.
+         - RDBMSs use normalized data and JOIN operations to relate tables efficiently.
+
+       5. Performance & Scaling
+
+         - MongoDB’s data model enables horizontal scaling (sharding), making it well-suited for large, distributed datasets.
+         - RDBMS scaling typically relies on vertical scaling or complex clustering; JOINs can become expensive as data grows.
+
+       6. Use Cases and Design Philosophy 
+
+         - MongoDB models are often designed to optimize common query patterns, reducing the need for joins and complex queries.
+         - RDBMS models are designed for transactional consistency and for representing organized, well-structured relationships.
+
+       In summary, MongoDB encourages a more flexible, application-driven 
+       approach to modeling, while relational databases rely on rigid schemas 
+       and normalized relationships. Compass provides tools to visually explore 
+       your document structures and relationships, which can be especially 
+       helpful as your model evolves.
+
+
+.. io-code-block::
+    :copyable: true
+
+    .. input::
+
+       How can I combine multiple conditions in a single $search query?
+
+    .. output:: 
+
+       To combine multiple conditions in a single $search query in MongoDB Atlas
+       Search (including Compass), you should use the compound operator. The 
+       compound operator allows you to specify multiple criteria using must, 
+       mustNot, filter, and should clauses.
+
+       Example: Combine Multiple Conditions
+
+       Suppose you want to:
+
+       - Match documents where the plot field contains "baseball"
+       - Exclude documents where the genres field contains "Comedy" or "Romance"
+       
+       Your $search stage would look like this:
+
+       {
+         "$search": {
+           "compound": {
+             "must": [
+               {
+                 "text": {
+                   "query": "baseball",
+                   "path": "plot"
+                  }
+               }
+             ],
+             "mustNot": [
+               {
+                 "text": {
+                   "query": ["Comedy", "Romance"],
+                   "path": "genres"
+                 }
+               }
+             ]
+          }
+         }
+       }
+
+Learn More
+----------
+
+- :ref:`atlas-ui-ai-data-usage`

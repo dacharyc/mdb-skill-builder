@@ -1,0 +1,265 @@
+.. _atlas-sp-manage-connections:
+
+==================
+Manage Connections
+==================
+
+.. default-domain:: mongodb
+
+.. meta::
+   :keywords: atlas stream processing, atlas stream processing overview, streaming data, data stream, real time, data processing, apache kafka, kafka
+   :description: Learn how to manage connections in your Stream Processing Workspace connection registry
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Each {+SPW+} stores every configured connection to a streaming data
+source or sink in its connection registry. The procedures on this page
+walk you through creating and configuring your {+atlas-sp+}
+connections.
+
+.. _atlas-sp-manage-connection-prereqs:
+
+Prerequisites
+-------------
+
+To create and configure connections, you must have the following:
+
+- An |service| :ref:`project <manage-projects>`
+- An |service| user with the :authrole:`Project Owner` or
+  the :authrole:`Project Stream Processing Owner` role to manage a
+  connection registry
+
+  .. note::
+     
+     While both the :authrole:`Project Owner` and :authrole:`Project Stream Processing Owner`
+     roles grant the privileges to create, view, edit and delete
+     connections in the connection registry, the 
+     :authrole:`Project Owner` role also allows users to perform tasks 
+     such as creating database deployments, managing project access, and more. 
+
+     See :ref:`Project Roles <project-roles>` to learn more about the 
+     differences between these roles.
+
+- An |service| {+cluster+}
+
+.. _atlas-sp-manage-connections-considerations:
+
+Considerations
+--------------
+
+When configuring {+atlas-sp+} connections, ensure you select a
+connection type suitable to your use case. {+atlas-sp+} supports the
+following providers:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 60 20
+
+   * - Provider (:ref:`See note <asp-limitations>`)
+     - Description
+     - Connection Types
+
+   * - Kafka Broker
+     - Configurable server that receives and stores event streams,
+       organizing them into partitioned topics.
+     - Sink and Source
+
+   * - {+service+} Clusters
+     - Cloud-hosted MongoDB server providing both permanent storage
+       and event-driven :ref:`Change Streams <changeStreams>`. 
+     - Sink and Source
+
+   * - {+aws+} |s3|
+     - Object storage container hosted on {+aws+}.
+     - Only Sink
+
+   * - {+aws+} Kinesis
+     - Cloud-hosted platform that receives and stores
+       event streams, providing various :aws:`integrated tools
+       <kinesis>`.
+     - Sink and Source
+
+   * - HTTPS
+     - HTTPS request to retrieve data through an API
+       endpoint each time a document passes through. {+atlas-sp+} then
+       uses this data to enrich the document that triggered the request.  
+     - Supplementary Source; must follow a :pipeline:`$source` stage.
+
+   * - External Function Connections
+     - {+atlas-sp+} supports embedding calls to `AWS Lambda <https://docs.aws.amazon.com/lambda/>`__ 
+       resources within your {+atlas-sp+} pipeline. You can execute these calls 
+       synchronously or asynchronously, and you can pass responses from synchronous calls 
+       to subsequent stages in your pipeline. 
+
+       To learn more, see the :ref:`{+atlas-sp+} External Functions <atlas-sp-agg-external-function>` 
+       documentation.
+     - Trigger
+
+.. _asp-limitations:
+
+.. sharedinclude:: cet/atlas/asp-limitations.rst
+
+.. tip::
+
+   See :ref:`manual-timeseries-collection-limitations` for more information.
+
+.. _atlas-sp-manage-connection-add:
+
+Add a Connection to the Connection Registry
+-------------------------------------------
+
+Each {+atlas-sp+} connection type has distinct configuration
+requirements and procedures. To learn more, see :ref:`Add an Atlas
+Stream Processing Connection <atlas-sp-add-connection>`.
+
+.. _atlas-sp-manage-connection-view:
+
+View Connections in the Connection Registry
+-------------------------------------------
+
+To view a connection to your {+spw+}:
+
+.. tabs::
+
+   .. tab:: {+atlas-cli+}
+      :tabid: view-connection-cli
+
+      .. include:: /includes/extracts/atlas-streams-connections-list-and-describe.rst
+
+   .. tab:: {+atlas-ui+}
+      :tabid: view-connection-ui
+
+      .. include:: /includes/procedures/atlas-sp-view-connection-ui.rst
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: view-connection-api
+
+      The {+atlas-admin-api+} provides different endpoints for 
+      retrieving one or all connections in a connection registry.
+
+      :oas-bump-atlas-op:`View One Connection in a Connection Registry <getgroupstreamconnection>`
+
+      :oas-bump-atlas-op:`List All Connections in a Connection Registry <listgroupstreamconnections>`
+
+   .. tab:: ``mongosh``
+      :tabid: view-connection-sh
+
+      To list all available connections using ``mongosh``, use the
+      ``sp.listConnections()`` method. It returns a list of documents
+      describing each connection in the {+spw+}'s connection
+      registry. It has the following syntax:
+
+      .. code-block:: sh
+
+         sp.listConnections()
+
+.. _manage-spi-connection-modify:
+.. _atlas-sp-manage-connection-modify:
+
+Modify a Connection from the Connection Registry
+------------------------------------------------
+
+To modify a connection from a connection registry:
+
+.. tabs::
+
+   .. tab:: {+atlas-cli+}
+      :tabid: edit-connection-cli
+
+      .. include:: /includes/extracts/atlas-streams-connections-update.rst
+
+   .. tab:: {+atlas-ui+}
+      :tabid: edit-connection-ui
+
+      .. include:: /includes/procedures/atlas-sp-edit-connection-ui.rst
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: edit-connection-api
+
+      The {+atlas-admin-api+} provides an endpoint for editing a 
+      {+spw+}.
+
+      :oas-bump-atlas-op:`Update One Stream Connection <updategroupstreamconnection>`
+
+.. _manage-spi-connection-delete:
+.. _atlas-sp-manage-connection-delete:
+
+Delete a Connection from the Connection Registry
+------------------------------------------------
+
+To delete a connection from a connection registry:
+
+.. tabs::
+
+   .. tab:: {+atlas-cli+}
+      :tabid: delete-connection-cli
+
+      .. include:: /includes/extracts/atlas-streams-connections-delete.rst
+
+   .. tab:: {+atlas-ui+}
+      :tabid: delete-connection-ui
+
+      .. include:: /includes/procedures/atlas-sp-delete-connection-ui.rst
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: delete-connection-api
+
+      The {+atlas-admin-api+} provides an endpoint for editing a 
+      {+spw+}.
+
+      :oas-bump-atlas-op:`Delete One Stream Connection <deletegroupstreamconnection>`
+
+.. _atlas-sp-manage-connection-pl-list:
+
+List Private Link Connections
+-----------------------------
+
+The {+atlas-admin-api+} provides an endpoint for viewing all Private
+Link connections configured for {+atlas-sp+} within a specified
+project.
+
+:oas-bump-atlas-op:`Return All Private Links
+<listgroupstreamprivatelinkconnections>`
+
+.. _atlas-sp-manage-connection-pl-view:
+
+View One Private Link Connection
+--------------------------------
+
+The {+atlas-admin-api+} provides an endpoint for viewing the details
+of one Private Link connection configured for {+atlas-sp+} within a
+specified project.
+
+:oas-bump-atlas-op:`Return One Private Link
+<getgroupstreamprivatelinkconnection>`
+
+.. _atlas-sp-manage-connection-pl-delete:
+
+Delete a Private Link Connection
+--------------------------------
+
+The {+atlas-admin-api+} provides an endpoint for deleting a Private
+Link connection configured for {+atlas-sp+} within a specified
+project.
+
+:oas-bump-atlas-op:`Delete One Private Link
+<deletegroupstreamprivatelinkconnection>`
+
+
+.. toctree::
+   :titlesonly:
+
+   Add a Connection to the Registry  </atlas-stream-processing/add-sp-connection>
+   VPC Peering Connections </atlas-stream-processing/manage-vpc-peering-connections>
+   Kafka Private Link Connections </atlas-stream-processing/kafka-private-link-connection>
+   S3 Private Link Connections </atlas-stream-processing/s3-private-link-connection>
+   Kinesis Private Link Connections </atlas-stream-processing/kinesis-private-link-connection>
+   Google Cloud Private Link Connection </atlas-stream-processing/gcp-private-link-connection>

@@ -1,0 +1,290 @@
+.. meta::
+   :keywords: atlas ui, atlas cli
+   :description: Configure alert settings in Atlas to trigger notifications for specific conditions using various methods like email, SMS, or collaboration tools.
+
+.. _configure-alerts:
+
+========================
+Configure Alert Settings
+========================
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. composable-tutorial::
+   :options: interface, alert-scope
+   :defaults: atlas-ui, project-alert
+
+   For each organization and project, you can select which conditions
+   trigger alerts and how users are notified.
+
+   .. include:: /includes/fact-free-shared-alerts.rst
+
+   .. _configure-alert-settings-tabs:
+
+   Required Access
+   ---------------
+
+   To manage all organization alerts, you must have the 
+   :authrole:`Organization Owner` role for the organization.
+
+   The :authrole:`Organization Billing Admin` role grants a 
+   limited authorization to manage billing alerts.
+
+   To manage project alerts, you must have 
+   :authrole:`Project Owner` access to the project. Users with 
+   :authrole:`Organization Owner` access must add themselves to the project 
+   as a ``Project Owner``.
+
+   .. _default-alert-settings:
+
+   Default Alert Settings
+   ----------------------
+
+   .. selected-content::
+      :selections: atlas-ui, project-alert
+
+      .. include:: /includes/default-project-alerts.rst
+
+   .. selected-content::
+      :selections: atlas-cli, project-alert
+
+      .. include:: /includes/default-project-alerts.rst
+
+   .. selected-content::
+      :selections: atlas-ui, org-alert
+
+      .. include:: /includes/default-org-alerts.rst
+
+   .. selected-content::
+      :selections: atlas-cli, org-alert
+
+      .. include:: /includes/default-org-alerts.rst
+
+   .. _notification-options:
+
+   Notification Options
+   --------------------
+
+   .. selected-content::
+      :selections: atlas-ui, project-alert
+
+      .. include:: /includes/notification-options-project-alert.rst
+
+   .. selected-content::
+      :selections: atlas-cli, project-alert
+
+      .. include:: /includes/notification-options-project-alert.rst
+
+   .. selected-content::
+      :selections: atlas-ui, org-alert
+
+      .. include:: /includes/notification-options-org-alert.rst
+
+   .. selected-content::
+      :selections: atlas-cli, org-alert
+
+      .. include:: /includes/notification-options-org-alert.rst
+
+   .. _configure-alert-settings:
+
+   Configure an Alert
+   ------------------
+
+   When you create a new alert, you can clone an existing alert. You can also update an existing alert configuration.
+
+   .. selected-content::
+      :selections: atlas-ui, project-alert
+
+      .. include:: /includes/steps-configure-project-alert.rst
+
+   .. selected-content::
+      :selections: atlas-cli, project-alert
+
+      .. include:: /includes/extracts/atlas-alerts-settings-create-and-update.rst
+
+      .. include:: /includes/extracts/atlas-alerts-settings-fields-type.rst
+
+   .. selected-content::
+      :selections: atlas-ui, org-alert
+
+      .. include:: /includes/steps-configure-org-alert.rst
+
+   .. selected-content::
+      :selections: atlas-cli, org-alert
+
+      There are no specific instructions for creating organization alerts using the {+atlas-cli+}. Instead, select :guilabel:`{+atlas-ui+}` from the :guilabel:`Interface` dropdown on this page.
+
+   View Alert Configurations
+   -------------------------
+
+   You can configure :ref:`maintenance-window-alerts` for projects. These alerts
+   are effective only for projects with an active :ref:`maintenance window
+   configured <atlas-modify-project-settings>`. If you don't configure a maintenance
+   window, you can create a maintenance window alert but maintenance tasks will not
+   trigger the alert.
+
+   .. selected-content::
+      :selections: atlas-ui, project-alert
+
+      You can view open alerts, closed alerts, and alert 
+      settings on the :guilabel:`Project Alerts` page. 
+      |service| sends notifications for all alerts 
+      that appear on the :guilabel:`Open` tab. To learn more, 
+      see :ref:`alerts-workflow`.
+
+      To view your alert configurations:
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/nav/steps-project-alerts.rst
+
+         .. step:: Click the :guilabel:`Alerts Settings` tab.
+   
+   .. selected-content::
+      :selections: atlas-cli, project-alert
+
+      .. include:: /includes/extracts/atlas-alerts-settings-list-and-describe.rst
+   
+   .. selected-content::
+      :selections: atlas-ui, org-alert
+
+      You can view all alerts, alert settings, and deleted alerts on 
+      the :guilabel:`Organization Alerts` page. To learn more, see 
+      :ref:`alerts-workflow`.
+
+      To view your alert configurations: 
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/nav/steps-org-alerts.rst
+
+         .. step:: Click the :guilabel:`Alert Settings` tab.
+
+   .. selected-content::
+      :selections: atlas-cli, org-alert
+
+      There are no specific instructions for viewing organization alert configurations using the {+atlas-cli+}. Instead, select :guilabel:`{+atlas-ui+}` from the :guilabel:`Interface` dropdown on this page.
+
+   .. _disable-alert-setting:
+
+   Disable an Alert
+   ----------------
+
+   .. selected-content::
+      :selections: atlas-ui, project-alert
+
+      .. include:: /includes/steps-disable-project-alert.rst
+
+      If you disable an alert setting, |service| cancels active
+      alerts related to the setting. A disabled alert setting
+      remains visible but grayed-out. You can re-enable it
+      at any time.
+
+   .. selected-content::
+      :selections: atlas-cli, project-alert
+
+      .. include:: /includes/extracts/atlas-alerts-settings-disable.rst
+
+   .. selected-content::
+      :selections: atlas-ui, org-alert
+
+      .. include:: /includes/steps-disable-org-alert.rst
+
+      If you disable an alert setting, |service| cancels active
+      alerts related to the setting. A disabled alert setting
+      remains visible but grayed-out and can be later re-enabled.
+
+   .. selected-content::
+      :selections: atlas-cli, org-alert
+
+      There are no specific instructions for disabling an organization alert using the {+atlas-cli+}. Instead, select :guilabel:`{+atlas-ui+}` from the :guilabel:`Interface` dropdown on this page.
+
+   .. _enable-alert-setting:
+
+   Enable an Alert
+   ---------------
+
+   .. selected-content::
+      :selections: atlas-ui, project-alert
+   
+      To enable an alert that you previously disabled:
+
+      .. include:: /includes/steps-enable-project-alert.rst
+
+   .. selected-content::
+      :selections: atlas-cli, project-alert
+      
+      To enable an alert that you previously disabled:
+      
+      .. include:: /includes/extracts/atlas-alerts-settings-enable.rst
+
+   .. selected-content::
+      :selections: atlas-ui, org-alert
+
+      To enable an alert that you previously disabled:
+      
+      .. include:: /includes/steps-enable-org-alert.rst
+
+   .. selected-content::
+      :selections: atlas-cli, org-alert
+
+      There are no specific instructions for enabling organization alerts using the {+atlas-cli+}. Instead, select :guilabel:`{+atlas-ui+}` from the :guilabel:`Interface` dropdown on this page.
+
+   .. _delete-alert-setting:
+
+   Delete an Alert
+   ---------------
+
+   .. selected-content::
+      :selections: atlas-ui, project-alert
+
+      .. warning::
+
+         Don't delete the :ref:`maintenance-window-alerts` 
+         that are created when you configure a maintenance window.
+
+         If you delete a maintenance window alert, disable and then
+         re-enable your :ref:`maintenance window
+         <atlas-modify-project-settings>` to re-create the alerts.
+
+      .. include:: /includes/steps-delete-project-alert.rst
+
+   .. selected-content::
+      :selections: atlas-cli, project-alert
+
+      .. warning::
+
+         Don't delete the :ref:`maintenance-window-alerts` 
+         that are created when you configure a maintenance window.
+
+         If you delete a maintenance window alert, disable and then
+         re-enable your :ref:`maintenance window
+         <atlas-modify-project-settings>` to re-create the alerts.
+
+      .. include:: /includes/extracts/atlas-alerts-settings-delete.rst
+
+   .. selected-content::
+      :selections: atlas-ui, org-alert
+
+      .. include:: /includes/steps-delete-org-alert.rst
+
+   .. selected-content::
+      :selections: atlas-cli, org-alert
+
+      There are no specific instructions for deleting an organization alert using the {+atlas-cli+}. Instead, select :guilabel:`{+atlas-ui+}` from the :guilabel:`Interface` dropdown on this page.
+
+   If you delete an alert setting, |service| cancels active
+   alerts related to the setting. A deleted alert setting does
+   not remain visible.

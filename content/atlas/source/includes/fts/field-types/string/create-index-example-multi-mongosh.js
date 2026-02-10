@@ -1,0 +1,26 @@
+db.movies.createSearchIndex(
+  {
+    "mappings": {
+      "dynamic": false,
+      "fields": {
+        "title": {
+          "type": "string",
+          "multi": {
+            "english": {
+              "type": "string",
+              "analyzer": "lucene.english"
+            },
+            "french": {
+              "type": "string",
+              "analyzer": "lucene.french"
+            },
+            "stableSimilarity": {
+              "type": "string",
+              "similarity": { "type": "stableTfl" }
+            }
+          }
+        }
+      }
+    }
+  }
+)

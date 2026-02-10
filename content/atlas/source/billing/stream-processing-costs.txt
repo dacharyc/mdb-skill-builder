@@ -1,0 +1,180 @@
+.. _stream-processing-costs:
+.. _atlas-sp-processor-billing:
+
+=================
+Stream Processing
+=================
+
+.. meta::
+   :description: Understand the costs associated with Atlas Stream Processing, including charges for Stream Processing Workspaces, data transfer, VPC peering, and Private Link connections.
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: genre
+   :values: reference
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+You incur {+atlas-sp+} costs for the following items: 
+
+- Running Stream Processors
+- Data Transfer
+- VPC Peering
+- Private Link connections
+
+.. composable-tutorial::
+   :options: cloud-provider
+   :defaults: aws
+
+   Stream Processors
+   -----------------
+
+   |service| charges per hour per stream processor, where the hourly rate
+   is determined by the tier of the stream processor. {+atlas-sp+} bills
+   users for stream processors only when they are running. Billing is
+   recorded in one-second increments.
+
+   .. include:: /includes/atlas-stream-processing/legacy-worker-model.rst
+
+   The allocated vCPU and RAM vary depending on your stream processor
+   tier:
+
+   .. list-table::
+      :widths: 16 16 16 16 16 16
+      :header-rows: 1
+
+      * - Stream Processor Tier
+        - vCPU
+        - RAM
+        - Bandwidth
+        - Max Parallelism
+        - Kafka Partition Limit
+
+      * - ``SP2``
+        - 0.25
+        - 512 MB
+        - 50 Mbps
+        - 1
+        - 32
+
+      * - ``SP5``
+        - 0.5
+        - 1 GB
+        - 125 Mbps
+        - 2
+        - 64
+
+      * - ``SP10``
+        - 1
+        - 2 GB
+        - 200 Mbps
+        - 8
+        - Unlimited
+     
+      * - ``SP30``
+        - 2
+        - 8 GB
+        - 750 Mbps
+        - 16
+        - Unlimited
+
+      * - ``SP50``
+        - 8
+        - 32 GB
+        - 2500 Mbps
+        - 64
+        - Unlimited
+
+   .. note::
+
+      |service| doesn't charge for storage.
+
+   .. selected-content::
+      :selections: aws
+
+      .. include:: /includes/atlas-stream-processing/aws-workspace-cost.rst
+
+   .. selected-content::
+      :selections: azure
+
+      .. include:: /includes/atlas-stream-processing/azure-workspace-cost.rst
+
+   .. selected-content::
+      :selections: gcp
+
+      .. include:: /includes/atlas-stream-processing/gcp-workspace-cost.rst
+
+   Data Transfer
+   -------------
+
+   {+atlas-sp+} charges for all egress data transfer based on the transfer
+   type and destination. Data transfer pricing varies by cloud provider
+   and follows a tiered structure from lowest to highest cost. Data
+   transfer charges per GB.
+
+   .. seealso::
+
+      - |service-pricing|
+      - :ref:`atlas-sp-overview`
+
+   .. selected-content::
+      :selections: aws
+
+      .. include:: /includes/atlas-stream-processing/aws-data-transfer-cost.rst
+
+   .. selected-content::
+      :selections: azure
+
+      .. include:: /includes/atlas-stream-processing/azure-data-transfer-cost.rst
+
+   .. selected-content::
+      :selections: gcp
+
+      .. include:: /includes/atlas-stream-processing/gcp-data-transfer-costs.rst
+
+   VPC Peering
+   -----------
+
+   {+atlas-sp+} charges for all :ref:`VPC peering
+   <vpc-peering>` connections. To learn more, see
+   :ref:`<atlas-sp-security-networking>`.
+
+   :gold:`IMPORTANT:` {+atlas-sp+} supports VPC peering connections
+   only for {+aws+} and {+gcp+} workspaces.
+
+   .. selected-content::
+      :selections: aws
+
+      .. include:: /includes/atlas-stream-processing/aws-vpc-peering-costs.rst
+
+   .. selected-content::
+      :selections: gcp
+
+      .. include:: /includes/atlas-stream-processing/gcp-vpc-peering-costs.rst
+
+   Private Link
+   -------------
+
+   {+atlas-sp+} charges for all :ref:`Private Link
+   <private-endpoint-overview>` connections. To learn more, see
+   :ref:`<atlas-sp-pl-kafka-add>`.
+
+   .. selected-content::
+      :selections: aws
+
+      .. include:: /includes/atlas-stream-processing/aws-private-link-cost.rst
+
+   .. selected-content::
+      :selections: azure
+
+      .. include:: /includes/atlas-stream-processing/azure-private-link-cost.rst
+
+   .. selected-content::
+      :selections: gcp
+
+      .. include:: /includes/atlas-stream-processing/gcp-private-link-cost.rst

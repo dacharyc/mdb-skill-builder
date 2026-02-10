@@ -1,0 +1,59 @@
+.. _restore-archived-data:
+
+===================================================
+Restore Specific Documents from {+Online-Archive+}
+===================================================
+
+.. meta::
+   :description: Restore archived data to your Atlas cluster using the `$merge` pipeline stage or MongoDB Tools, ensuring adequate cluster provisioning.
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. include:: /includes/flex-dont-use.rst
+
+This page describes how to restore specific archived data using the :pipeline:`$merge`
+pipeline stage. This approach allows you execute a more granular restore based on specific
+criteria. If you need to restore a complete cluster, see :ref:`oa-config-backup` for more
+details. 
+
+.. note:: 
+
+   Ensure that your {+cluster+} is adequately provisioned for the amount of data you want
+   to restore from your archive. Otherwise, you risk running out of space during or after the
+   restoration. Contact :doc:`Support </support>` for additional technical guidance on
+   setting up the size of the oplog or for troubleshooting any space issues on your
+   |service| {+cluster+}.
+
+Required Access
+---------------
+
+You need :authrole:`Project Data Access Admin` access or higher to the project to follow
+this procedure. 
+
+Considerations
+--------------
+
+This approach is not recommended for large datasets (around 1TB of data) with a large
+number of partitions. 
+
+Procedure
+---------  
+
+Perform the following steps to restore specific archived data to your |service| {+cluster+}:
+
+.. include:: /includes/steps-restore-archived-data.rst
+
+.. note:: 
+
+   If you run into issues while migrating data back to your |service| 
+   {+cluster+}, contact :doc:`Support </support>`.

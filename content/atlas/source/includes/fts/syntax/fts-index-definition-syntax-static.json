@@ -1,0 +1,12 @@
+{
+  "mappings": { 
+    "dynamic": true|false, 
+    "fields": { 
+      "<field-name>": {
+        "type": "<field-type>",
+        ...
+      },
+      ...  
+    }
+  }
+}

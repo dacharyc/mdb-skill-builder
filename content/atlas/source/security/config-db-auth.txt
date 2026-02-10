@@ -1,0 +1,109 @@
+===========================================
+Configure |service| Clusters Authentication
+===========================================
+
+.. meta::
+   :description: Explore how to configure cluster authentication in Atlas, including options like AWS IAM, LDAP, OIDC, and X.509.
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+|service| offers the following security features for 
+{+database-deployment+} authentication.
+
+To learn about recommendations for authentication,
+see :ref:`arch-center-authentication-recs` in the
+{+atlas-arch-center+}.
+
+.. important::
+
+   {+service+} requires any user that needs access to the {+service+}
+   control plane to have :abbr:`MFA (Multi-Factor Authentication)`
+   configured for enhanced security.
+
+   If you use {+service+} :ref:`<atlas-org-users>`, configure and
+   manage MFA within {+service+}. You must use MFA when using
+   {+service+} credentials.
+
+   If you use federated authentication, configure and manage MFA in
+   the :abbr:`IdP (Identity Provider)`.
+
+   If you don't configure MFA, {+service+} supports the following MFA
+   methods as secondary identification:
+
+   - Security keys
+   - Biometrics
+   - OTP (One-Time Password) authenticators 
+   - Push notifications with Okta Verify
+   - Email
+   
+   To learn more, see :ref:`atlas-enable-mfa`.
+
+Database User Authentication
+----------------------------
+
+|service| requires clients to authenticate to access
+{+database-deployments+}. You must create database users to access the
+database. To set up database users for your {+database-deployments+}, 
+see :ref:`mongodb-users`.
+
+Custom Database Roles
+---------------------
+
+When the built-in |service|
+:ref:`database user privileges <atlas-user-privileges>` don't
+meet your desired set of privileges, you can create :ref:`custom roles 
+<mongodb-roles>`.
+
+Authentication with AWS IAM
+---------------------------
+
+You can authenticate applications running on |aws| services to |service|
+{+clusters+} with |aws| |iam| roles. You can set up a database user to
+use an |aws| |iam| role ARN for authentication and connect to your
+database using {+mongosh+} and drivers that authenticate using your |aws|
+|iam| role ARN. Using |aws| |iam| role reduces the number of
+authentication mechanisms and number of secrets to manage.
+
+To learn more, see :ref:`set-up-pwdless-auth`. 
+
+User Authentication with |ldap|
+-------------------------------
+
+|service| supports performing user authentication with |ldap|. To use |ldap|, 
+see :doc:`/security-ldaps`.
+
+User Authentication with |oidc|
+-------------------------------
+
+|service| supports performing user authentication
+with |oidc|. To use |oidc|, see :ref:`oidc-authentication-authorization`.
+
+User Authentication with X.509
+------------------------------
+
+X.509 client certificates provide database users access to the 
+{+database-deployments+} in your project. Options for X.509 
+authentication include |service|-managed X.509 authentication and 
+self-managed X.509 authentication. To learn more 
+about self-managed X.509 authentication, see :ref:`self-managed-x509`.
+
+.. toctree::
+   :titlesonly:
+
+   Database Users </security-add-mongodb-users>
+   Custom Database Roles </security-add-mongodb-roles>
+   AWS IAM </security/aws-iam-authentication>
+   LDAP </security-ldaps>
+   OIDC/OAuth2.0 </security-oidc>
+   X.509 </security-self-managed-x509>
+   
+
+.. dismissible-skills-card::
+   :skill: Secure MongoDB Atlas: AuthN and AuthZ
+   :url: https://learn.mongodb.com/skills?openTab=security

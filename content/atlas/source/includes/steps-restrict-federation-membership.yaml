@@ -1,0 +1,28 @@
+title: Go to the :guilabel:`Advanced Settings` page.
+level: 4
+ref: click-advanced-settings
+content: |
+
+  a. .. include:: /includes/nav/list-federation.rst
+
+  #. In the sidebar, click :guilabel:`Advanced Settings`.
+
+---
+title: Toggle :guilabel:`Restrict Membership` to :guilabel:`On`.
+level: 4
+ref: click-org-name
+---
+title: View User Conflicts
+level: 4
+ref: review-conflicts
+content: |
+
+   If your federation contains users who belong to organizations
+   outside of your federation, |service| displays a warning banner. To
+   review the conflicting users, click :guilabel:`View User Conflicts`.
+
+   |service| displays a modal with a list of users that conflict with
+   the federation restriction. Consider contacting these users to make
+   them aware of the restriction.
+
+...

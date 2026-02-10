@@ -1,0 +1,49 @@
+.. _atlas-ui-authentication-streams:
+
+==============================
+{+atlas-cli+} Authentication
+==============================
+
+.. meta::
+   :description: Set up Atlas credentials and an API key to securely authenticate with Atlas through the Atlas CLI. Learn how to log in, log out, and check your authentication status.
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Authenticate with the {+atlas-cli+}
+-----------------------------------
+
+Log In from the {+atlas-cli+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /includes/extracts/atlas-auth-login.rst
+
+For step-by-step instructions on logging in using the 
+{+atlas-cli+}, see
+:atlas:`Connect from the Atlas CLI </cli/stable/connect-atlas-cli>`.
+
+Log Out from the {+atlas-cli+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /includes/extracts/atlas-auth-logout.rst
+
+View Your Authentication Status from the {+atlas-cli+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /includes/extracts/atlas-auth-whoami.rst
+
+.. dismissible-skills-card::
+   :skill: Secure MongoDB Atlas: AuthN and AuthZ
+   :url: https://learn.mongodb.com/skills?openTab=security
+
+
+.. toctree::
+   :titlesonly:
+
+   Federated </security/federated-authentication>
+   Multi-Factor </security-multi-factor-authentication>

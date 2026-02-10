@@ -1,0 +1,35 @@
+============
+FAQ: Support
+============
+
+.. meta::
+   :description: Access support for Atlas clusters via in-app chat or support cases, and explore upgraded support plans and Flex Consulting for expert advice.
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. _faq-support:
+
+What is Flex Consulting?
+------------------------
+
+In addition to support plans, |service-fullname| offers personalized, 
+expert advice from a MongoDB consulting engineer through 
+Flex Consulting units.
+
+To learn more, see :ref:`Flex Consulting <flex-consulting>`.
+
+Where can I view the system status of the MongoDB Cloud?
+--------------------------------------------------------
+
+Visit https://status.cloud.mongodb.com for the status of the
+MongoDB Cloud, including |service| and |mms|.
+
+You can also subscribe to an
+`RSS feed <http://status.cloud.mongodb.com/history.rss>`_ of the MongoDB
+Cloud Status page using your preferred RSS reader.

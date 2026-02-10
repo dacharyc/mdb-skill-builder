@@ -1,0 +1,166 @@
+.. _atlas-sp-monitoring:
+
+================================================================
+{+atlas-sp+} Monitoring and Alerting
+================================================================
+
+.. default-domain:: mongodb
+
+.. meta::
+   :keywords: atlas stream processing, streaming data, data stream, monitoring, alerting, alerts, stats, statistics, report, reporting, metrics
+   :description: Learn about Atlas Stream Processing's monitoring and alerting capabilities so you can gain insight into your stream processor performance
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+{+atlas-sp+} provides monitoring and alerts so that users can leverage
+performance and status insights to refine their workflows.
+
+.. _atlas-sp-monitoring-ui:
+
+Monitor Stream Processor Workspaces in the {+atlas-ui+}
+------------------------------------------------------
+
+For each of your {+spw+}s you can monitor your stream processors in the |service| UI:
+
+.. procedure::
+   :style: normal
+
+   .. include:: /includes/nav/steps-stream-processing.rst
+
+   .. step:: Select the {+spw+} you want to monitor.
+
+      In the pane of the {+spw+} you want to monitor, click
+      :guilabel:`Manage`.
+
+   .. step:: Click the :guilabel:`Monitoring` tab.
+
+      The :guilabel:`Monitoring` tab displays a variety of runtime
+      statistics about a stream processor of your choosing, including, but
+      not limited to:
+
+      - Number of messages ingested
+      - Number of messages successfully processed
+      - Number of messages sent to your :ref:`Dead Letter Queue <atlas-sp-dlq>`
+
+      If your source connection is {+kafka+}, you can monitor the 
+      lag between the current offset and the latest offset at the broker for a topic's
+      partition and the sum of all the partition lags.
+
+   .. step:: Filter the monitoring charts as needed.
+
+      You can filter the charts by stream processor name, time range, and granularity.
+
+.. _atlas-sp-monitoring-proc-methods:
+
+Stream Processor Monitoring Methods
+-----------------------------------
+
+{+atlas-sp+} provides the following methods for on-demand reporting
+about your stream processors:
+
+- :method:`sp.processor.sample()`
+- :method:`sp.processor.stats()`
+
+The ``sp.processor.sample()`` method allows you to see a small sample of
+the documents output by a currently running stream processor of your
+choosing. Users can compare the sampled results against their expected
+results to diagnose any errors in their aggregation pipeline design.
+
+The ``sp.processor.stats()`` method returns a variety of runtime
+statistics about a stream processor of your choosing, including, but
+not limited to:
+
+- Number of messages ingested
+- Number of messages successfully processed
+- Number of messages sent to your :ref:`Dead Letter Queue <atlas-sp-dlq>`
+- In-memory size of your pipeline state
+- Pipeline definition
+
+If your source connection is {+kafka+}, you can monitor the 
+following optional metrics:
+
+- ``partitionOffsetLag`` indicates the lag between the 
+  current offset and the latest offset at the broker for a topic's
+  partition.
+
+- ``kafkaTotalOffsetLag`` indicates the sum of all the partition lags.
+
+.. _atlas-sp-monitoring-logs:
+
+Stream Processing Logs
+----------------------
+
+{+atlas-sp+} provides two types of {+spw+} activity logs:
+
+- **Operational logs**, which primarily track the behavior of
+    individual stream processors.
+- **Audit logs**, which primarily track authentication and security
+    activity at the {+spw+} level.
+
+To download {+atlas-sp+} operational or audit logs:
+
+.. procedure::
+   :style: normal
+
+   .. include:: /includes/nav/steps-stream-processing
+
+   .. step:: Navigate to the pane of the {+spw+} from which to
+      download logs and click the ellipsis.
+
+   .. step:: In the dropdown menu, select :guilabel:`Download Logs`.
+
+   .. step:: In the modal window, select the type of log you want to
+      download.
+
+   .. step:: In the :guilabel:`Stream processor` field, provide the
+      name of the stream processor for which you want to download
+      logs. Leave this field blank to download logs for all stream
+      processors.
+
+   .. step:: From the :guilabel:`Time Period` dropdown, select the
+      interval for which you want to download logs.
+
+   .. step:: Click the :guilabel:`Download Logs` button.
+
+.. note::
+
+   Logs take up to five minutes after creation to become queryable.
+
+.. _atlas-sp-monitoring-datadog:
+
+Stream Processor Metrics in Datadog
+-----------------------------------
+
+You can send metrics to Datadog to monitor your stream
+processors. To learn how to configure the integration and 
+which metrics are available, see :ref:`datadog-integration`.
+
+.. _atlas-sp-monitoring-proc-alerts:
+
+Stream Processor Alerts
+-----------------------
+
+{+atlas-sp+} triggers alerts when processors change state, or a
+processor meets various ingestion or output thresholds. For a
+list of available {+atlas-sp+} alerts, see :ref:`atlas-sp-alerts`. To
+learn more about alert configuration, see :ref:`configure-alerts`.
+
+You can target {+atlas-sp+} alerts in the following ways:
+
+- All stream processors within a project
+- All stream processors within a {+spw+} matching the configured
+  predicate
+- All stream processors the names of which match the configured
+  predicate
+
+For targets other than all stream processors, you can configure
+multiple targets for the same alert.
+
+{+atlas-sp+} configures a :alert:`Strean Processor State is failed
+<Stream Processor State is failed>` alert by default. As this is a
+project-level alert, it applies to any stream processor running in any
+{+spw+} within the project for which it is configured.

@@ -1,0 +1,614 @@
+.. _pl-troubleshooting:
+.. _atlas-troubleshoot-private-endpoint:
+
+===============================================
+Troubleshoot Private Endpoint Connection Issues
+===============================================
+
+.. meta::
+   :description: Troubleshoot private endpoint issues in Atlas by checking statuses, configuring security groups, and testing connectivity with nslookup and telnet.
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+This page outlines common private endpoint connection issues and possible resolutions.
+
+{+Dedicated-Clusters+}
+----------------------
+
+.. tabs::
+
+   .. tab:: {+aws-pl+}
+      :tabid: {+aws-pl+}
+
+      .. include:: /includes/steps/troubleshoot-privatelink-aws.rst
+
+      Obtain Private IPs with DNS Lookup
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/fact-pl-connection-strings.rst  
+
+      **SRV Record for DNS Seedlist Private Endpoint-Aware Connection 
+      Strings**
+
+      The following example shows the SRV record for an {+aws-pl+}
+      -enabled single-region {+cluster+}, showing three unique ports 
+      defined for ``pl-0-us-east-1.k45tj.mongodb.net``:
+
+      .. code-block:: sh
+         :copyable: false
+         
+         $ nslookup -type=SRV _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net
+
+         Server: 127.0.0.53
+         Address: 127.0.0.53#53
+
+         Non-authoritative answer:
+         _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1026 pl-0-us-east-1.k45tj.mongodb.net.
+         _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1024 pl-0-us-east-1.k45tj.mongodb.net.
+         _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1025 pl-0-us-east-1.k45tj.mongodb.net.
+
+      In the preceding example:
+
+      - ``_mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net`` is the SRV
+        record that the
+        ``mongodb+srv://cluster0-pl-0.k45tj.mongodb.net``
+        connection string references.
+
+      - ``pl-0-us-east-1.k45tj.mongodb.net`` is the hostname for each
+        node in one |service| {+cluster+} in one region for which 
+        you have configured {+aws-pl+}.
+
+      - ``1024``, ``1025``, and ``1026`` are unique ports that 
+        |service| assigns on the load balancer for each |service| 
+        replica set node in the region for which you enabled 
+        {+aws-pl+}. All nodes in an |service| replica set are 
+        accessible via the same hostname, with the load balancer 
+        resolving individual nodes by their unique port.
+
+      **Hostname DNS Resolution in Private Endpoint-Aware Connection 
+      Strings and SRV Records**
+
+      The hostname in the SRV record and the standard connection string 
+      is a |dns| Canonical Name (``CNAME``) record that resolves to the
+      endpoint-specific regional |dns| name that |aws| generates for the
+      interface endpoint. A |dns| ``ALIAS`` record exists for each 
+      subnet in your |vpc| that you deployed the interface endpoint to. 
+      Each ``ALIAS`` record contains the private IP address of the 
+      :term:`interface endpoint` for that subnet.
+
+      The following example shows the |dns| lookup for the hostname in 
+      the SRV record and in the standard connection string, including 
+      the endpoint-specific regional |dns| name for the interface 
+      endpoint and its |dns| ``ALIAS`` records:
+
+      .. code-block:: sh
+         :copyable: false
+
+         $ nslookup pl-0-us-east-1.k45tj.mongodb.net
+         Server: 127.0.0.53
+         Address: 127.0.0.53#53
+
+         Non-authoritative answer:
+         pl-0-us-east-1.k45tj.mongodb.net
+         canonical name = vpce-024f5b57108c8d3ed-ypwbxwll.vpce-svc-02863655456245e5c.us-east-1.vpce.amazonaws.com.
+    
+         Name: vpce-024f5b57108c8d3ed-ypwbxwll.vpce-svc-02863655456245e5c.us-east-1.vpce.amazonaws.com
+         Address: 10.0.30.194
+         Name: vpce-024f5b57108c8d3ed-ypwbxwll.vpce-svc-02863655456245e5c.us-east-1.vpce.amazonaws.com
+         Address: 10.0.20.54
+
+      Connection Refused Because There are Too Many Open Connections
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      - If your connections exceed the connection limits for your 
+        `cluster service limit <https://www.mongodb.com/docs/atlas/reference/atlas-limits/#connection-limits-and-cluster-tier>`__, 
+        you should increase the cluster tier.
+      - If your connection count is significantly higher than your
+        expected connection count, see section below :ref:`Gather More Information on the Client Making the Most Connections <pl-troubleshoot-gather-info>`.
+      - E.g. enforcement on a sharded cluster v7.0.22 using load balanced 
+        optimized connection string.
+
+      .. io-code-block:: 
+        :copyable: false
+
+        .. input:: 
+
+           $ mongosh "mongodb+srv://aws-replica-set-7-pl-0-lb.22qdu.mongodb-dev.net/" --apiVersion 1 --username sarah
+             Enter password: *****
+             Current Mongosh Log ID:	68910f1754be6d9adc74e399
+             Connecting to:		mongodb+srv://<credentials>@aws-replica-set-7-pl-0-lb.22qdu.mongodb-dev.net/?appName=mongosh+2.5.6
+             MongoNetworkError: Client network socket disconnected before secure TLS connection was established
+
+        .. output:: 
+
+           {"t":{"$date":"2025-08-04T19:48:17.649+00:00"},"s":"I", "c":"NETWORK", 
+           "id":22942, "ctx":"listener","msg":"Connection refused because there are 
+           too many open connections","attr":{"remote":"54.172.143.8:33205",
+           "isLoadBalanced":false,"uuid":{"uuid":{"$uuid":"e52e9c14-7648-430a-bc2e-95292347b7e0"}},
+           "connectionId":380,"connectionCount":58}}
+
+
+      Viewing the Client Source IP
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. note:: 
+
+         This feature is rolling out gradually. We expect it to be 
+         available for all the dedicated clusters in AWS by the end of September, 2025. 
+
+      - You can view the client source IP in the mongos logs for sharded 
+        clusters connecting via Private Endpoints.
+      - You can view the client source IP in the mongod logs for replica sets 
+        connecting via Private Endpoints.
+      - You can view the client source IP in the audit logs for both replica sets 
+        and sharded clusters connecting via Private Endpoints.
+      - This functionality is supported on AWS for the following versions:
+
+        - 8.1 and v8.1.0+
+        - 8.0 and v8.0.10+
+        - 7.0 and v7.0.22+
+
+      - The origin client IP address and port is indicated by the ``sourceClient`` field. 
+        That value is ``10.50.4.23`` in the above example.
+          
+        .. code-block::
+
+           {"t":{"$date":"2025-07-21T12:15:42.123+00:00"},"s":"I","c":"NETWORK",
+           "id":22943,"ctx":"listener","msg":"Connection accepted","attr":{"remote":"192.168.100.55:31245",
+           "isLoadBalanced":true,"sourceClient":"10.50.4.23:50123","uuid":{"uuid":{"$uuid":"12345678-abcd-4321-abcd-87654321abcd"}},
+           "connectionId":345,"connectionCount":19}}
+
+
+
+      .. _pl-troubleshoot-gather-info:
+
+      Gather More Information on the Client Making the Most Connections
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      Gathering these details requires using the 
+      `jq tool <https://www.mongodb.com/docs/manual/reference/log-messages/#log-parsing-examples>`__, 
+      which can be downloaded from the `jq website <https://jqlang.github.io/jq/>`__.
+
+      Connections created from the client metadata
+      `````````````````````````````````````````````
+
+      The following query provides the number of connections created from a 
+      particular client IP address. You can now collect the exact source VPC Private IP address 
+      using the attribute ``sourceClient``.
+
+      .. io-code-block::
+
+         .. input::
+         
+            grep '"c":"NETWORK"' mongod.log | jq -c '.attr.sourceClient' | grep -v null | sort | uniq -c
+         
+         .. output:: 
+
+            1 "172.31.36.2:32958"
+            1 "172.31.36.2:52904"
+            1 "172.31.36.2:52908"
+            1 "172.31.36.2:52910"
+            1 "172.31.36.2:52918"
+
+      Drivers used by the applications to connect to the cluster
+      ```````````````````````````````````````````````````````````
+
+      The following query provides the number of connections created by each 
+      driver. This is useful in scenarios where customers might use different 
+      drivers for different applications.
+
+      .. io-code-block::
+
+         .. input::
+
+            more mongodb.log| grep 'NETWORK' | jq -r '.attr.doc.driver.name' | grep -v null | sort | uniq -c | sort -rn
+
+         .. output::
+
+            56447    mongo-go-driver
+            21633    mongo-java-driver|sync
+               75    mongo-java-driver|sync|Airbyte
+                4    nodejs|Mongoose
+
+      For a more detailed analysis of connection counts and driver details, 
+      you can use the following Python script, which provides comprehensive 
+      information on the number of connections created and terminated, along 
+      with the driver names and version details.
+
+      .. io-code-block::
+
+        .. input:: /includes/driver_details_and_connection_details.py
+
+        .. output::
+
+           Driver: ('mongo-go-driver', 'v1.12.0-cloud')
+           Connection Opened: 14368
+           Connection Closed: 14362
+
+           Driver: ('mongo-go-driver', 'v1.12.1')
+           Connection Opened: 42056
+           Connection Closed: 41958
+
+           Driver: ('mongo-java-driver|sync', '4.11.1')
+           Connection Opened: 18012
+           Connection Closed: 17987
+
+           Driver: ('mongo-java-driver|sync', '4.8.2')
+           Connection Opened: 3621
+           Connection Closed: 3610
+
+           Driver: ('nodejs|Mongoose', '4.17.1|6.12.0')
+           Connection Opened: 3
+           Connection Closed: 1
+
+           Driver: ('mongo-go-driver', 'v1.13.0')
+           Connection Opened: 23
+           Connection Closed: 20
+
+           Driver: ('mongo-java-driver|sync|Airbyte', '4.11.0')
+           Connection Opened: 75
+           Connection Closed: 75
+
+           Driver: ('nodejs|Mongoose', '4.17.2|6.13.0')
+           Connection Opened: 1
+           Connection Closed: 0
+           
+      Application names used by client applications to connect to the cluster
+      ```````````````````````````````````````````````````````````````````````
+      We can suggest that customers include the application name in the connection 
+      string to specify different applications connecting to the cluster. By using the 
+      ``appName``, we can identify which application is creating many connections 
+      to the cluster in the future. See the `Miscellaneous Configuration <https://www.mongodb.com/docs/v6.2/reference/connection-string/#miscellaneous-configuration>`__ 
+      section of our documentation for more details on using the ``appName`` in 
+      the connection string. Additionally, you can use the ``db.currentOp().appname`` 
+      command to see the current operations associated with the application name. 
+      The following query provides details of the ``appName`` with the number of 
+      connections created by that particular application.
+
+      .. io-code-block::
+
+         .. input:: 
+
+            more mongodb.log| grep 'NETWORK' | jq -r '.attr.doc.application.name' | grep -v null | sort | uniq -c | sort -rn
+
+         .. output::
+
+            10809   niyo-*******-api
+            8616    MongoDB CPS Module v13.17.2.8878 (git: 70c0b932f47f4f0b3e82a75e223f39ed9635b47f)
+            7203    niyo-ns*****
+            5752    MongoDB Automation Agent v13.17.2.8878 (git: 70c0b932f47f4f0b3e82a75e223f39ed9635b47f)
+            3601    *****-auth-service
+
+      The provided details help to pinpoint the specific factors 
+      contributing to the high number of connections. By analyzing Source Client 
+      IP, client metadata, driver usage, and application names, you can identify 
+      which elements are responsible for the increased connections and determine 
+      the necessary areas to investigate. This targeted approach allows you 
+      to disregard other less relevant factors and concentrate on 
+      addressing the issues with the highlighted information, ultimately 
+      streamlining the mitigation process and enhancing cluster performance.
+
+      Multi-Region Private Endpoints 
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      Private endpoints are only available in multi-region clusters if there is a 
+      node within each region that the cluster spans that has a private endpoint 
+      configured. To learn more about configuring multi-region private endpoints, see 
+      :ref:`Regionalized Private Endpoints for Multi-Region Sharded Clusters <atlas_regionalized-pl>`.
+
+      .. include:: /includes/fact-private-endpoint-multi-uri.rst  
+
+      Test Connectivity from Your Deployed Application
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      You can use the tools ``nslookup`` and ``telnet`` to test the connectivity 
+      from your application to your Private Endpoint in |service|. 
+
+      .. procedure::
+         :style: normal
+
+         .. step:: Get the connection details for your |service| {+cluster+}.
+
+            Run ``nslookup`` with the ``-type=SRV`` flag to get the port numbers 
+            associated with each of the nodes in your {+cluster+}.
+
+            .. io-code-block:: 
+               :copyable: true 
+
+               .. input:: 
+                  :language: bash
+
+                   nslookup -type=SRV _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net
+
+               .. output::
+                  :language: bash
+
+                   Server: 127.0.0.53
+                   Address: 127.0.0.53#53
+                   Non-authoritative answer:
+                   _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1026 pl-0-us-east-1.k45tj.mongodb.net.
+                   _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1024 pl-0-us-east-1.k45tj.mongodb.net.
+                   _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1025 pl-0-us-east-1.k45tj.mongodb.net.
+
+         .. step:: Test the connectivity.
+
+            From your application environment, with one of the listed ports (for example, 
+            ``1026``, ``1024`` or ``1025`` in the example output above), run the 
+            following ``telnet`` command to test connectivity:
+
+            .. code-block:: bash
+
+               telnet pl-0-<xyz>.mongodb.net 1024
+               telnet pl-0-<xyz>.mongodb.net 1025
+               telnet pl-0-<xyz>.mongodb.net 1026
+
+   .. tab:: {+az-pl+}
+      :tabid: {+az-pl+}
+
+      .. include:: /includes/fact-private-endpoint-status-intro.rst
+
+      :guilabel:`Atlas Endpoint Service Status`
+
+      .. list-table::
+         :widths: 30 70
+         :header-rows: 1
+
+         * - Status
+           - Description
+
+         * - Creating private link
+           - |service| is creating the load balancer and VNet
+             resources.
+
+         * - Failed
+           - A system failure has occurred.
+
+         * - Available
+           - |service| created the load balancer and {+az-pl+} 
+             Service.
+             The {+az-pl+} Service is ready to receive connection
+             requests.
+
+         * - Deleting
+           - |service| is deleting the {+az-pl+} Service.
+
+      :guilabel:`Endpoint Status`
+
+      .. list-table::
+         :widths: 30 70
+         :header-rows: 1
+
+         * - Status
+           - Description
+
+         * - Not configured
+           - |service| created the load balancer and {+az-pl+} 
+             Service, but you haven't created a private endpoint 
+             yet. Click :guilabel:`Edit` and complete the wizard 
+             to create the private endpoint.
+
+         * - Initiating
+           - |service| has not yet accepted the connection to your
+             private endpoint.
+
+         * - Failed
+           - |azure| failed to establish a connection between 
+             |service| VNet resources and the private endpoint in 
+             your VNet. Click :guilabel:`Edit`, verify that the 
+             information you provided is correct, and then create 
+             the private endpoint again.
+
+         * - Available
+           - |service| VNet resources are connected to the private
+             endpoint in your VNet. You can connect to |service|
+             clusters in this region using {+az-pl+}.
+
+         * - Deleting
+           - |service| is removing the private endpoint 
+             connection from the {+az-pl+} Service.
+
+      Obtain Private IPs with DNS Lookup
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      When a client in your VNet connects to an |service| cluster using
+      one of these private endpoint-aware connection strings, the
+      client attempts to establish a connection to the Private Link
+      Service in the |service| VNet through the private endpoint's
+      network interface. The Private Link service sends traffic through
+      an |azure| Standard Load Balancer to the |service| cluster nodes
+      that you deployed in that region. Your client's |dns| resolution
+      mechanism handles resolving the hostname to the network
+      interface's private IP address. The driver is only aware of the
+      hostname in the connection string, listening on one port for each 
+      node in the cluster's replica set.
+
+      **SRV Record for DNS Seedlist Private Endpoint-Aware Connection Strings**
+
+      The following example shows the SRV record for an 
+      {+az-pl+}-enabled single-region cluster, showing three unique
+      ports defined for ``pl-0-eastus2.uzgh6.mongodb.net``:
+
+      .. code-block:: sh
+         :copyable: false
+
+         $ nslookup -type=SRV _mongodb._tcp.cluster0-pl-0.uzgh6.mongodb.net
+
+         Server:  127.0.0.53
+         Address:  127.0.0.53#53
+
+         Non-authoritative answer:
+         _mongodb._tcp.cluster0-pl-0.uzgh6.mongodb.net service = 0 0 1024 pl-0-eastus2.uzgh6.mongodb.net.
+         _mongodb._tcp.cluster0-pl-0.uzgh6.mongodb.net service = 0 0 1025 pl-0-eastus2.uzgh6.mongodb.net.
+         _mongodb._tcp.cluster0-pl-0.uzgh6.mongodb.net service = 0 0 1026 pl-0-eastus2.uzgh6.mongodb.net.
+
+      In the preceding example:
+
+      - ``_mongodb._tcp.cluster0-pl-0.uzgh6.mongodb.net`` is
+        the SRV record that the connection string references.
+
+      - ``pl-0-eastus2.uzgh6.mongodb.net`` is the hostname for
+        each node in one |service| cluster in one region for which
+        you have configured {+az-pl+}.
+
+      - ``1024``, ``1025``, and ``1026`` are unique ports that 
+        |service| assigns on the load balancer for each |service|
+        replica set node in the region for which you enabled 
+        {+az-pl+}. All nodes in an |service| replica set are
+        accessible via the same hostname, with the load balancer
+        resolving individual nodes by their unique port.
+
+      **Hostname DNS Resolution in Private Endpoint-Aware Connection Strings and SRV Records**
+
+      The hostname in the SRV record and the standard connection string
+      is a |dns| ``A`` record that resolves to the private IP address
+      of the private endpoint's network interface. 
+
+      The following example shows the |dns| lookup for the hostname in
+      the SRV record and in the standard connection string:
+
+      .. code-block:: sh
+         :copyable: false
+
+         $ nslookup pl-0-eastus2.uzgh6.mongodb.net
+         Server:  127.0.0.53
+         Address:  127.0.0.53#53
+
+         Non-authoritative answer:
+         Name:	pl-0-eastus2.uzgh6.mongodb.net
+         Address: 10.0.0.4
+
+      Multi-Region Private Endpoints 
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      Private endpoints are only available in multi-region clusters if there is a 
+      node within each region that the cluster spans that has a private endpoint 
+      configured. To learn more about configuring multi-region private endpoints, see 
+      :ref:`Regionalized Private Endpoints for Multi-Region Sharded Clusters <atlas_regionalized-pl>`.
+
+      .. include:: /includes/fact-private-endpoint-multi-uri.rst  
+
+      Test Connectivity from Your Deployed Application
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      You can use the tools ``nslookup`` and ``telnet`` to test the connectivity 
+      from your application to your Private Endpoint in |service|. 
+
+      .. procedure::
+         :style: normal
+
+         .. step:: Get the connection details for your |service| {+cluster+}.
+
+            Run ``nslookup`` with the ``-type=SRV`` flag to get the port numbers 
+            associated with each of the nodes in your {+cluster+}.
+
+            .. io-code-block:: 
+               :copyable: true 
+
+               .. input:: 
+                  :language: bash
+
+                   nslookup -type=SRV _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net
+
+               .. output::
+                  :language: bash
+
+                   Server: 127.0.0.53
+                   Address: 127.0.0.53#53
+                   Non-authoritative answer:
+                   _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1026 pl-0-us-east-1.k45tj.mongodb.net.
+                   _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1024 pl-0-us-east-1.k45tj.mongodb.net.
+                   _mongodb._tcp.cluster0-pl-0.k45tj.mongodb.net service = 0 0 1025 pl-0-us-east-1.k45tj.mongodb.net.
+
+         .. step:: Test the connectivity.
+
+            From your application environment, with one of the listed ports (for example, 
+            ``1026``, ``1024`` or ``1025`` in the example output above), run the 
+            following ``telnet`` command to test connectivity:
+
+            .. code-block:: bash
+
+               telnet pl-0-<xyz>.mongodb.net 1024
+               telnet pl-0-<xyz>.mongodb.net 1025
+               telnet pl-0-<xyz>.mongodb.net 1026
+
+
+   .. tab:: {+gcp-psc+}
+      :tabid: {+gcp-psc+}
+
+      .. include:: /includes/troubleshoot-privateserviceconnect-gcp.rst
+
+      Multi-Region Private Endpoints 
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      Private endpoints are only available in multi-region clusters if there is a 
+      node within each region that the cluster spans that has a private endpoint 
+      configured. To learn more about configuring multi-region private endpoints, see 
+      :ref:`Regionalized Private Endpoints for Multi-Region Sharded Clusters <atlas_regionalized-pl>`.
+
+      .. include:: /includes/fact-private-endpoint-multi-uri.rst  
+         
+      Test Connectivity from Your Deployed Application
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      You can use the tools ``nslookup`` and ``telnet`` to test the connectivity 
+      from your application to your Private Endpoint in |service|. 
+
+      .. procedure::
+         :style: normal
+
+         .. step:: Get the connection details for your |service| {+cluster+}.
+
+            Run ``nslookup`` with the ``-type=SRV`` flag to get the port numbers 
+            associated with each of the nodes in your {+cluster+}.
+
+            .. io-code-block:: 
+               :copyable: true 
+
+               .. input:: 
+                  :language: bash
+
+                   nslookup -debug -type=SRV _mongodb._tcp.gpc-mongo-pl-0-us-central1.test.mongodb.net
+
+               .. output::
+                  :language: bash
+
+                  Server:		8.8.8.8
+                  Address:	8.8.8.8#53
+
+                  ------------
+                      QUESTIONS:
+	                    _mongodb._tcp.gpc-mongo-pl-0-us-central1.test.mongodb.net, type = SRV, class = IN
+                      ANSWERS:
+                      ->  _mongodb._tcp.gpc-mongo-pl-0-us-central1.test.mongodb.net
+                      service = 0 0 27017 pl-00-000-us-central1-gcp.test.mongodb.net.
+                      ttl = 60
+                      ->  _mongodb._tcp.gpc-mongo-pl-0-us-central1.test.mongodb.net
+	                    service = 0 0 27017 pl-00-001-us-central1-gcp.test.mongodb.net.
+	                    ttl = 60
+                      ->  _mongodb._tcp.gpc-mongo-pl-0-us-central1.test.mongodb.net
+	                    service = 0 0 27017 pl-00-002-us-central1-gcp.test.mongodb.net.
+	                    ttl = 60
+                      AUTHORITY RECORDS:
+                      ADDITIONAL RECORDS:
+                  ------------
+                  Non-authoritative answer:
+                  _mongodb._tcp.gpc-mongo-pl-0-us-central1.test.mongodb.net	service = 0 0 27017 pl-00-000-us-central1-gcp.test.mongodb.net.
+                  _mongodb._tcp.gpc-mongo-pl-0-us-central1.test.mongodb.net	service = 0 0 27017 pl-00-001-us-central1-gcp.test.mongodb.net.
+                  _mongodb._tcp.gpc-mongo-pl-0-us-central1.test.mongodb.net	service = 0 0 27017 pl-00-002-us-central1-gcp.test.mongodb.net.
+
+         .. step:: Test the connectivity.
+
+            From your application environment, with one of the listed ports (for example, 
+            ``27017`` in the example output above), run the 
+            following ``telnet`` command to test connectivity:
+
+            .. code-block:: bash
+
+               telnet pl-0-<xyz>.mongodb.net 27017
+

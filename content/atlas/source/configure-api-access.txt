@@ -1,0 +1,386 @@
+.. meta::
+   :keywords: atlas ui, atlas cli
+   :description: Configure programmatic access to Atlas using API keys or service accounts, including authentication methods and access management.
+
+.. _atlas-admin-api-access:
+.. _programmatic-access:
+
+====================================================
+Get Started with the {+atlas-admin-api+}
+====================================================
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. composable-tutorial::
+   :options: programmatic-access, interface
+   :defaults: service-account, atlas-ui
+
+   .. important::
+
+      Each {+atlas-admin-api+} has its own resources and requires initial
+      setup.
+
+      You can access the {+atlas-admin-api+} servers through the public 
+      internet only. The {+atlas-admin-api+} is not available over 
+      connections that use :ref:`network peering <vpc-peering>` or 
+      :ref:`private endpoints <private-endpoint>`.
+
+      To learn more, see :ref:`atlas-api`.
+
+   The {+atlas-admin-api+} follows the principles of the |rest|
+   architectural style to expose a number of internal resources which
+   enable programmatic access to administrative features in {+service+}. To
+   learn more about the {+atlas-admin-api+}, see
+   :ref:`atlas-admin-api-ref`.
+
+   .. include:: includes/api/facts/api-no-access-to-data.rst
+
+   To use the {+atlas-admin-api+} to manage your {+service+} clusters, you
+   must authenticate your |api| requests with one of the following
+   authentication methods: 
+   
+   - Service account access tokens ({+oauth-2+})
+   - API keys ({+http-digest+})
+
+   To learn about these methods, see :ref:`api-authentication`.
+
+   The following sections describe how to use service accounts and |api|
+   keys to configure programmatic access to your |service| organizations
+   and projects. 
+
+   Required Access
+   ---------------
+
+   To create a service account or |api| keys for an organization, you must have
+   :authrole:`Organization Owner` access to that organization.
+   
+   To grant a service account access to a project, you must have
+   :authrole:`Organization Owner` access to the organization that owns the project.
+
+   To grant |api| keys access to a project, you must have
+   :authrole:`Project Owner` access for that project.
+
+   .. _enable-api-access-list:
+   .. _atlas-require-api-access-list:
+
+   Optional: Require an IP Access List for the {+atlas-admin-api+}
+   -------------------------------------------------------------------------
+
+   When you create an organization using the {+atlas-ui+}, |service|
+   enables the |api| IP access list feature by default. This limits |api| 
+   requests to only those from the location-based IP or |cidr| addresses that you 
+   specify in the IP access list. If you make a request to 
+   the {+atlas-admin-api+} without an IP access list entry, the server responds with 
+   a 403 status code.
+
+   If you disable the feature, you can make |api| requests from any address on 
+   the internet as long as the IP access list is empty. Once you add an IP access 
+   list entry, only requests originating from that IP address can make requests.  
+   
+   .. include:: /includes/fact-service-account-token-ip-access.rst
+
+   To set your organization to require IP access lists for every 
+   {+atlas-admin-api+} request after organization creation, follow these steps:
+
+   .. include:: /includes/steps-require-ip-access-list.rst
+
+   .. _see-org-api-keys:
+   .. _about-org-api-keys:
+   .. _atlas-prog-api-key:
+
+   Grant Programmatic Access to |service|
+   --------------------------------------
+
+   You can grant programmatic access to an organization or project using one of the 
+   two following authentication methods:
+
+   .. include:: /includes/api/admonitions/service-accounts.rst
+
+   .. include:: /includes/api-table-auth-comparison.rst
+
+   .. _create-org-api-key:
+
+   Grant Programmatic Access to an Organization
+   --------------------------------------------
+
+   Use the following procedures to grant programmatic access to an 
+   organization either through a service account or |api| keys. 
+   To learn more about these two authentication methods, see :ref:`api-authentication`.
+
+   .. selected-content::
+      :selections: service-account, atlas-ui
+
+      Create a Service Account for an Organization
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/steps-create-service-account-org.rst
+                  
+   .. selected-content::
+      :selections: service-account, atlas-api
+
+      Create a Service Account for an Organization
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      You can use the {+atlas-admin-api+} to :oas-bump-atlas-op:`create a service account for your organization <createserviceaccount>`.
+
+      .. include:: /includes/api-record-secret.rst
+
+   .. selected-content::
+      :selections: api-key, atlas-ui
+
+      Create an |api| Key for an Organization
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/steps-app-api-key-create-in-org.rst
+
+   .. selected-content::
+      :selections: api-key, atlas-cli
+
+      Create |api| Keys for an Organization
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/extracts/atlas-organizations-apiKeys-create.rst
+
+      Add an |api| Access List Entry for the |api| Key
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/extracts/atlas-organizations-apiKeys-accessLists-create.rst
+
+   .. _about-project-api-keys:
+
+   Grant Programmatic Access to a Project
+   --------------------------------------
+
+   Use the following procedures to grant programmatic access to a project 
+   either through a service account or |api| keys. 
+   To learn more about these two authentication methods, see :ref:`api-authentication`.
+
+   .. _invite-org-app-api-keys:
+
+   .. selected-content::
+      :selections: service-account, atlas-ui
+
+      Grant Existing Service Account Access to a Project
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      If you've already created service accounts or |api| keys for an organization, 
+      you can assign them to a project to grant that project access to the 
+      {+atlas-admin-api+}.
+
+      .. warning::
+
+         If you assign an organization service account to a project, the 
+         :authrole:`Project Owner` can manage the service account, including rotating 
+         secrets and updating the IP access list. 
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/nav/steps-project-access-manager.rst
+
+         .. step:: Click :guilabel:`Invite to Project`.
+
+         .. step:: Locate your organization service account. 
+                  
+            Start typing the client ID of your service account in the field, 
+            then select your service account from the menu.
+
+         .. step:: Assign project roles to your service account. 
+
+            In the menu that appears, select the :ref:`new role or roles <project-roles>` 
+            for the service account.
+
+         .. step:: Click :guilabel:`Invite to Project`.
+
+   .. selected-content::
+      :selections: service-account, atlas-api
+
+      Grant Existing Service Account Access to a Project
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      You can use the {+atlas-admin-api+} to :oas-bump-atlas-op:`grant an existing 
+      service account access to a project <addprojectserviceaccount>`.
+
+   .. selected-content::
+      :selections: api-key, atlas-ui
+
+      Grant Existing |api| Keys Access to a Project
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      If you've already created service accounts or |api| keys for an organization, 
+      you can assign them to a project to grant that project access to the 
+      {+atlas-admin-api+}.
+            
+      .. include:: /includes/steps-app-api-key-invite-to-project.rst
+
+   .. selected-content::
+      :selections: api-key, atlas-cli
+
+      Grant Existing |api| Keys Access to a Project
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      If you've already created service accounts or |api| keys for an organization, 
+      you can assign them to a project to grant that project access to the 
+      {+atlas-admin-api+}.
+
+      .. include:: /includes/extracts/atlas-projects-apiKeys-assign.rst
+
+   .. _create-project-api-key:
+
+   Add Project Access from a Project
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   If you haven't already created a service account or |api| keys for an organization, 
+   you can create them for a project to grant that project access to the {+atlas-admin-api+}.
+   The service account or |api| keys that you create for a project are automatically added 
+   to the parent organization with the permission :authrole:`Organization Member`. 
+
+   .. selected-content::
+      :selections: service-account, atlas-ui
+
+      To create a service account for a project using the {+atlas-ui+}:
+
+      .. include:: /includes/steps-create-service-account-project.rst  
+
+   .. selected-content::
+      :selections: service-account, atlas-api
+
+      You can use the {+atlas-admin-api+} to :oas-bump-atlas-op:`create a service 
+      account for your project <createprojectserviceaccount>`.
+
+      .. include:: /includes/api-record-secret.rst
+
+   .. selected-content::
+      :selections: api-key, atlas-cli
+
+      .. include:: /includes/extracts/atlas-projects-apiKeys-create.rst
+
+      After you create the |api| key for your project, use the 
+      {+atlas-ui+} to add an |api| access list entry. You can't use the
+      |api| key for the project until you set up the |api| access list.
+
+      .. note:: {+atlas-cli+} Limitation
+
+         You can't edit the |api| access list for a project |api| key
+         using the {+atlas-cli+}.
+
+      To add an |api| access list entry using the {+atlas-ui+}:
+
+      .. include:: /includes/steps/add-project-api-key-to-access-list.rst 
+
+   .. selected-content::
+      :selections: api-key, atlas-ui
+
+      To create an |api| key for a project using the {+atlas-ui+}:
+
+      .. include:: /includes/steps-app-api-key-create-in-project.rst
+
+   .. _prog-access-usage:
+   
+   .. _example-api-request:
+
+   Make an |api| Request
+   ---------------------
+
+   The {+atlas-admin-api+} uses one of two authentication methods to authenticate requests:
+   service account or |api| keys. You'll need the keys or secret that you saved when 
+   :ref:`configuring your preferred authentication method <create-org-api-key>` to 
+   complete the following procedures.
+
+   All {+atlas-admin-api+} endpoints have the following base URL:
+
+   .. include:: /includes/api-base-url.rst
+
+   .. important::
+
+      MongoDB uses HTTPS URLs to increase security. Using HTTP URLs will return a 301 status code.
+
+   .. selected-content::
+      :selections: service-account, atlas-ui
+
+      .. include:: /includes/steps-api-request-service-account.rst
+
+   .. selected-content::
+      :selections: service-account, atlas-api
+
+      .. include:: /includes/steps-api-request-service-account.rst
+
+   .. selected-content::
+      :selections: api-key, atlas-ui
+
+      .. include:: /includes/steps-api-request-api-key.rst
+
+   .. selected-content::
+      :selections: api-key, atlas-cli
+
+      .. include:: /includes/steps-api-request-api-key.rst
+
+   .. seealso::
+   
+      - `{+atlas-admin-api+} Specification <https://mongodb.com/docs/atlas/reference/api-resources-spec>`_
+      - :ref:`atlas-api-error-codes`
+
+
+   Alternatively, you can use any tool that supports `OpenAPI v3
+   specification <https://spec.openapis.org/oas/v3.0.1>`__ to generate code
+   samples or mock servers. For example, you can import 
+   the :atlas:`Atlas Admin API Specification </reference/api-resources-spec>`
+   into `Postman <https://www.postman.com/>`__ to generate ``curl``
+   commands.
+
+   .. warning::
+
+      Using an HTTP URL with Postman will return a 301 status code as expected. However, in this scenario, Postman may automatically retry the request with HTTPS, but simultaneously strip the header and body from the retry request. This will return a 401 status code instead of 301, making it difficult to determine why the request failed.
+
+   To use Postman to generate ``curl`` commands: 
+
+   .. procedure:: 
+      :style: normal 
+
+      .. step:: In the MongoDB |service| Administration API :atlas:`documentation </reference/api-resources-spec/>`, click :guilabel:`Download source` in the navigation bar.
+
+      .. step:: Right-click the OpenAPI specification format you want to download and copy the link.
+   
+      .. step:: Open Postman and click :guilabel:`File`, then :guilabel:`Import`.
+
+         The :guilabel:`Import` window displays.
+
+      .. step:: In the :guilabel:`Import` window, click :guilabel:`Link` and paste the download link that you copied in step 2.
+
+      .. step:: Click :guilabel:`Continue`, then :guilabel:`Import`.
+
+      .. step:: For the request for which you want to generate a ``curl`` command, click **</>** on the right and select :guilabel:`cURL` from the :guilabel:`Code snippet` dropdown.
+
+   Next Steps
+   ----------
+
+   To learn more about the {+atlas-admin-api+}, see 
+   :ref:`atlas-admin-api-ref`.
+
+   To manage programmatic access to the {+atlas-admin-api+}, see any of 
+   the following procedures:
+
+   - :ref:`atlas-admin-api-access-org`.
+
+   - :ref:`prog-access-mult-orgs`.
+
+   - :ref:`atlas-admin-api-access-project`.
+
+   - :ref:`rotate-service-account-secrets`.
+
+.. toctree::
+   
+   Organization Access </configure-api-access-org>
+   Multiple Organizations </configure-api-access-mult-org>
+   Project Access </configure-api-access-project>
+   

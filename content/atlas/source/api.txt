@@ -1,0 +1,195 @@
+.. _atlas-api:
+.. _data-api-overview:
+.. _graphql-api-overview:
+
+=============================
+|service| Programmatic Access
+=============================
+
+.. facet::
+   :name: genre 
+   :values: reference
+
+.. meta:: 
+   :description: Use APIs and the Atlas CLI to programmatically access your deployments and apps.
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+You can interact with |service| programmatically to perform
+administrative tasks or manage your deployments using the
+following resources.
+
+.. _atlas-admin-api-overview:
+
+{+atlas-admin-api+}
+-------------------------
+
+.. include:: /includes/fact-atlas-admin-api-definition.rst
+
+You can explore the various endpoints available through the {+atlas-admin-api+}
+in MongoDB's `Postman workspace <https://www.postman.com/mongodb-devrel/workspace/mongodb-atlas-administration-apis/overview>`__.
+
+To configure access for the {+atlas-admin-api+}, see :ref:`atlas-admin-api-access`.
+
+.. seealso::
+
+   - :ref:`Learn about the Atlas Admin API <atlas-admin-api>`.
+   - `See the Atlas Admin API Specification <https://mongodb.com/docs/atlas/reference/api-resources-spec/v2>`__.
+
+{+atlas-go-sdk+}
+-------------------------------------------------
+
+The {+atlas-go-sdk+} provides platform-specific and Go language-specific
+tools, libraries, and documentation to help you build applications that
+interact with |service| quickly and easily using the {+atlas-admin-api+}. 
+
+.. seealso::
+
+   :ref:`Atlas Go SDK <atlas-admin-sdk>`.
+
+.. _atlas-programmatic-access-cli-overview:
+
+{+voyage-api-full+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The {+voyage-api+} provides endpoints for accessing Voyage AI's
+state-of-the-art embedding and reranking models. Use the REST API 
+and available client SDKs to power search and retrieval in your AI applications.
+
+.. card-group::
+   :columns: 2
+   :style: compact
+
+   .. card::
+      :cta: Learn about the Embedding and Reranking API
+      :url: https://www.mongodb.com/docs/voyageai/api-reference/overview/
+
+   .. card::
+      :cta: See the Embedding and Reranking API Specification
+      :url: https://www.mongodb.com/docs/api/doc/atlas-embedding-and-reranking-api/
+
+{+atlas-cli+} 
+-------------
+
+The {+atlas-cli+} is a command-line interface built specifically for
+|service-fullname|. You can use {+atlas-cli+} to interact with |service|
+from the terminal with short and intuitive commands and accomplish
+complex operational tasks such as creating a cluster or setting up an
+access list interactively and programmatically.  
+
+.. seealso::
+
+   - `Learn more about the {+atlas-cli+} <https://www.mongodb.com/docs/atlas/cli/current/>`__.
+   - `Get Started with the {+atlas-cli+} <https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-getting-started/>`__.
+
+.. _atlas-programmatic-access-terraform-overview:
+
+HashiCorp Terraform MongoDB Atlas Provider
+------------------------------------------
+
+HashiCorp Terraform MongoDB |service| Provider provides refined
+programmatic access and management of |service-fullname| resources. You
+can define your environment using the HashiCorp Configuration Language (HCL)
+and deploy, update, and manage |service| infrastructure as code through
+HashiCorp Terraform. This allows you to integrate |service| into your
+continuous delivery workflows. 
+
+.. seealso::
+
+   - `Learn more about MongoDB Atlas and HashiCorp Terraform <https://www.mongodb.com/atlas/hashicorp-terraform>`__.
+   - `Managing IaC with MongoDB Atlas and HashiCorp Terraform <https://www.youtube.com/watch?v=zoMB6mlq46k>`__ (Video Walkthrough).
+
+Cloud Development Kit for Terraform 
+-----------------------------------
+
+:abbr:`CDK (Cloud Development Kit)` for Terraform leverages the
+|service-fullname| {+atlas-admin-api+} to enable provisioning across
+popular programming languages such as JavaScript, TypeScript, Python,
+Java, Go, and C#. Utilizing the powerful capabilities of Terraform,
+with :abbr:`CDKTF (Cloud Development Kit for Terraform)` you can now 
+create, manage, and update your |service| resources with ease and deploy 
+them seamlessly in the cloud without context switching from the native
+programming language of choice. 
+
+.. seealso::
+
+   - `MongoDB Cloud Development Kit for Terraform <https://constructs.dev/search?q=&cdk=cdktf&keywords=terraform&offset=0>`__.
+   - `Managing IaC with MongoDB Atlas and the Terraform CDK
+     <https://www.youtube.com/watch?v=9f0WghCYsEw>`__ (Video Walkthrough).
+
+.. _atlas-programmatic-access-cloudformation-overview:
+
+MongoDB Atlas AWS CloudFormation Resources
+------------------------------------------
+
+|service| CloudFormation Resources helps you to manage
+|service-fullname|. It simplifies provisioning and management of
+|service| features on |aws|. You can create YAML- or JSON-based templates
+for the service or application architectures you want and have |aws|
+CloudFormation use those templates for quick and reliable provisioning
+of the services or applications (called "stacks"). You can also easily
+update or replicate the stacks as needed. 
+
+.. seealso::
+
+   - `Learn more about Atlas CloudFormation <https://www.mongodb.com/atlas/aws-cloudformation>`__.
+   - `Atlas CloudFormation Resources <https://github.com/mongodb/mongodbatlas-cloudformation-resources/>`__.
+
+AWS Partner Solutions
+---------------------
+
+|aws| Partner Solutions provide pre-built CloudFormation templates to
+help you provision a group of |service| resources for specific use cases
+instead of deploying them one by one. Partner Solutions help you deploy
+popular technologies to |aws| according to |aws| best practices. 
+
+.. seealso::
+
+   `AWS Quick Starts <https://aws.amazon.com/quickstart/?solutions-all.sort-by=item.additionalFields.sortDate&solutions-all.sort-order=desc&awsf.filter-content-type=*all&awsf.filter-tech-category=*all&awsf.filter-industry=*all&solutions-all.q=mongodb&solutions-all.q_operator=AND>`__.
+
+AWS Cloud Development Kit 
+-------------------------
+
+If you prefer using familiar programming languages like JavaScript,
+TypeScript, Python, Java, C#, and Go rather than using YAML or |json|,
+you can use the |aws| :abbr:`CDK (Cloud Development Kit)` to deploy
+|service| resources. When you execute your |aws| :abbr:`CDK (Cloud 
+Development Kit)` applications, they automatically generate
+CloudFormation templates, which in turn utilize the |aws| CloudFormation
+service for resource provisioning. This way, you benefit from the
+abstraction and flexibility provided by |aws| :abbr:`CDK (Cloud
+Development Kit)` and take advantage of the robustness of CloudFormation
+for infrastructure management, while still using the programming
+language of your choice.  
+
+.. seealso::
+
+   - `Atlas AWS Cloud Development Kit <https://github.com/mongodb/awscdk-resources-mongodbatlas/blob/main/examples/README.md>`__.
+   - `How to Deploy Atlas with AWS CDK <https://www.youtube.com/watch?v=p7Fru0fbmxY>`__ (Video Walkthrough).
+
+.. _atlas-programmatic-access-ak8so-overview:
+
+|ak8so| 
+-------
+
+The |ak8so| enables you to manage |service| resources through custom resources that 
+you apply in |k8s|. This allows an infrastructure as code approach to manage 
+declarative configuration for |service| using a GitOps workflow, allowing developers 
+to configure |service| resources using the same process and tooling that they use to 
+deploy application components into |k8s|. The automatic creation of a |k8s| secret 
+containing the connection string for a database user simplifies the process of 
+connecting an application to the database.
+
+.. seealso::
+
+   - `Learn more about the Atlas Kubernetes Operator <https://www.mongodb.com/docs/atlas/operator/current/>`__.
+   - `Quick Start Tutorial <https://www.mongodb.com/docs/atlas/operator/current/ak8so-quick-start/#std-label-ak8so-quick-start-ref>`__.
+
+.. toctree::
+
+   {+atlas-admin-api+} </api/atlas-admin-api>
+   Infrastructure as Code </infrastructure>

@@ -1,0 +1,10 @@
+{
+  "mappings": {
+    "fields": {
+      "products": {
+        "type": "embeddedDocuments",
+        "dynamic": true
+      }
+    }
+  }
+}

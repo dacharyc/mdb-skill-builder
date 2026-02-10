@@ -1,0 +1,242 @@
+.. _config-adf:
+
+========================================================
+Configure Data Stores for a {+FDI+}
+========================================================
+
+.. meta::
+   :description: Configure data stores for a federated database instance using JSON to map and query collections across various storage services.
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: genre
+   :values: reference
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This page contains general commands that you can use to set, 
+update, and retrieve {+fdi+} storage configuration. For a specific Data Store
+configuration, such as AWS S3 Encryption, see its specific Data Store 
+documentation.
+
+
+Define a Data Store for a {+FDI+}
+--------------------------------------------------------
+
+
+To configure a data store for a {+fdi+}, you need to
+create a storage configuration JSON file that defines your data stores and 
+maps them to collections you can query. MongoDB provides 
+{+fdi+} support for the following data stores:
+
+- :ref:`adf-configuration-file-aws`
+- :ref:`adf-configuration-file-azure`
+- :ref:`adf-configuration-file-gcp`
+- :ref:`adf-configuration-file-atlas`
+- :ref:`adf-configuration-file-http`
+- :ref:`adf-configuration-file-oa`
+
+.. important:: 
+
+   Information in your storage configuration is visible internally at 
+   MongoDB and stored as operational data to monitor and improve the 
+   performance of {+adf+}. We recommend that you don't use :abbr:`PII 
+   (Personally Identifiable Information)` in your configurations.
+
+
+
+Data Access Types
+-----------------
+
+When you create a {+fdi+}, you grant |service| one of the following types of
+data access to the |aws| buckets in your |aws| account. 
+
+- **read only access:** It cannot make any changes to the data or add new data.
+- **read and write access:** It can update existing files, delete files, or
+  add new data to the storage.
+
+To access your |service| clusters, |service| uses your existing 
+:manual:`Role Based Access Controls</core/authorization>`. You can view 
+and edit the acces of your user following the steps in 
+:ref:`manage-users-and-roles`.
+
+Privilege Actions 
+-----------------
+
+Privilege actions are the operations that you can perform on your 
+{+fdi+}. You can grant the privilege action through one of the following: 
+
+- When you :atlas:`create or modify </security-add-mongodb-roles/>` 
+  custom roles from the |service| User Interface
+- In the ``actions.action`` request body parameter when you 
+  :oas-bump-atlas-op:`create <creategroupcustomdbrolerole>` or 
+  :oas-bump-atlas-op:`update <updategroupcustomdbrolerole>` a custom 
+  role from the |service| |api|
+
+The following table shows the available {+fdi+} privilege actions:
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Command 
+     - Description
+
+   * - .. authaction:: sqlGetSchema
+     - Retrieve the schema stored for a collection or view, see 
+       :ref:`sqlgetschema-cmd` for details.  
+
+   * - .. authaction:: sqlSetSchema
+     - Set or delete the schema for a collection or view, see 
+       :ref:`sqlgetschema-cmd` for details. 
+
+   * - .. authaction:: viewAllHistory 
+     - Retrieve details about the queries that were run in the past
+       using :ref:`$queryHistory <adf-query-history-stage>`.
+
+   * - .. authaction:: outToAzure
+     - Write data from any one of the :ref:`supported <config-adf>`
+       {+fdi+} stores or multiple :ref:`supported <config-adf>` {+fdi+}
+       stores to your |azure| Blob Storage container using
+       :ref:`$out <adf-out-stage>`.
+
+   * - .. authaction:: outToS3
+     - Write data from any one of the :ref:`supported <config-adf>`
+       {+fdi+} stores or multiple :ref:`supported <config-adf>` {+fdi+}
+       stores to your |s3| bucket using :ref:`$out <adf-out-stage>`.
+
+   * - .. authaction:: outToGCP
+     - Write data from any one of the :ref:`supported <config-adf>`
+       {+fdi+} stores or multiple :ref:`supported <config-adf>` {+fdi+}
+       stores to your {+gcs+} bucket using :ref:`$out <adf-out-stage>`.
+
+   * - .. authaction:: storageGetConfig 
+     - Retrieve your {+fdi+} :ref:`storage configuration 
+       <config-adf>` using the :ref:`storageGetConfig 
+       <adf-getstorageconfig>` command.
+
+   * - .. authaction:: storageSetConfig 
+     - Set or update your {+fdi+} :ref:`storage configuration 
+       <config-adf>` using the :ref:`storageSetConfig 
+       <adf-setstorageconfig>` command.
+
+
+.. _adf-getstorageconfig:
+
+Retrieve Configuration File
+---------------------------
+
+To retrieve your {+FDI+} Configuration File, connect to your instance and use 
+the following command: 
+
+.. code-block:: javascript
+
+   use admin
+   db.runCommand( { "storageGetConfig" : 1 } )
+
+The command returns the current {+fdi+} configuration. 
+
+
+.. _adf-validatestorageconfig:
+
+Validate Configuration File
+---------------------------
+
+To validate your {+fdi+} configuration, connect to your instance and use the 
+following command:
+
+.. code-block:: javascript
+
+   use admin
+   db.runCommand( { "storageValidateConfig" : <config> } )
+
+Replace ``<config>`` with the configuration for the {+fdi+}.
+
+If the configuration is valid, the command returns the following answer:
+
+.. code-block:: sh 
+   :copyable: false
+
+   { "ok" : 1 }
+
+If the configuration is invalid, the command returns the list of errors in the 
+``errs`` field:
+
+.. code-block:: sh 
+   :copyable: false
+
+   {
+	  "ok" : 1,
+	  "errs" : [
+		  "<error>",
+		  "<error>",
+		  ...
+	  ]
+   }
+
+
+.. _adf-setstorageconfig:
+
+Update your {+FDI+} Configuration
+---------------------------------------------------------
+
+To update your {+fdi+} configuration, connect to your instance and use the 
+following command:
+
+.. code-block:: javascript
+
+   use admin
+   db.runCommand( { "storageSetConfig" : <config> } )
+
+Replace ``<config>`` with the configuration for the {+fdi+}. 
+
+.. tip::
+   MongoDB recommends you to :ref:`validate <adf-validatestorageconfig>` your 
+   {+FDI+} configuration before applying any changes.
+
+
+To update your {+FDI+} configuration Data stores, data sources, databases, 
+collections, and views, follow these steps:
+
+.. include:: /includes/steps/manage-storage-configuration-ui.rst
+
+
+.. _generate-wildcard-collections:
+
+Generate Wildcard Collections 
+-----------------------------
+
+.. important::
+   The Wildcard collections function is available **only** for data sources from
+   |aws| |s3| and |service| Clusters.
+
+When using Data Sources from :ref:`AWS S3 <adf-configuration-file-aws>` 
+or :ref:`Atlas Clusters <adf-configuration-file-atlas>`, you can
+dynamically set collection names that map to data. To generate a collection 
+name, specify the wildcard symbol ``*`` as the value for the collection 
+name setting in your {+fdi+} storage configuration. 
+
+.. tip::
+    You can use the :ref:`storageSetConfig <adf-setstorageconfig>` 
+    command to configure the settings for generating wildcard (``*``) 
+    collections. 
+
+.. toctree::
+   :titlesonly:
+   :hidden:
+
+   Deploy a Data Store </data-federation/deployment/deploy-adf>
+   Configuration Files</data-federation/config/adf-config-file-formats>
+   Generate a Wildcard Collection</data-federation/config/adfa-generate-wildcard-collection>
+   Partition Attributes </data-federation/supported-unsupported/supported-partition-attributes>
+   Supported Data Formats </data-federation/supported-unsupported/supported-data-formats>
+   Optimize Queries </data-federation/admin/optimize-query-performance>
+   Use Partition Attributes </data-federation/supported-unsupported/supported-partition-attributes>
+   File Path Syntax </data-federation/config/path-syntax-examples>
+   AWS S3 Encryption </data-federation/supported-unsupported/adf-encryption>
+   AWS S3 Limitations </data-federation/supported-unsupported/adf-limitations>

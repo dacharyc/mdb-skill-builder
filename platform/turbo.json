@@ -1,0 +1,52 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "globalEnv": ["NPM_BASE_64_AUTH", "NPM_EMAIL"],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build:toc"],
+      "with": ["blobs:watch"]
+    },
+    "build:toc": {
+      "outputs": ["./src/context/toc-data/data.copied.ts"]
+    },
+    "build": {
+      "dependsOn": ["^build", "typecheck", "lint", "test", "build:toc"],
+      "outputs": ["build/**", "next/**", "dist/**"]
+    },
+    "typecheck": {},
+    "lint": {},
+    "lint:fix": {},
+    "test": {},
+    "test:coverage": {},
+    "test:update": {},
+    "test:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "ingest:all": {
+      "cache": false,
+      "dependsOn": ["build"]
+    },
+    "ingest:pages": {
+      "cache": false,
+      "dependsOn": ["build"]
+    },
+    "convert:rst-to-mdx": {
+      "dependsOn": ["typecheck", "lint", "test"],
+      "cache": false
+    },
+    "blobs:seed": {
+      "cache": false
+    },
+    "blobs:clear": {
+      "cache": false
+    },
+    "blobs:watch": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

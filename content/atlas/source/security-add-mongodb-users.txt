@@ -1,0 +1,170 @@
+.. _mongodb-users:
+
+========================
+Configure Database Users
+========================
+
+.. default-domain:: mongodb
+
+.. meta::
+   :keywords: x509, atlas api, atlas cli, atlas ui
+   :description: Create and manage database users in Atlas, specifying roles and authentication methods, and learn how to view, modify, or delete users.
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Create database users to provide clients access to the {+database-deployments+} in your
+project. 
+
+A database user's access is determined by the roles assigned
+to the user. When you create a database user, any of the :ref:`built-in roles <atlas-user-privileges>` 
+add the user to all {+database-deployments+} in your |service| project. 
+To specify which resources a database user can access in your project, you 
+can select the option :guilabel:`Restrict Access to Specific Clusters` in the {+atlas-ui+}
+or set :ref:`specific privileges <atlas-specific-privileges>`
+and :ref:`custom roles <mongodb-roles>`.
+
+Database users are separate from |service| users. Database users have
+access to MongoDB databases, while |service| users have access to the
+|service| application itself. |service| supports creating temporary
+database users that automatically expire within a user-configurable
+7-day period.
+
+|service| audits the creation, deletion, and updates of both temporary
+and non-temporary database users in the project's :ref:`Activity Feed
+<project-activity-feed>`.
+
+.. note:: Self-Managed Deployments
+
+   The information on this page applies only to deployments hosted in
+   |service|. To learn how to create database users on self-managed
+   deployments, see :ref:`create-users`.
+
+Limitations
+-----------
+
+The following limitations apply only to deployments hosted in
+|service-fullname|. If any of these limits present a problem for your
+organization, contact :atlas:`Atlas support </support>`.
+
+- You must use the :atlas:`Atlas CLI
+  </cli/stable/command/atlas-dbusers-create>`, :atlas:`Atlas
+  Administration API
+  </reference/api-resources-spec/v2/#tag/Database-Users>`, Atlas UI, or
+  a supported :atlas:`integration
+  </partner-integrations/#std-label-partner-integrations>` to manage
+  database users on |service| clusters. Otherwise, |service| rolls back
+  any user modifications.
+
+- The available |service| :ref:`built-in roles <built-in-roles>` and
+  :atlas:`specific privileges
+  </security-add-mongodb-users/#std-label-atlas-specific-privileges>`
+  support a subset of MongoDB commands. For more information, see
+  :atlas:`Unsupported Commands in M10+ Clusters
+  </unsupported-commands/#std-label-paid-tier-command-limitations>` for
+  more information.
+
+- You can create a maximum of 100 database users per |service| project.
+
+Database User Authentication
+----------------------------
+
+|service| offers the following forms of authentication for database
+users:
+
+.. include:: /includes/atlas-auth-methods.rst
+
+.. _view-mongodb-users:
+.. _modify-mongodb-users:
+.. _add-mongodb-users:
+.. _delete-mongodb-users:
+
+Create Database Users
+----------------------
+
+.. composable-tutorial::
+   :options: interface-default-atlas-cli, auth-method
+   :defaults: atlas-ui, password
+
+
+   .. selected-content::
+      :selections: atlas-ui, password
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-ui-password.rst
+
+   .. selected-content::
+      :selections: atlas-ui, x509
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-ui-x509.rst
+
+   .. selected-content::
+      :selections: atlas-ui, ldap
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-ui-ldap.rst
+
+   .. selected-content::
+      :selections: atlas-ui, oidc
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-ui-oidc.rst
+
+   .. selected-content::
+      :selections: atlas-ui, aws-iam
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-ui-aws-iam.rst
+
+   .. selected-content::
+      :selections: atlas-cli, password
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-cli-password.rst
+
+   .. selected-content::
+      :selections: atlas-cli, ldap
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-cli-ldap.rst
+
+   .. selected-content::
+      :selections: atlas-cli, x509
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-cli-x509.rst
+
+   .. selected-content::
+      :selections: atlas-cli, oidc
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-cli-oidc.rst
+
+   .. selected-content::
+      :selections: atlas-cli, aws-iam
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-cli-aws-iam.rst
+
+   .. selected-content::
+      :selections: admin-api, password
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-admin-api-password.rst
+
+   .. selected-content::
+      :selections: admin-api, x509
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-admin-api-x509.rst
+ 
+   .. selected-content::
+      :selections: admin-api, ldap
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-admin-api-ldap.rst
+
+   .. selected-content::
+      :selections: admin-api, oidc
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-admin-api-oidc.rst
+
+   .. selected-content::
+      :selections: admin-api, aws-iam
+
+      .. include:: /includes/composable-includes/security-add-mongodb-users/atlas-admin-api-aws-iam.rst

@@ -1,0 +1,209 @@
+.. _manage-spi:
+.. _atlas-sp-manage-spi:
+
+===================================================
+Manage {+SPW+}s
+===================================================
+
+.. default-domain:: mongodb
+
+.. meta::
+   :keywords: atlas stream processing, atlas stream processing overview, streaming data, data stream, real time, data processing, apache kafka, kafka
+   :description: Learn how to create, configure, and manage Stream Processing Workspaces
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+An {+atlas-sp+} workspace provides a context for all of your operations
+on streaming data. The procedures in this page walk you through 
+creating and configuring your {+spw+}s.
+
+.. _atlas-sp-manage-spi-prereqs:
+
+Prerequisites
+-------------
+
+To create and configure a {+spw+}, you must have the 
+following:
+
+- An |service| :ref:`project <manage-projects>`
+- An |service| user with the :authrole:`Project Owner`,
+  the :authrole:`Project Stream Processing Owner`, 
+  or the :authrole:`Project Data Access Admin` role to manage a {+SPW+}.
+
+  .. note::
+
+     While the :authrole:`Project Owner`, :authrole:`Project Stream Processing Owner`, 
+     and :authrole:`Project Data Access Admin` roles all grant the privileges to create, view, edit and delete
+     {+spw+}s, the :authrole:`Project Owner` role also allows users to perform tasks 
+     such as creating database deployments, managing project access, and more. 
+
+     See :ref:`Project Roles <project-roles>` to learn more about the 
+     differences between these roles.
+
+
+.. _atlas-sp-default-tier-spw:
+
+Considerations
+--------------
+
+You must set a **default tier** when you create a {+spw+}.
+Stream processors that you create in this workspace
+default to this tier. You can optionally set a 
+**max tier size** as well. You can't create stream 
+processors larger than the max tier in this workspace.
+
+Defaults:
+
+- **default tier**: ``SP10``
+- **max tier size**: unset
+
+You can configure the default and max {+spw+} tiers
+only from the |service| control plane (UI, API, Terraform, or CLI). 
+You can't configure the default and tiers from the data plane 
+({+mongosh+}).
+
+
+.. _manage-spi-view:
+.. _atlas-sp-manage-spi-view:
+
+View {+spw+}s
+-------------------------------------
+
+To view your {+spw+}s:
+
+.. tabs::
+
+   .. tab:: {+atlas-cli+}
+      :tabid: view-spi-cli
+
+      .. include:: /includes/extracts/atlas-api-streams-listStreamWorkspaces.rst
+
+   .. tab:: {+atlas-ui+}
+      :tabid: view-spi-ui
+
+      .. include:: /includes/procedures/atlas-sp-view-spi-ui.rst
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: view-spi-api
+
+      The {+atlas-admin-api+} provides different endpoints for 
+      retrieving one or all {+spw+}s.
+
+      :oas-bump-atlas-op:`Return One Stream Workspace <getgroupstreamworkspace>`
+
+      :oas-bump-atlas-op:`List All Stream Workspaces <listgroupstreamworkspaces>`
+
+.. _manage-spi-create:
+.. _atlas-sp-manage-spi-create:
+
+Create a {+spw+}
+-------------------------------------
+
+To create a new {+spw+}:
+
+.. tabs::
+
+   .. tab:: {+atlas-cli+}
+      :tabid: create-spi-cli
+
+      .. include:: /includes/extracts/atlas-api-streams-createStreamWorkspace.rst
+
+   .. tab:: {+atlas-ui+}
+      :tabid: create-spi-ui
+
+      .. include:: /includes/procedures/atlas-sp-create-spi-ui.rst
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: create-spi-api
+
+      The {+atlas-admin-api+} provides an endpoint for creating a 
+      {+spw+}.
+
+      :oas-bump-atlas-op:`Create One Stream Workspace <creategroupstreamworkspace>`
+
+.. _manage-spi-delete:
+.. _atlas-sp-manage-spi-delete:
+
+Delete a {+spw+}
+-----------------------------------------------
+
+To delete a {+spw+}:
+
+.. tabs::
+
+   .. tab:: {+atlas-cli+}
+      :tabid: delete-spi-cli
+
+      .. include:: /includes/extracts/atlas-api-streams-deleteStreamWorkspace.rst
+
+   .. tab:: {+atlas-ui+}
+      :tabid: delete-spi-ui
+
+      .. include:: /includes/procedures/atlas-sp-delete-spi-ui.rst
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: delete-spi-api
+
+      The {+atlas-admin-api+} provides an endpoint for deleting a 
+      {+spw+}.
+
+      :oas-bump-atlas-op:`Delete One Stream Workspace <deletegroupstreamworkspace>`
+
+.. _manage-spi-edit:
+.. _atlas-sp-manage-spi-edit:
+
+Edit a {+spw+}
+--------------------------------------
+
+To edit an {+spw+}:
+
+.. tabs::
+
+   .. tab:: {+atlas-cli+}
+      :tabid: edit-spi-cli
+
+      .. include:: /includes/extracts/atlas-api-streams-updateStreamWorkspace.rst
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: edit-spi-api
+
+      The {+atlas-admin-api+} provides an endpoint for editing a 
+      {+spw+}.
+
+      :oas-bump-atlas-op:`Update One Stream Workspace <updategroupstreamworkspace>`
+
+.. _atlas-sp-manage-spi-audit:
+
+Download Audit Logs
+-------------------
+
+To download your {+spw+} audit logs:
+
+.. tabs::
+
+   .. tab:: {+atlas-cli+}
+      :tabid: download-log-spi-cli
+
+      .. include:: /includes/extracts/atlas-api-streams-downloadAuditLogs.rst
+
+   .. tab:: {+atlas-ui+}
+      :tabid: download-log-spi-ui
+
+      .. include:: /includes/procedures/atlas-sp-download-logs-spi-ui.rst
+
+   .. tab:: {+atlas-admin-api+}
+      :tabid: download-log-spi-api
+
+      The {+atlas-admin-api+} provides an endpoint for creating a 
+      {+spw+}.
+
+      :oas-bump-atlas-op:`Download Audit Logs for One Atlas Stream Processing Workspace <downloadgroupstreamauditlogs>`
+

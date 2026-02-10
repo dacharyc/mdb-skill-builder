@@ -1,0 +1,139 @@
+.. _upgrade-major-MongoDB-version:
+
+===========================================
+Upgrade Major MongoDB Version for a Cluster
+===========================================
+
+.. meta::
+   :description: Upgrade your Atlas cluster's MongoDB version by creating a staging cluster to test application compatibility before updating the production environment.
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+You can upgrade the major version of your |service| {+cluster+} at any time
+by :ref:`modifying the cluster <scale-cluster-version>`.
+
+To ensure that your transition to the new MongoDB version is smooth and doesn't
+affect your application, before you upgrade the major version on your
+production |service| {+cluster+}, use the following procedure to create
+a staging {+cluster+} and test your application against the new MongoDB version.
+
+Considerations
+--------------
+
+The following considerations apply:
+
+- Your {+cluster+} must be in a healthy state before upgrading.
+
+- If you :ref:`take an on-demand snapshot <on-demand-snapshots>` before
+  a major version upgrade, wait until the snapshot completes before you
+  upgrade the version.
+
+- If you upgrade your cluster from lower versions to MongodB 8.0, be aware
+  of the :ref:`write-blocking behavior <cluster-blocking-writes>` in |service|.
+  To ensure that your dedicated cluster's primary node writes aren't blocked as soon
+  you upgrade to MongoDB 8.0:
+  
+  - Check that the cluster has enough storage capacity to handle your workload
+    after the upgrade.
+  - Enable :ref:`storage auto-scaling <howitworks-scale-cluster-storage>`,
+    which automatically scales your cluster storage when disk utilization
+    exceeds 90% and ensures consistent workload availability and performance.
+
+- Each major version contains some features which may not be backward-compatible
+  with previous versions. When upgrading to a new major version, check
+  the :manual:`Release Notes </release-notes>` for changes which may affect
+  your applications. 
+  
+  Alternatively, if you use the :manual:`Stable API </reference/stable-api/>`,
+  ensure that behavior changes between MongoDB versions don't break your
+  application after an upgrade.
+
+  The MongoDB Stable API encompasses a :manual:`subset of MongoDB
+  commands </reference/stable-api/#std-label-api-v1-command-list>` that
+  applications use to read and write data, create collections and
+  indexes, and perform other common tasks. The Stable API:
+  
+  - Allows you to specify which version of the MongoDB API your application
+    runs against and provides long-term API stability for applications.
+    
+  - Supports more frequent releases and automatic server upgrades, allowing your
+    applications to take advantage of rapidly released features without
+    risking backward incompatible changes.
+
+Limitations
+-----------
+
+The following limitations apply to upgrading your cluster's version:
+
+- You can't upgrade to a version that is 2 versions above the pinned |fcv| version. If a cluster is pinned 
+  to |fcv| 6.0, you can only upgrade to 7.0, not 8.0+. To learn how to pin the |fcv| for your cluster,
+  see :ref:`pin-fcv`.
+
+- You can only upgrade your |service| {+cluster+} one major version at a
+  time. You can't skip any major versions when upgrading your cluster.
+
+- After upgrading the MongoDB major version, you can't downgrade to previous
+  versions unless you pinned the cluster's |fcv| before upgrading.
+
+- Live migration requires the |fcv|\s on the source and destination {+clusters+}
+  to match their major versions. To learn more about supported migration paths,
+  see :ref:`Migrate or Import Data <import-strategies>`.
+
+  .. include:: /includes/mongosync-compatibility-restriction.rst
+
+- Starting with MongoDB 6.0, the ``$$SEARCH_META`` 
+  aggregation variable can't be used in any subsequent stage after a 
+  :pipeline:`$searchMeta` stage. 
+
+  If you want to upgrade to MongoDB 6.0 from a previous 
+  version and use the ``$$SEARCH_META`` aggregation variable in your
+  |fts| :pipeline:`$searchMeta` queries, review them before you upgrade your 
+  {+cluster+} to avoid errors.
+
+Required Access
+---------------
+
+To upgrade a {+cluster+}, you must have the :authrole:`Project Owner` or
+higher role for the project.
+
+Upgrade Your Major MongoDB Version
+----------------------------------
+
+To upgrade your major MongoDB version:
+
+.. include:: /includes/steps-change-major-version.rst
+
+Manage Feature Compatibility (FCV) During Upgrades
+--------------------------------------------------
+
+MongoDB major version upgrades are supported by both |service| and on-premises deployments. 
+The |fcv| enables or disables features that persist data incompatible with earlier versions of 
+MongoDB. You can pin a cluster's |fcv| before upgrading in |service|, which enables you to 
+revert MongoDB to the previous version after upgrading without experiencing version compatibility issues. 
+
+.. warning::
+
+   The |fcv| is a short-term measure that only persists for up to 4 weeks after the pin date, and doesn't 
+   simulate the behavior of the previous binary versions. It only postpones upgrading certain internal data 
+   structures that allow new server features. After you are confident that a downgrade to the previous version 
+   is unnecessary, unpin the |fcv| to match the current binary version.
+
+For more information on how to pin and unpin |fcv| for your cluster and how to downgrade your
+cluster by one major version, see :ref:`downgrade-major-MongoDB-version`.
+
+.. _major-version-upgrade-support:
+
+Contact Support
+----------------
+
+.. include:: /includes/migration-support.rst

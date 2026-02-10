@@ -1,0 +1,9 @@
+# dependencies
+node_modules
+# monorepo artifacts
+.turbo
+# test coverage
+coverage
+# Local Netlify dev
+.netlify
+deno.lock

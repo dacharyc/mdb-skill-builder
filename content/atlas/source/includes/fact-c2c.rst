@@ -1,0 +1,1 @@
+In most cases, you can live migrate to |service| using :ref:`this procedure <c2c-pull-live-migration>`.

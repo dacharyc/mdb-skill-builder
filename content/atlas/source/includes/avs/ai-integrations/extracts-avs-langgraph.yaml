@@ -1,0 +1,38 @@
+ref: avs-langgraph-intro-js
+content: |
+
+  You can integrate MongoDB with |langgraph-link|
+  to build AI agents and advanced |rag| applications. 
+  This page provides an overview of the MongoDB |langgraph| integration and how you 
+  can use MongoDB for agent state persistence and retrieval in your LangGraph workflows.
+
+---
+ref: avs-langgraph-intro-python
+content: |
+
+  You can integrate MongoDB with |langgraph-link|
+  to build AI agents and advanced |rag| applications. 
+  This page provides an overview of the MongoDB |langgraph| integration and how you 
+  can use MongoDB for agent state persistence, memory, and retrieval in your LangGraph workflows.
+
+---
+
+ref: avs-langgraph-background-js
+content: |
+
+  LangGraph is a specialized framework within the LangChain ecosystem 
+  designed for building AI agents and complex multi-agent workflows.
+  |graphs-link| are the core components of LangGraph, representing the workflow 
+  of your agent. The MongoDB LangGraph integration enables 
+  the following capabilities: 
+
+  - **MongoDB LangGraph Checkpointer**: You can persist the state of your LangGraph agents 
+    in MongoDB, providing *short-term memory*.
+
+  - **Retrieval Tools**: You can use the MongoDB LangChain 
+    integration to quickly create retrieval tools for your LangGraph workflows.
+
+  Integrating your LangGraph applications with MongoDB allows you to consolidate 
+  both retrieval capabilities and agent memory in a single database,
+  simplifying your architecture and reducing operational complexity.
+  

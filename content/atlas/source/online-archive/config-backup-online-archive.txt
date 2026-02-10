@@ -1,0 +1,74 @@
+.. default-domain:: mongodb
+
+.. meta::
+   :keywords: backup, online archive, archived data
+   :description: Configure Continuous Cloud Backups for Atlas clusters with online archives to ensure data restoration and prevent data loss.
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+.. _oa-config-backup:
+
+=========================================
+Back Up and Restore Archived Data
+=========================================
+
+.. include:: /includes/flex-dont-use.rst
+
+This page describes how to mitigate data loss and execute an easy restore process with
+:ref:`pit-restore`. 
+
+If you need a more granular restore that follows specific criteria, see
+:ref:`restore-archived-data`.
+
+Prerequisites
+-----------------
+
+You must have :ref:`configured {+Online-Archive+} <config-online-archive>` on
+your |service| cluster to use :ref:`pit-restore`. 
+
+Considerations
+------------------
+
+Your |service| cluster :ref:`backup configuration <backup-cloud-provider>` only captures
+data that is active in your cluster at the time of the backup. However, archived data has
+the same redundancy guarantees that the |s3| vendor provides. 
+
+The order in which you execute archive and backup operations has a direct impact on what data
+you restore to your cluster. Consider the following scenarios:
+
+- **Scenario 1: You archived data before backing up.** 
+  
+  Part of your data lives in your cluster and the remaining part lives in your
+  {+Online-Archive+}. If your cluster goes down, you restore data to the last state
+  preserved in your backup strategy. Your {+Online-Archive+} remains unchanged.
+
+- **Scenario 2: You backed up data before archiving.** 
+  
+  You took a snapshot of the entirety of your data before archiving part of it. If your
+  cluster goes down and you restore to a snapshot older than the moment you archived data,
+  you may restore older data that already lives in your {+Online-Archive+}.  
+
+If you use :ref:`pit-restore`, you can replay the :manual:`oplog
+</reference/glossary/#std-term-oplog>` to restore your cluster to a point in time that matches
+the last time documents on the cluster were archived and avoid any data loss or redundancy.
+
+Procedure
+-------------
+
+If you have configured :ref:`pit-restore` and :ref:`{+Online-Archive+}
+<config-online-archive>` on your |service| cluster, take the following steps to restore your
+cluster:
+
+1. :ref:`Pause <pause-resume-online-archive>` {+Online-Archive+}.
+
+#. :ref:`Restore <restore-from-continuous>` your cluster from the :ref:`pit-restore`.
+
+#. :ref:`Resume <pause-resume-online-archive>` {+Online-Archive+}.
+
+
+

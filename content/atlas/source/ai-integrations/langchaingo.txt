@@ -1,0 +1,188 @@
+.. _langchaingo:
+
+=============================================
+Get Started with the LangChainGo Integration
+=============================================
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. facet::
+   :name: programming_language
+   :values: go
+
+.. meta::
+   :description: Integrate MongoDB Vector Search with LangChainGo to build LLM and RAG applications.
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+You can integrate {+avs+} with `LangChainGo
+<https://pkg.go.dev/github.com/tmc/langchaingo>`__ to build large language model (LLM)
+applications and implement retrieval-augmented generation (RAG). This tutorial
+demonstrates how to start using {+avs+} with LangChainGo to perform semantic
+search on your data and build a |rag| implementation. Specifically, you perform
+the following actions:
+
+#. Set up the environment.
+#. Store custom data in MongoDB.
+#. Create a {+avs+} index on your data.
+#. Run the following vector search queries:
+
+   - Semantic search.
+   - Semantic search with metadata pre-filtering.
+
+#. Implement |rag| by using {+avs+} to answer questions on your data.
+
+Background
+----------
+
+LangChainGo is the Go programming language implementation of LangChain. It is a
+community-driven, third-party port of the LangChain framework.
+
+.. include:: /includes/ai-integrations/langchain/langchain-background.rst 
+
+LangChainGo facilitates the orchestration of LLMs for AI applications, bringing
+the capabilities of LangChain into the Go ecosystem. It also allows developers
+to connect to their preferred vector-store-compatible databases, including MongoDB.
+
+Procedure
+---------
+
+.. tabs::
+
+   .. tab::
+      :tabid: Voyage AI
+
+      Prerequisites
+      ~~~~~~~~~~~~~
+
+      To complete this tutorial, you must have the following:
+
+      - .. include:: /includes/avs/shared/avs-requirements-cluster.rst
+      - .. include:: /includes/avs/shared/avs-requirements-openai-api-key.rst
+      - .. include:: /includes/avs/shared/avs-requirements-voyageai-api-key.rst
+      - A terminal and code editor to run your Go project.
+      - `Go installed <https://go.dev/doc/install>`__ on your machine.
+
+      Set Up the Environment
+      ~~~~~~~~~~~~~~~~~~~~~~
+
+      You must first set up the environment for this tutorial. Complete the following
+      steps to set up your environment.
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-set-up-environment-voyageai.rst
+
+      Use MongoDB as a Vector Store
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-atlas-vector-store-voyageai.rst
+
+      Create the {+avs+} Index
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-create-vector-index-voyageai.rst
+
+      Run Vector Search Queries
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      This section demonstrates various queries that you can run on your vectorized
+      data. Now that you've created the index, you can run vector search queries.
+
+      Select the :guilabel:`Basic Semantic Search` or :guilabel:`Semantic Search with Filtering` 
+      tab to see the corresponding code.
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-query-examples.rst
+
+      Answer Questions on Your Data
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-rag-voyageai.rst
+
+   .. tab::
+      :tabid: OpenAI
+
+      Prerequisites
+      ~~~~~~~~~~~~~
+
+      To complete this tutorial, you must have the following:
+
+      - .. include:: /includes/avs/shared/avs-requirements-cluster.rst
+      - .. include:: /includes/avs/shared/avs-requirements-openai-api-key.rst
+      - A terminal and code editor to run your Go project.
+      - `Go installed <https://go.dev/doc/install>`__ on your machine.
+
+      Set Up the Environment
+      ~~~~~~~~~~~~~~~~~~~~~~
+
+      You must first set up the environment for this tutorial. Complete the following
+      steps to set up your environment.
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-set-up-environment-openai.rst
+
+      Use MongoDB as a Vector Store
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-atlas-vector-store-openai.rst
+
+      Create the {+avs+} Index
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-create-vector-index-openai.rst
+
+      Run Vector Search Queries
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      This section demonstrates various queries that you can run on your vectorized
+      data. Now that you've created the index, you can run vector search queries.
+
+      Select the :guilabel:`Basic Semantic Search` or :guilabel:`Semantic Search with Filtering` 
+      tab to see the corresponding code.
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-query-examples.rst
+
+      Answer Questions on Your Data
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .. include:: /includes/ai-integrations/langchaingo/langchaingo-rag-openai.rst
+
+After completing this tutorial, you have successfully integrated {+avs+} with
+LangChainGo to build a |rag| application. You have accomplished the following:
+
+- Initiated and configured the necessary environment to support your application
+- Stored custom data in MongoDB and instantiated MongoDB as a vector store
+- Built a {+avs+} index on your data, enabling semantic search capabilities
+- Used vector embeddings to retrieve semantically relevant data
+- Enhanced search results by incorporating metadata filters
+- Implemented a |rag| workflow using {+avs+} to provide meaningful answers to
+  questions based on your data
+
+Next Steps
+----------
+
+- To learn more about getting started with {+avs+}, see the
+  :ref:`vector-search-quick-start`, and then select :guilabel:`Go` from the drop-down
+  menu.
+- To learn more about vector embeddings, see :ref:`create-embeddings`, and then
+  select :guilabel:`Go` from the drop-down menu.
+- To learn how to integrate LangChainGo and Hugging Face, see :ref:`avs-rag`.
+- To learn how implement |rag| without the need for |api| keys or credits, see
+  :ref:`local-rag`.
+
+MongoDB also provides the following developer resource:
+
+- `AI Learning Hub <https://www.mongodb.com/resources/use-cases/artificial-intelligence>`__
+
+.. TODO: Add blog link when available
+
+.. seealso::
+
+   To learn more about integrating LangChainGo, OpenAI, and MongoDB, see `Using
+   MongoDB Atlas as a Vector Store with OpenAI Embeddings
+   <https://github.com/tmc/langchaingo/tree/main/examples/mongovector-vectorstore-example>`__.

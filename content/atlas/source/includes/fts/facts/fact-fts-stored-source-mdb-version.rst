@@ -1,0 +1,1 @@
+``storedSource`` is only available on clusters running MongoDB 7.0+.

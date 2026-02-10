@@ -1,0 +1,280 @@
+.. _atlas-support:
+
+=======================
+Get Help with |service|
+=======================
+
+.. meta::
+   :description: Explore support options for Atlas, including free and paid plans, and learn how to request assistance or modify your support plan.
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+|service-fullname| offers several packages to support your organization
+or project. |service| includes a free Basic support plan, or you can
+upgrade to a paid plan for extended support services. Details on
+support plans are available through the UI as part of the procedure to
+:ref:`change your support plan <change-cancel-support>` or by
+:website:`contacting MongoDB </company/contact>`.
+
+.. _required-roles-for-support:
+
+Required Roles 
+--------------
+
+To raise and view support cases, you must have the appropriate :ref:`roles <user-roles>`:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Support Cases
+     - Scope
+     - Role
+   * - Can View
+     - Project
+     - Any user with any role in the project
+   * - Can Raise
+     - Project
+     - Any user with any role in the project
+   * - Can View and Raise
+     - Organization and Project
+     - Any user with the :authrole:`Organization Owner`, or :authrole:`Organization Read Only` for the organization
+
+.. _support-comparison:
+
+Support Comparison
+------------------
+The following table provides a comparison of the different Atlas support plans:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20 20
+   :stub-columns: 1
+   :align: left
+
+   * - Support Services
+     - Basic
+     - Developer
+     - Pro
+     - Enterprise
+
+
+   * - Response Times
+     - N/A
+     - First response within 8 hours.
+     - First response options from 2 hours.
+     - First response options from 15 mins to 2 hours.
+
+   * - Technical Support
+     - - Chat Support Monday-Friday
+
+     - - 24/7 Support via Case Portal
+       - Chat Support Monday-Friday
+       - End-to-end database support (advice on data best practices and performance improvements)
+
+     - - 24/7 Support via Case Portal
+       - Chat Support Monday-Friday
+       - End-to-end database support (advice on data best practices and performance improvements)
+       - Phone Support
+       - Proactive customer success management
+
+     - - 24/7 Support via Case Portal
+       - Chat Support Monday-Friday
+       - End-to-end database support (advice on data best practices and performance improvements)
+       - Phone Support
+       - Tailored white glove support and customer success management
+
+   * - Customer Resources
+     - Docs, FAQ, Community Forums
+
+     - - Docs, FAQ, Community Forums
+       - Knowledge Base
+
+     - - Docs, FAQ, Community Forums
+       - Knowledge Base
+
+     - - Docs, FAQ, Community Forums
+       - Knowledge Base
+
+   * - Training
+     - Online training at MongoDB University
+
+     - Online training at MongoDB University
+
+     - - Online training at MongoDB University
+       - Access to MongoDB University for Teams
+
+     - - Online training at MongoDB University
+       - Access to MongoDB University for Teams
+
+   * - Escalation Managers
+     - N/A
+     - N/A
+     - Dedicated Escalation Manager for urgent emergencies
+     - Dedicated Escalation Manager for urgent emergencies
+   
+   * - Event and Launch Management
+     - N/A
+     - N/A
+     - Proactively ensure MongoDB Support aware of special circumstance
+     - Proactively ensure MongoDB Support aware of special circumstance
+   
+   * - Customer Success Management
+     - N/A
+     - N/A
+     - Onboarding, Check-ins, to Quarterly Business Reviews
+     - Onboarding, Check-ins, to Quarterly Business Reviews
+
+.. _request-support:
+
+Request Support
+---------------
+
+Based on your support plan, you can request support through the 
+|service| console in the following ways:
+
+.. tabs::
+
+   tabs:
+     - id: basic
+       name: Basic Support Plan
+       content: |
+
+        - Click the in-app chat icon in the lower right corner to chat
+          with a MongoDB Support representative.
+
+        - To view Developer Resources:
+
+          .. include:: /includes/nav/list-project-resources.rst
+        
+     - id: dev-premium
+       name: Paid Support Plans
+       content: |
+
+        - Click the in-app chat icon in the lower right corner to chat
+          with a MongoDB Support representative.
+
+        - Visit the MongoDB Support Portal and open a private support 
+          case.
+
+          - For Organizations:
+
+            .. note::
+  
+               Only :authrole:`Organization Owners <Organization Owner>`
+               can open a support case at the organization level.
+               Organizations with no projects cannot open a support
+               case.
+  
+            a. .. include:: /includes/nav/list-org-support.rst
+
+            #. Under :guilabel:`Support Cases`, click 
+               :guilabel:`Create New Case`. The MongoDB Support
+               Portal opens in a new tab.
+
+               .. include:: /includes/fact-support-portal-sync.rst
+
+          - For Projects:
+  
+            a. .. include:: /includes/nav/list-org-support.rst
+
+            #. Click :guilabel:`Create New Case`. The MongoDB Support
+               Portal opens in a new tab.
+
+               .. include:: /includes/fact-support-portal-sync.rst
+               
+
+.. _change-cancel-support:
+.. _subscribe-support:
+
+Modify a Support Plan
+---------------------
+
+The following table describes the ways you can modify your support plan
+and its impact on billing:
+
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Action
+     - Result
+
+   * - Upgrade or Downgrade
+     - Your billing changes occur on the first day of the next month.
+
+   * - Cancel during a trial period
+     - Your billing stops immediately.
+
+   * - Cancel outside of a trial period
+     - |service| schedules for the cancellation of your plan at
+       the end of the month and your billing continues until the cancellation
+       period.
+
+.. tabs::
+
+   tabs:
+     - id: basic
+       name: Basic Support Plan
+       content: |
+
+         .. include:: /includes/steps/change-support-basic.rst
+
+     - id: dev-premium
+       name: Paid Support Plans
+       content: |
+
+         .. include:: /includes/steps/change-support-premium.rst
+         .. include:: /includes/retroactive-billing.rst 
+
+Downgrade or Cancel a Support Plan
+----------------------------------
+
+To downgrade or cancel your Paid support plan in MongoDB Atlas, follow these steps:
+
+.. procedure:: 
+   :style: normal
+
+   .. step:: Navigate to the *Support* page for your organization.
+      
+      a. .. include:: /includes/nav/list-org-support.rst
+
+   .. step:: Select a Support Plan.
+
+      You can see all available support plans and choose to downgrade or cancel your current plan.
+
+   .. step:: Follow the prompts to confirm the downgrade or cancellation of your Paid support plan.
+
+      .. note::
+
+         If you cancel during a trial period, billing stops immediately. 
+         If you cancel outside of a trial period, your Atlas plan will be canceled at the end of the month 
+         and billing continues until then.
+
+.. _flex-consulting:
+
+Flex Consulting
+---------------
+
+|service-fullname| offers personalized, expert consulting with 
+Flex Consulting units.
+
+To purchase Flex Consulting units through the |service| console:
+
+.. include:: /includes/steps/flex-consulting.rst
+
+To learn more or to purchase Flex Consulting units from a 
+representative,
+see `MongoDB Flex Consulting <https://www.mongodb.com/products/consulting/flex-consulting>`__.
+
+.. note::
+   
+   You must schedule consulting hours to use Flex Consulting units. 
+   When you purchase Flex Consulting, you receive a confirmation email 
+   with further instructions.

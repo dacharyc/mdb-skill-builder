@@ -1,0 +1,63 @@
+.. _import-strategies:
+
+======================
+Migrate or Import Data
+======================
+
+.. default-domain:: mongodb
+
+.. meta::
+   :keywords: live migration to MongoDB Atlas
+   :description: Import data into Atlas from existing MongoDB deployments, JSON, or CSV files using live migration or self-guided tools.
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+You can bring data from existing MongoDB deployments, ``JSON``, or ``CSV``
+files into deployments in |service| using either:
+
+- live migration where |service| assists you, or
+- tools for a self-guided migration of data from your existing deployments
+  into |service|.
+
+.. _c2c-intro:
+
+Live Migrate to Atlas
+---------------------
+
+Migrate your data from a source {+cluster+} into |a-service| MongoDB
+{+cluster+} using one of the following types of guided live migration
+in the {+atlas-ui+}:
+
+- Live migration (pull). For instructions, see :ref:`c2c-pull-live-migration`.
+- Live migration (push). For instructions, see :ref:`c2c-push-live-migration`.
+
+.. include:: /includes/import/migration-cluster-down-state.rst
+
+.. _self-managed-migration:
+
+Self-Guided Migration Tools
+---------------------------
+
+- To load data into a new {+cluster+} in |service|, see :ref:`Load Sample Data <sample-data>`.
+- To make a copy of your {+cluster+} for testing purposes, see :manual:`MongoDB Backup Methods </core/backups>`.
+- To load data from a JSON or a CSV file into an |service| {+cluster+}, use the {+Compass+} :abbr:`GUI (Graphical User Interface)` .
+- To create backups and restore data, use the MongoCLI utilities :manual:`mongorestore and mongodump </tutorial/backup-and-restore-tools/>`.
+- To migrate from legacy relational databases to MongoDB, use the :ref:`Relational Migrator <relational-migrator-intro>` tool. 
+  Relational Migrator utilizes intelligent algorithms and generative AI to automate solutions to common data modeling, code conversion, and other migration challenges.
+- To restore data from an |service| cluster backup to another |service| cluster, use :ref:`restore-overview`.
+- If the application that you want to migrate requires a near-continuous uptime, contact :ref:`MongoDB Support <request-support>` 
+  and share your uptime requirements and {+cluster+} configuration.
+
+.. toctree::
+   :titlesonly:
+   
+   Monitor Migrations </import/monitor-migrations>
+   Verify Migrations <import/live-migration-verification>
+   Compare Migration Methods </import/live-migration-comparison-modes>
+   Live Migrate a Cluster </live-migration>
+   Standalone Mongosync <https://www.mongodb.com/docs/mongosync/current/reference/mongosync/#mongosync>
+   Troubleshoot Live Migration </import/live-migration-troubleshooting>

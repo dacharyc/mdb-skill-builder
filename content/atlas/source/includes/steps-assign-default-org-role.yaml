@@ -1,0 +1,24 @@
+title: Go to the :guilabel:`Linked Organizations` page.
+level: 4
+ref: click-orgs
+content: |
+
+  a. .. include:: /includes/nav/list-federation.rst
+
+  #.  In the sidebar, click :guilabel:`Organizations`.
+
+---
+title: Click the :guilabel:`Name` of the organization for which you
+   want to assign default permissions.
+level: 4
+ref: click-org-name
+---
+title: In the :guilabel:`Default User Role` dropdown, select the desired
+   role.
+level: 4
+ref: toggle-restrict-access
+content: |
+
+   To remove a default user role, click the
+   :icon-fa4:`times-circle` next to the dropdown.
+...

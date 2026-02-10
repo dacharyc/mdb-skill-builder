@@ -1,0 +1,403 @@
+.. _langgraph:
+
+================================
+Integrate MongoDB with LangGraph
+================================
+
+.. default-domain:: mongodb
+
+.. facet::
+   :name: genre
+   :values: reference
+
+.. facet::
+   :name: programming_language
+   :values: python
+
+.. meta::
+   :description: Integrate MongoDB with LangGraph to build AI agents and advanced RAG applications.
+   :keywords: AI agents, agents, agentic, RAG, retrieval, langgraph, langchain, chatbot, vector database, integration
+
+.. dismissible-skills-card::
+   :skill: Gen AI
+   :url: https://learn.mongodb.com/skills?openTab=gen+ai
+   
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |langgraph-link| replace:: `LangGraph <https://langchain-ai.github.io/langgraph/>`__
+.. |langgraph| replace:: LangGraph
+
+.. include:: /includes/avs/ai-integrations/extracts/avs-langgraph-intro-python.rst
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/atlas/ai-integrations/langgraph/build-agents
+   :icon: wizard
+   
+   To build a sample AI agent that uses all of the components
+   on this page, see the :ref:`tutorial <langgraph-build-agents>`.
+
+.. note::
+
+   For the JavaScript integration, see :ref:`LangGraph JS/TS <langgraph-js>`.
+
+Background
+----------
+
+LangGraph is a specialized framework within the LangChain ecosystem 
+designed for building AI agents and complex multi-agent workflows.
+`Graphs <https://langchain-ai.github.io/langgraph/concepts/low_level/>`__ 
+are the core components of LangGraph, representing the workflow 
+of your agent. The MongoDB LangGraph integration enables 
+the following capabilities: 
+
+- **MongoDB LangGraph Checkpointer**: You can persist the state of your LangGraph agents 
+  in MongoDB, providing *short-term memory*.
+
+- **MongoDB LangGraph Store**: You can store and retrieve important memories for your LangGraph agents
+  in a MongoDB collection, providing *long-term memory*.
+
+- **Retrieval Tools**: You can use the MongoDB LangChain 
+  integration to quickly create retrieval tools for your LangGraph workflows.
+
+Integrating your LangGraph applications with MongoDB allows you to consolidate 
+both retrieval capabilities and agent memory in a single database,
+simplifying your architecture and reducing operational complexity.
+
+.. _mongodb-checkpointer-python:
+
+MongoDB LangGraph Checkpointer (Short-Term Memory)
+--------------------------------------------------
+
+The MongoDB LangGraph Checkpointer allows you to `persist
+<https://langchain-ai.github.io/langgraph/concepts/persistence/>`__
+your agent's state in MongoDB to implement `short-term memory
+<https://langchain-ai.github.io/langgraph/concepts/memory/#short-term-memory>`__.
+This feature enables human-in-the-loop,
+memory, time travel, and fault-tolerance for your LangGraph agents.
+
+To install the package for this component:
+
+.. code-block:: shell
+  
+   pip install langgraph-checkpoint-mongodb
+
+Usage
+~~~~~
+
+.. code-block:: python
+
+   from langgraph.checkpoint.mongodb import MongoDBSaver
+   from pymongo import MongoClient
+
+   # Connect to your MongoDB cluster
+   client = MongoClient("<connection-string>")
+
+   # Initialize the MongoDB checkpointer
+   checkpointer = MongoDBSaver(client)
+
+   # Instantiate the graph with the checkpointer
+   app = graph.compile(checkpointer=checkpointer)
+
+.. note::
+
+   - :ref:`Tutorial <langgraph-short-term-memory>`
+   - `MongoDB Checkpointer Documentation <https://langchain-ai.github.io/langgraph/how-tos/persistence_mongodb/>`__
+   - `LangGraph API Reference <https://langchain-mongodb.readthedocs.io/en/latest/langgraph_checkpoint_mongodb/api_docs.html>`__
+
+.. _langgraph-mongodb-store:
+
+MongoDB LangGraph Store (Long-Term Memory)
+------------------------------------------
+
+The MongoDB LangGraph Store allows you to store and retrieve memories in
+a MongoDB collection, which enables `long-term memory
+<https://langchain-ai.github.io/langgraph/concepts/memory/#long-term-memory>`__
+for your LangGraph agents. This enables you to build agents that can
+remember past interactions and use that information to inform future
+decisions.
+
+To install the package for this component:
+
+.. code-block:: shell
+  
+   pip install langgraph-store-mongodb
+
+Usage
+~~~~~
+
+.. include:: /includes/ai-integrations/fact-automated-embedding-preview.rst
+
+.. tabs::
+
+   .. tab:: Manual Embedding
+      :tabid: manual-embed
+
+      .. code-block:: python
+
+         from langgraph.store.mongodb import MongoDBStore, create_vector_index_config
+         from langchain_voyageai import VoyageAIEmbeddings
+
+         # Vector search index configuration with client-side embedding
+         index_config = create_vector_index_config(
+             embed = VoyageAIEmbeddings(),
+             dims = <dimensions>,
+             fields = ["<field-name>"],
+             filters = ["<filter-field-name>", ...] # Optional
+         )
+
+         # Store memories in MongoDB collection
+         with MongoDBStore.from_conn_string(
+              conn_string=MONGODB_URI,
+              db_name="<database-name>",
+              collection_name="<collection-name>",
+              index_config=index_config
+          ) as store:
+              store.put(
+                  namespace=("user", "memories"),
+                  key=f"memory_{hash(content)}",
+                  value={"content": content}
+              )
+
+   .. tab:: Automated Embedding
+      :tabid: auto-embed
+
+      To use automated embedding, pass an ``AutoEmbeddings`` instance
+      to the ``embed`` parameter in the index configuration. This
+      enables MongoDB to generate and manage embedding vectors
+      automatically.
+
+      .. code-block:: python
+
+         from langgraph.store.mongodb import MongoDBStore, create_vector_index_config
+         from langchain_mongodb import AutoEmbeddings
+
+         # Vector search index configuration with server-side Automated Embedding
+         index_config = create_vector_index_config(
+             embed = AutoEmbeddings(model_name="voyage-4"),
+             fields = ["<field-name>"],
+             filters = ["<filter-field-name>", ...] # Optional
+         )
+
+         # Store memories - text is embedded server-side
+         with MongoDBStore.from_conn_string(
+              conn_string=MONGODB_URI,
+              db_name="<database-name>",
+              collection_name="<collection-name>",
+              index_config=index_config
+          ) as store:
+              store.put(
+                  namespace=("user", "memories"),
+                  key=f"memory_{hash(content)}",
+                  value={"content": content}
+              )
+
+Retrieving and deleting memories:
+
+.. code-block:: python
+
+   # Retrieve memories from MongoDB collection
+   with MongoDBStore.from_conn_string(
+       conn_string=MONGODB_URI,
+       db_name="<database-name>",
+       collection_name="<collection-name>",
+       index_config=index_config
+   ) as store:
+        results = store.search(
+            ("user", "memories"),
+            query="<query-text>",
+            limit=3
+        )
+        for result in results:
+            print(result.value)
+
+   # To delete memories, use store.delete(namespace, key)
+   # To batch operations, use store.batch(ops)
+
+.. collapsible:: 
+   :heading: Options
+   :sub_heading: Use the following parameters to configure the memory store.
+   :expanded: false
+
+   .. list-table::
+      :widths: 25 15 60
+      :header-rows: 1
+
+      * - Parameter
+        - Necessity
+        - Description
+
+      * - ``conn_string``
+        - Required
+        - Specify the connection string for your MongoDB cluster
+          or local |service| deployment.
+      * - ``db_name``
+        - Required
+        - The name of the database to use. It will be created if it doesn't exist. Defaults to "checkpointing_db".
+      * - ``collection_name``
+        - Required
+        - The name of the collection to use. It will be created if it doesn't exist. Defaults to "persistent-store".
+      * - ``ttl_config``
+        - Optional
+        - TTL (Time To Live) configuration for the store. This configures automatic expiry of documents in the store.
+          For example:
+
+          .. code-block:: python
+
+             ttl_config = {
+                "default_ttl": 3600,     # Expire documents after 1 hour
+                "refresh_on_read": True, # Refresh TTL on read
+             }
+
+      * - ``index_config``
+        - Optional
+        - Vector search index configuration. The ``embed`` parameter accepts
+          either an embedding model for client-side embedding or an
+          ``AutoEmbeddings`` instance for server-side Automated Embedding.
+
+          For example:
+
+          .. code-block:: python
+
+             index_config = create_vector_index_config(
+                 embed = <embedding-model-or-AutoEmbeddings>,
+                 dims = <dimensions>,  # Not required for Automated Embedding
+                 fields = ["<field-name>"], # field to embed
+                 filters = ["<filter-field-name>", ...], # optional
+                 name = "<index-name>" # optional, defaults to 'vector_index'
+                 relevance_score_fn: "euclidean" | "cosine" | "dotProduct"] # defaults to 'cosine'
+                 embedding_key: "<embedding-field-name>" # optional, defaults to 'embedding'
+             )
+             
+Methods
+```````
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Method
+     - Description
+
+   * - ``put(namespace, key, value, *, index)``
+     - Stores a single item in the store with the specified namespace, key, and value.
+
+   * - ``search(namespace_prefix, /, *, ...)``
+     - Searches for items within a given ``namespace_prefix``. 
+       Supports basic key-value filtering and semantic query search if a vector index is configured. 
+
+       The ``search`` method has the following modes:
+
+       - **Metadata Filtering (No query)**: When called without a query argument, 
+         it performs a standard MongoDB filtered query. You can specify a filter dictionary 
+         to match against fields within the stored value document.
+
+         For example: ``store.search(("docs",), filter={"author": "Bob", "status": "published"})``
+
+       - **Semantic Search (With query)**: If the store was initialized with an 
+         ``index_config`` and a query string is provided, it performs a semantic search. 
+         The method embeds the query text and uses {+avs+} to find the most relevant items.
+
+         For example: ``store.search(("docs",), query="information about AI assistants")``
+
+   * - ``get(namespace, key, *, refresh_ttl)``
+     - Retrieves a single item from the store.
+       Optionally, you can refresh the item's TTL upon access.
+
+   * - ``delete(namespace, key)``
+     - Deletes a single item from the store identified by its namespace and key.
+     
+   * - ``list_namespaces(*, prefix, ...)``
+     - Lists unique namespaces in the store. Allows filtering by a path prefix, suffix, and document depth.
+
+   * - ``batch(ops)``
+     - Executes a sequence of operations (``GetOp``, ``PutOp``, ``SearchOp``, ``DeleteOp``)
+       in a single batch. Read operations are performed first, 
+       followed by a bulk application of deduplicated write operations.
+       ``abatch(ops)`` is the async version of this method.
+
+   * - ``ensure_index_filters(filters)``
+     - Method that prepares a list of filter fields for {+avs+} indexing.
+
+.. note::
+
+   - :ref:`Tutorial <langgraph-long-term-memory>`
+   - `LangGraph API Reference <https://langchain-mongodb.readthedocs.io/en/latest/langgraph_store_mongodb/api_docs.html>`__
+
+.. _langgraph-retrieval:
+
+Retrieval Tools
+---------------
+
+You can seamlessly use LangChain retrievers as
+tools in your LangGraph workflow to retrieve relevant 
+data from MongoDB.
+
+The MongoDB LangChain integration natively supports 
+full-text search, vector search, hybrid search, and 
+parent-document retrieval. For a complete list of
+retrieval methods, see :ref:`MongoDB LangChain Retrievers 
+<langchain-retrievers>`.
+
+Usage
+~~~~~
+
+1. To create a basic retrieval tool with {+avs+} and LangChain:
+
+   .. code-block:: python
+
+      from langchain.tools.retriever import create_retriever_tool
+      from langchain_mongodb.vectorstores import MongoDBAtlasVectorSearch
+      from langchain_voyageai import VoyageAIEmbeddings
+
+      # Instantiate the vector store
+      vector_store = MongoDBAtlasVectorSearch.from_connection_string(
+        connection_string = "<connection-string>",        # MongoDB cluster URI
+        namespace = "<database-name>.<collection-name>",  # Database and collection name
+        embedding = VoyageAIEmbeddings(),                 # Embedding model to use
+        index_name = "vector_index",                      # Name of the vector search index
+        # Other optional parameters...
+      )
+      
+      # Create a retrieval tool
+      retriever = vector_store.as_retriever()
+      retriever_tool = create_retriever_tool(
+          retriever,
+          "vector_search_retriever", # Tool name
+          "Retrieve relevant documents from the collection" # Tool description
+      )
+
+#. To add the tool as a node in LangGraph:
+
+   a. Convert the tool into a node.
+   #. Add the node to the graph.
+
+   .. code-block:: python
+
+      from langgraph.graph import StateGraph
+      from langgraph.prebuilt import ToolNode
+
+      # Define the graph
+      workflow = StateGraph()
+
+      # Convert the retriever tool into a node
+      retriever_node = ToolNode([retriever_tool])
+
+      # Add the tool as a node in the graph
+      workflow.add_node("vector_search_retriever", retriever_node)
+
+      graph = workflow.compile()
+
+.. note::
+
+   - :ref:`Tutorial <langgraph-build-agents>`
+   - :ref:`MongoDB LangChain Integration <langchain>`
+   - `LangGraph Documentation <https://langchain-ai.github.io/langgraph/>`__
+
+.. toctree::
+    :titlesonly:
+
+    Build AI Agents </ai-integrations/langgraph/build-agents>
