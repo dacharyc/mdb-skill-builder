@@ -19,3 +19,9 @@
 
 # MDX content
 /content-mdx
+
+# Node modules
+node_modules/
+
+# Distribution files
+dist/

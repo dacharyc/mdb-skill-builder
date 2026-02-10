@@ -19,6 +19,7 @@ mainContent:
       For specific implementation tasks, see:
 references:
 - filename: manage-indexes.md
+  title: Manage Search Indexes
   linkText: Manage Search Indexes
   sources:
   - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-create-index-node.mdx
@@ -26,6 +27,7 @@ references:
   - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-edit-index-node.mdx
   - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-delete-index-node.mdx
 - filename: write-queries.md
+  title: Write Search Queries
   linkText: Write Search Queries
   sources:
   - path: content-mdx/atlas/atlas-search/path-construction.mdx
