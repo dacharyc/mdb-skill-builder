@@ -40,6 +40,9 @@ example searches the `description` and `type` fields.
 "path": [ "description", "type" ]
 ```
 
+The `multi` path option is available only to fields of
+type How to Index String Fields.
+
 If your index definition contains a field
 with multiple analyzers, you can specify which one to use. The `path`
 parameter can take an object with the following fields:

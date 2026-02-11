@@ -20,6 +20,17 @@ client.connect(err => {
 });
 ```
 
+<Extract>
+  To connect to a database other than `admin` but still authenticate
+  to the `admin` database, update the `database` component of the
+  connection string.
+
+  ```sh
+  mongodb://username:password@host1:port1,...,hostN:portN/database?authSource=admin&...
+  ```
+
+</Extract>
+
 ### Example
 
 The following connection string specifies the `cluster0` deployment and `test`

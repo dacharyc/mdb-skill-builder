@@ -88,8 +88,12 @@ async function processMdxFile(
   // Get the directory containing the MDX files for resolving includes
   const contentMdxDir = resolve(repoRoot, "content-mdx");
 
+  // The sourceFilePath should be relative to contentMdxDir, not repoRoot
+  // Strip the "content-mdx/" prefix if present
+  const sourceFilePath = filePath.replace(/^content-mdx\//, "");
+
   // Convert MDX to Markdown
-  const markdown = await mdxToMarkdown(content, contentMdxDir, filePath);
+  const markdown = await mdxToMarkdown(content, contentMdxDir, sourceFilePath);
 
   return markdown.trim();
 }
