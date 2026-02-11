@@ -176,6 +176,54 @@ describe("content", () => {
 
         expect(result.content).toMatch(/^## File Section\n\nFile content$/);
       });
+
+      it("prepends content as description when both path and content are specified", async () => {
+        vi.mocked(fs.readFile).mockResolvedValue('const query = { $search: {} };');
+
+        const source: ContentSource = {
+          path: "examples/query.js",
+          content: "Simple search query example:",
+        };
+
+        const result = await processContentSource(source, "/repo");
+
+        // Content should appear before the code block
+        expect(result.content).toContain("Simple search query example:");
+        expect(result.content).toContain("```javascript");
+        expect(result.content).toContain("const query = { $search: {} };");
+
+        // Verify order: description comes before code block
+        const descriptionPos = result.content.indexOf("Simple search query example:");
+        const codeBlockPos = result.content.indexOf("```javascript");
+        expect(descriptionPos).toBeLessThan(codeBlockPos);
+
+        // Source should be the file path, not "inline content"
+        expect(result.source).toBe("examples/query.js");
+      });
+
+      it("prepends content with header when all three are specified", async () => {
+        vi.mocked(fs.readFile).mockResolvedValue('db.collection.find({})');
+
+        const source: ContentSource = {
+          path: "examples/find.js",
+          header: "Query Examples",
+          content: "A basic find query:",
+        };
+
+        const result = await processContentSource(source, "/repo");
+
+        // Header should come first, then content description, then code
+        expect(result.content).toContain("## Query Examples");
+        expect(result.content).toContain("A basic find query:");
+        expect(result.content).toContain("```javascript");
+
+        const headerPos = result.content.indexOf("## Query Examples");
+        const descriptionPos = result.content.indexOf("A basic find query:");
+        const codeBlockPos = result.content.indexOf("```javascript");
+
+        expect(headerPos).toBeLessThan(descriptionPos);
+        expect(descriptionPos).toBeLessThan(codeBlockPos);
+      });
     });
   });
 

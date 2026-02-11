@@ -87,10 +87,10 @@ async function processMdxFile(
 
   // Get the directory containing the MDX files for resolving includes
   const contentMdxDir = resolve(repoRoot, "content-mdx");
-  
+
   // Convert MDX to Markdown
   const markdown = await mdxToMarkdown(content, contentMdxDir, filePath);
-  
+
   return markdown.trim();
 }
 
@@ -114,7 +114,12 @@ export async function processContentSource(
   // Process the content
   if (source.path) {
     sourceInfo = source.path;
-    
+
+    // If both path and content are specified, prepend content as a description
+    if (source.content) {
+      content += source.content.trim() + "\n\n";
+    }
+
     if (isMdxFile(source.path)) {
       const mdxContent = await processMdxFile(source.path, repoRoot);
       content += mdxContent;

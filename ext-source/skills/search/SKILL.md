@@ -1,6 +1,6 @@
 ---
 name: search
-description: Help developers implement and optimize MongoDB Search
+description: Implement and optimize MongoDB Search, including Search indexes, queries, and configuration
 ---
 
 # MongoDB Search
@@ -61,6 +61,8 @@ to help you get started:
 
 The following examples demonstrate common search patterns.
 
+Simple FTS Query with a 'text' operator and no analyzer specified:
+
 ```javascript
 const { MongoClient } = require("mongodb");
 
@@ -105,6 +107,8 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+Complex FTS Query with a 'compound' operator to combine multiple search clauses:
 
 ```javascript
 const { MongoClient } = require("mongodb");
@@ -164,6 +168,8 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+Complex FTS Query with a 'sort' option applied in the 'compound' operator to return results in a specific order:
 
 ```javascript
 const { MongoClient } = require("mongodb");

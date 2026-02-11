@@ -1,6 +1,6 @@
 id: search
 title: MongoDB Search
-description: Help developers implement and optimize MongoDB Search
+description: Implement and optimize MongoDB Search, including Search indexes, queries, and configuration
 mainContent:
   type: composite
   sources:
@@ -12,8 +12,14 @@ mainContent:
     content: |
       The following examples demonstrate common search patterns.
   - path: content/atlas/source/includes/fts/quickstart/queries/simple-fts-query.js
+    content: |
+      Simple FTS Query with a 'text' operator and no analyzer specified:
   - path: content/atlas/source/includes/fts/quickstart/queries/complex-fts-query.js
+    content: |
+      Complex FTS Query with a 'compound' operator to combine multiple search clauses:
   - path: content/atlas/source/includes/fts/quickstart/queries/sort-query.js
+    content: |
+      Complex FTS Query with a 'sort' option applied in the 'compound' operator to return results in a specific order:
   - header: Task-Specific Guides
     content: |
       For specific implementation tasks, see:
