@@ -62,6 +62,9 @@ export function postprocessMarkdown(content: string, repoRoot?: string): string 
   // Step 14: Process IoCodeBlock/Input/Output tags (convert to labeled code blocks)
   result = processIoCodeBlockTags(result);
 
+  // Step 15: Process Extract tags (remove tags, dedent content)
+  result = processExtractTags(result);
+
   // Final step: Normalize whitespace for readability
   result = normalizeWhitespace(result);
 
@@ -1344,6 +1347,70 @@ function processProcedureStepTags(content: string): string {
 
       // Regular content - dedent by 4 spaces
       const dedented = line.slice(Math.min(4, getLeadingSpaces(line)));
+      output.push(dedented);
+    } else {
+      output.push(line);
+    }
+  }
+
+  return output.join('\n');
+}
+
+/**
+ * Process Extract tags: remove the tags and dedent the content.
+ * Extract tags contain content pulled from another source, but we just want
+ * the plain text for skills.
+ */
+function processExtractTags(content: string): string {
+  const lines = content.split('\n');
+  const output: string[] = [];
+
+  let inCodeBlock = false;
+  let inExtract = false;
+  let extractIndent = 0;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    // Track code block state
+    if (trimmed.startsWith('```')) {
+      inCodeBlock = !inCodeBlock;
+      // If inside Extract, dedent the code block markers
+      if (inExtract) {
+        output.push(line.slice(Math.min(extractIndent, getLeadingSpaces(line))));
+      } else {
+        output.push(line);
+      }
+      continue;
+    }
+
+    // Inside code block: preserve content, dedent if in Extract
+    if (inCodeBlock) {
+      if (inExtract) {
+        output.push(line.slice(Math.min(extractIndent, getLeadingSpaces(line))));
+      } else {
+        output.push(line);
+      }
+      continue;
+    }
+
+    // Check for opening Extract tag
+    if (trimmed === '<Extract>' || /^<Extract\s[^>]*>$/.test(trimmed)) {
+      inExtract = true;
+      extractIndent = 2; // Content is typically indented 2 spaces
+      continue;
+    }
+
+    // Check for closing Extract tag
+    if (trimmed === '</Extract>') {
+      inExtract = false;
+      extractIndent = 0;
+      continue;
+    }
+
+    // Dedent content inside Extract
+    if (inExtract) {
+      const dedented = line.slice(Math.min(extractIndent, getLeadingSpaces(line)));
       output.push(dedented);
     } else {
       output.push(line);

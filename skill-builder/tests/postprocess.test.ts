@@ -824,6 +824,92 @@ Some content.
     });
   });
 
+  describe("Extract tag processing", () => {
+    it("removes Extract tags and dedents content", () => {
+      const input = `Some content before.
+
+<Extract>
+  This is extracted content.
+</Extract>
+
+Content after the extract.`;
+
+      const result = postprocessMarkdown(input);
+
+      expect(result).not.toContain("<Extract>");
+      expect(result).not.toContain("</Extract>");
+      expect(result).toContain("This is extracted content.");
+      expect(result).toContain("Content after the extract.");
+    });
+
+    it("handles multi-line Extract content", () => {
+      const input = `<Extract>
+  First line of the extract.
+  Second line of the extract.
+  Third line of the extract.
+</Extract>`;
+
+      const result = postprocessMarkdown(input);
+
+      expect(result).not.toContain("<Extract>");
+      expect(result).not.toContain("</Extract>");
+      expect(result).toContain("First line of the extract.");
+      expect(result).toContain("Second line of the extract.");
+      expect(result).toContain("Third line of the extract.");
+    });
+
+    it("preserves Extract tags inside code blocks", () => {
+      const input = `\`\`\`jsx
+<Extract>
+  This is inside a code block.
+</Extract>
+\`\`\``;
+
+      const result = postprocessMarkdown(input);
+
+      expect(result).toContain("<Extract>");
+      expect(result).toContain("</Extract>");
+    });
+
+    it("handles code blocks inside Extract tags", () => {
+      const input = `<Extract>
+  To connect to a database, use the following:
+
+  \`\`\`sh
+  mongodb://username:password@host:port/database
+  \`\`\`
+
+</Extract>`;
+
+      const result = postprocessMarkdown(input);
+
+      expect(result).not.toContain("<Extract>");
+      expect(result).not.toContain("</Extract>");
+      expect(result).toContain("To connect to a database, use the following:");
+      expect(result).toContain("mongodb://username:password@host:port/database");
+    });
+
+    it("handles multiple Extract tags", () => {
+      const input = `<Extract>
+  First extract.
+</Extract>
+
+Some content.
+
+<Extract>
+  Second extract.
+</Extract>`;
+
+      const result = postprocessMarkdown(input);
+
+      expect(result).not.toContain("<Extract>");
+      expect(result).not.toContain("</Extract>");
+      expect(result).toContain("First extract.");
+      expect(result).toContain("Some content.");
+      expect(result).toContain("Second extract.");
+    });
+  });
+
   describe("Tabs/Tab tag processing", () => {
     it("removes Tabs and Tab tags and dedents content by 4 spaces", () => {
       const input = `## Some Section
