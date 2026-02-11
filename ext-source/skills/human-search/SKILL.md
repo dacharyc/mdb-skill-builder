@@ -1,5 +1,5 @@
 ---
-name: search
+name: human-search
 description: Implement and optimize MongoDB Search, including Search indexes, queries, and configuration
 ---
 

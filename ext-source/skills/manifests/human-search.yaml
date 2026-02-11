@@ -1,4 +1,4 @@
-id: search
+id: human-search
 title: MongoDB Search
 description: Implement and optimize MongoDB Search, including Search indexes, queries, and configuration
 mainContent:

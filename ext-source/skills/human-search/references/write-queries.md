@@ -41,7 +41,7 @@ example searches the `description` and `type` fields.
 ```
 
 The `multi` path option is available only to fields of
-type How to Index String Fields.
+type string.
 
 If your index definition contains a field
 with multiple analyzers, you can specify which one to use. The `path`

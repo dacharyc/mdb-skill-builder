@@ -1,0 +1,218 @@
+id: ai-search
+title: MongoDB Search
+description: Implement and optimize MongoDB Search, including Search indexes, queries, and configuration
+includeReferenceDescriptions: true
+
+mainContent:
+  type: composite
+  sources:
+    # Core Index Definition - syntax overview and options table
+    - header: Search Index Definition
+      level: 2
+      content: |
+        Index definition JSON syntax and configuration options.
+    - path: content-mdx/atlas/_includes/search/index-definition-options-table.mdx
+
+    # Operators table from dedicated include
+    - header: Operators
+      level: 2
+      content: |
+        Operators for $search and $searchMeta queries:
+    - path: content-mdx/atlas/_includes/search/search-operators-table.mdx
+
+    # Collectors table from dedicated include
+    - header: Collectors
+      level: 2
+      content: |
+        Collectors return metadata about query results:
+    - path: content-mdx/atlas/_includes/search/search-collectors-table.mdx
+
+    # Header for reference documentation section
+    - header: Reference Documentation
+      level: 2
+      content: |
+        Load these references for detailed information on specific topics:
+
+references:
+  # $search and $searchMeta aggregation stages
+  - filename: search-and-searchMeta.md
+    title: $search and $searchMeta Aggregation Stages
+    linkText: $search and $searchMeta stages
+    description: Use these aggregation stages to run Search queries. $search returns matching documents; $searchMeta returns only metadata like counts and facets.
+    sources:
+      - path: content-mdx/atlas/atlas-search/aggregation-stages/search.mdx
+        header: $search Stage
+      - path: content-mdx/atlas/atlas-search/aggregation-stages/searchMeta.mdx
+        header: $searchMeta Stage
+    maxTokens: 3000
+
+  # compound operator - for combining multiple query clauses
+  - filename: compound-operator.md
+    title: compound Operator
+    linkText: compound operator
+    description: Use the compound operator to combine multiple operators into a single query with must, mustNot, should, and filter clauses.
+    sources:
+      - header: compound Operator
+        content: |
+          Combine multiple operators with boolean logic. Clauses: `must` (AND), `mustNot` (AND NOT), `should` (OR), `filter` (match without scoring).
+      - path: content/atlas/source/includes/fts/quickstart/queries/complex-fts-query.js
+        content: |
+          Example using must and mustNot - search for "baseball" in plot, excluding Comedy and Romance:
+    maxTokens: 1500
+
+  # text operator - for full-text search
+  - filename: text-operator.md
+    title: text Operator
+    linkText: text operator
+    description: Use the text operator for full-text search on string fields. Supports fuzzy matching, synonyms, and score boosting.
+    sources:
+      - header: text Operator
+        content: |
+          Full-text search using the analyzer from the index. Options: `query` (required), `path` (required), `fuzzy`, `matchCriteria` ("any"/"all"), `synonyms`.
+      - path: content/atlas/source/includes/fts/quickstart/queries/simple-fts-query.js
+        content: |
+          Basic text search for "baseball" in the plot field:
+    maxTokens: 1500
+
+  # Path construction - how to specify fields in queries
+  - filename: path-construction.md
+    title: Query Path Construction
+    linkText: path construction
+    description: How to specify which fields to search using the path parameter, including single fields, multiple fields, nested fields, and wildcards.
+    sources:
+      - header: Query Path Construction
+        content: |
+          The `path` parameter specifies fields to search:
+          - Single: `"path": "title"`
+          - Multiple: `"path": ["title", "plot"]`
+          - Nested: `"path": "address.city"`
+          - Wildcard: `"path": { "wildcard": "*" }`
+          - Multi-analyzer: `"path": { "value": "title", "multi": "english" }`
+    maxTokens: 1000
+
+  # Scoring Reference - how scoring works and how to modify it
+  - filename: scoring.md
+    title: Scoring
+    linkText: scoring
+    description: Documents are scored by relevance. Use this reference to understand how scoring works and how to modify scores with boost, constant, and function options.
+    sources:
+      - path: content-mdx/atlas/atlas-search/scoring.mdx
+        header: Scoring Overview
+    maxTokens: 2500
+
+  # Field Mappings Reference
+  - filename: field-mappings.md
+    title: Field Mappings
+    linkText: field mappings
+    description: Define static or dynamic field mappings to control how fields are indexed. Required for specifying field types and analyzers.
+    sources:
+      - header: Field Mappings
+        content: |
+          Control how fields are indexed. Use `"dynamic": true` to auto-index all fields, or `"dynamic": false` with explicit `fields` definitions.
+
+          Common field types: `string` (full-text), `token` (exact match/facets), `number`, `date`, `boolean`, `geo`, `autocomplete`.
+
+          Example static mapping:
+          ```json
+          {
+            "mappings": {
+              "dynamic": false,
+              "fields": {
+                "title": { "type": "string", "analyzer": "lucene.standard" },
+                "year": { "type": "number" },
+                "genres": { "type": "token" }
+              }
+            }
+          }
+          ```
+    maxTokens: 1500
+
+  # Analyzers Reference
+  - filename: analyzers.md
+    title: Analyzers
+    linkText: analyzers
+    description: Analyzers process text during indexing and querying. Choose from built-in analyzers (standard, simple, whitespace, keyword, language) or create custom analyzers.
+    sources:
+      - path: content-mdx/atlas/atlas-search/analyzers.mdx
+        header: Analyzer Types
+    maxTokens: 2000
+
+  # Synonyms Reference - using focused mongosh examples instead of full page
+  - filename: synonyms.md
+    title: Synonyms
+    linkText: synonyms configuration
+    description: Configure synonym mappings to match equivalent terms (e.g., "car" matches "automobile"). Requires a synonyms source collection.
+    sources:
+      - header: Configure Synonyms
+        level: 1
+      - content: |
+          Use synonyms to expand search queries to include equivalent terms. For example, configure synonyms so that searching for "car" also matches "automobile".
+
+          ## Setup Requirements
+
+          1. Create a synonyms source collection containing synonym mappings
+          2. Reference the collection in your search index definition
+          3. Use a consistent analyzer for both the synonyms and the indexed fields
+      - path: content-mdx/atlas/_includes/fts/synonyms/static-examples-mongosh.mdx
+        header: Static Mappings Example (mongosh)
+      - path: content-mdx/atlas/_includes/fts/synonyms/dynamic-intro.mdx
+        header: Dynamic Mappings Overview
+    maxTokens: 2500
+
+  # Query Performance Reference - using focused includes
+  - filename: query-performance.md
+    title: Query Performance
+    linkText: query performance
+    description: Best practices for optimizing query performance, including using compound.filter instead of $match and avoiding $skip for pagination.
+    sources:
+      - header: Query Performance Best Practices
+        level: 1
+      - path: content-mdx/atlas/_includes/query-performance/compound-filter-match.mdx
+        header: Use compound.filter Instead of $match
+      - path: content-mdx/atlas/_includes/query-performance/avoid-skip-after-search.mdx
+        header: Avoid $skip for Pagination
+      - path: content-mdx/atlas/_includes/query-performance/facet-instead-group.mdx
+        header: Use facet Instead of $group
+      - path: content-mdx/atlas/_includes/query-performance/search-instead-of-text-regex.mdx
+        header: Use $search Instead of $text or $regex
+    maxTokens: 2000
+
+  # Index Performance Reference - using focused includes
+  - filename: index-performance.md
+    title: Index Performance
+    linkText: index performance
+    description: Best practices for index sizing, avoiding mapping explosions, and configuring indexes for optimal performance.
+    sources:
+      - header: Index Performance Best Practices
+        level: 1
+      - path: content-mdx/atlas/_includes/index-performance/index-size-configuration.mdx
+        header: Index Size and Configuration
+      - path: content-mdx/atlas/_includes/index-performance/mapping-explosions.mdx
+        header: Avoid Mapping Explosions
+      - path: content-mdx/atlas/_includes/index-performance/storing-source-fields.mdx
+        header: Storing Source Fields
+      - path: content-mdx/atlas/_includes/index-performance/scaling-considerations.mdx
+        header: Scaling Considerations
+    maxTokens: 3000
+
+  # Index Management Reference - using focused mongosh examples only
+  - filename: manage-indexes.md
+    title: Manage Search Indexes
+    linkText: index management
+    description: Create, view, update, and delete MongoDB Search indexes using mongosh shell commands.
+    sources:
+      - header: Manage Search Indexes with mongosh
+        level: 1
+      - content: |
+          MongoDB Search indexes can be managed through multiple interfaces: Atlas UI, Atlas CLI, Admin API, and driver methods. The examples below show the mongosh shell commands for the most common operations.
+      - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-create-index-shell.mdx
+        header: Create an Index
+      - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-view-index-shell.mdx
+        header: View Indexes
+      - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-edit-index-shell.mdx
+        header: Edit an Index
+      - path: content-mdx/atlas/_includes/fts/search-index-management/procedures/steps-fts-delete-index-shell.mdx
+        header: Delete an Index
+    maxTokens: 2000
+
+maxTokens: 4000

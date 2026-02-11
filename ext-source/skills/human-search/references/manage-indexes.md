@@ -275,7 +275,7 @@ To run the sample application, use the following command:
 node update-index.js
 ```
 
-The updateSearchIndex() method doesn't return an output. To view your
+The dropSearchIndex() method doesn't return an output. To view your
 index status, you can use the
 Atlas CLI to list MongoDB Search indexes. To learn more, see
 [atlas clusters search index list](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-clusters-search-indexes-list.md) or [atlas
@@ -322,7 +322,7 @@ To run the sample application, use the following command.
 node drop-index.js
 ```
 
-The updateSearchIndex() method doesn't return an output. To view your
+The dropSearchIndex() method doesn't return an output. To view your
 index status, you can use the
 Atlas CLI to list MongoDB Search indexes. To learn more, see
 [atlas clusters search index list](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-clusters-search-indexes-list.md) or [atlas
