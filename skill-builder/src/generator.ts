@@ -23,15 +23,26 @@ description: ${manifest.description}
 
 /**
  * Generate reference links section
+ * @param references - Array of reference files
+ * @param includeDescriptions - Whether to include reference descriptions after the link
  */
-function generateReferenceLinks(references: ReferenceFile[]): string {
+function generateReferenceLinks(
+  references: ReferenceFile[],
+  includeDescriptions: boolean = false
+): string {
   if (!references || references.length === 0) {
     return "";
   }
 
   const links = references.map((ref) => {
     const linkText = ref.linkText || ref.title || ref.filename;
-    return `- [${linkText}](references/${ref.filename})`;
+    const link = `- [${linkText}](references/${ref.filename})`;
+
+    if (includeDescriptions && ref.description) {
+      return `${link}: ${ref.description}`;
+    }
+
+    return link;
   });
 
   return links.join("\n");
@@ -63,7 +74,10 @@ export async function generateSkillFile(
     // Check if the last source already has a "Task-Specific Guides" or similar header
     // If not, we might want to add one, but let's keep it simple for now
     skillContent += "\n\n";
-    skillContent += generateReferenceLinks(manifest.references);
+    skillContent += generateReferenceLinks(
+      manifest.references,
+      manifest.includeReferenceDescriptions
+    );
   }
 
   // Post-process to clean up MDX artifacts

@@ -49,43 +49,72 @@ Skill manifests are simple YAML files that declare:
 The manifest schema is:
 
 ```typescript
-interface SkillManifest {
-  id: string;                    // Unique identifier
-  title: string;                 // Human-readable title
-  description: string;           // What this skill helps with
+/**
+ * A source of content for a skill section
+ */
+export interface ContentSource {
+  /** Path to source file (MDX or code example) relative to repo root */
+  path?: string;
+  /** Inline markdown content */
+  content?: string;
+  /** Optional section header to add before this content */
+  header?: string;
+  /** Header level (1-6, default: 2 for ##) */
+  level?: number;
+}
 
-  // Main SKILL.md content - can be single file or composite
+/**
+ * A section of content that can be single or composite
+ */
+export interface ContentSection {
+  /** Type of content section */
+  type: "single" | "composite";
+  /** Array of content sources */
+  sources: ContentSource[];
+}
+
+/**
+ * A reference file for progressive disclosure
+ */
+export interface ReferenceFile {
+  /** Output filename in references/ directory (e.g., "configure-docker.md") */
+  filename: string;
+  /** Optional title (extracted from content if not provided) */
+  title?: string;
+  /** Text to use in links (defaults to title or filename) */
+  linkText?: string;
+  /** Description of when to use this reference (shown in SKILL.md if includeReferenceDescriptions is true) */
+  description?: string;
+  /** Array of content sources */
+  sources: ContentSource[];
+  /** Optional token budget for this reference */
+  maxTokens?: number;
+}
+
+/**
+ * Main manifest schema for a skill
+ */
+export interface SkillManifest {
+  /** Unique identifier for the skill */
+  id: string;
+  /** Human-readable title */
+  title: string;
+  /** Description of what this skill helps with */
+  description: string;
+  /** Main SKILL.md content - can be single file or composite */
   mainContent: ContentSection;
-
-  // Optional reference files for progressive disclosure
+  /** Optional reference files for progressive disclosure */
   references?: ReferenceFile[];
-
-  maxTokens?: number;            // Optional token budget for main content
-  metadata?: {                   // Optional additional metadata
+  /** Whether to include reference descriptions in the main SKILL.md file */
+  includeReferenceDescriptions?: boolean;
+  /** Optional token budget for main content */
+  maxTokens?: number;
+  /** Optional additional metadata */
+  metadata?: {
     tags?: string[];
     version?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
-}
-
-interface ContentSection {
-  type: 'single' | 'composite';
-  sources: ContentSource[];      // Array of content sources
-}
-
-interface ContentSource {
-  path?: string;                 // Optional file path to source (MDX or code example)
-  content?: string;              // Optional inline markdown content
-  header?: string;               // Optional section header
-  level?: number;                // Header level (1-6, default: 2 for ##)
-}
-
-interface ReferenceFile {
-  filename: string;              // Output filename in references/ (e.g., "configure-docker.md")
-  title?: string;                // Optional title (extracted from content if not provided)
-  linkText?: string;             // Text to use in links (defaults to title or filename)
-  sources: ContentSource[];      // Array of content sources
-  maxTokens?: number;            // Optional token budget for this reference
 }
 ```
 

@@ -36,6 +36,8 @@ export interface ReferenceFile {
   title?: string;
   /** Text to use in links (defaults to title or filename) */
   linkText?: string;
+  /** Description of when to use this reference (shown in SKILL.md if includeReferenceDescriptions is true) */
+  description?: string;
   /** Array of content sources */
   sources: ContentSource[];
   /** Optional token budget for this reference */
@@ -56,6 +58,8 @@ export interface SkillManifest {
   mainContent: ContentSection;
   /** Optional reference files for progressive disclosure */
   references?: ReferenceFile[];
+  /** Whether to include reference descriptions in the main SKILL.md file */
+  includeReferenceDescriptions?: boolean;
   /** Optional token budget for main content */
   maxTokens?: number;
   /** Optional additional metadata */
