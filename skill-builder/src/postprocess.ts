@@ -38,13 +38,11 @@ export function postprocessMarkdown(content: string, repoRoot?: string): string 
   // Step 6: Process Example tags (convert to heading + dedented content)
   result = processExampleTags(result);
 
-  // Step 7: Remove DefaultDomain tags and their content
-  result = removeDefaultDomainTags(result);
+  // Step 7: Remove irrelevant tags and their content
+  // (DefaultDomain, Toctree, Facet, Contents, Seealso - metadata/navigation not needed for skills)
+  result = removeIrrelevantTags(result);
 
-  // Step 8: Remove Toctree, Facet, and Contents tags
-  result = removeMetadataTags(result);
-
-  // Step 9: Process Heading tags (convert to markdown headings)
+  // Step 8: Process Heading tags (convert to markdown headings)
   result = processHeadingTags(result);
 
   // Step 10: Process Reference tags (resolve to values from _references.ts)
@@ -56,10 +54,7 @@ export function postprocessMarkdown(content: string, repoRoot?: string): string 
   // Step 12: Process Tabs/Tab tags (convert to sections with headings)
   result = processTabsTags(result);
 
-  // Step 13: Remove Seealso tags and their content (related content not accessible in skills)
-  result = removeSeealsoTags(result);
-
-  // Step 14: Process IoCodeBlock/Input/Output tags (convert to labeled code blocks)
+  // Step 13: Process IoCodeBlock/Input/Output tags (convert to labeled code blocks)
   result = processIoCodeBlockTags(result);
 
   // Step 15: Process Extract tags (remove tags, dedent content)
@@ -509,73 +504,27 @@ function processExampleTags(content: string): string {
 }
 
 /**
- * Remove DefaultDomain tags and their content entirely.
- * These specify the documentation domain (e.g., "mongodb") and aren't needed for skills.
+ * Tag names that should be removed along with their content.
+ * These are metadata, navigation, or reference elements not needed for skills:
+ * - DefaultDomain: documentation domain (e.g., "mongodb")
+ * - Toctree: table of contents tree (navigation)
+ * - Facet: content categorization (metadata)
+ * - Contents: "On this page" navigation
+ * - Seealso: related content references (may not be accessible in skills)
  */
-function removeDefaultDomainTags(content: string): string {
-  const lines = content.split('\n');
-  const output: string[] = [];
-
-  let inCodeBlock = false;
-  let inDefaultDomain = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    // Track code block state
-    if (trimmed.startsWith('```')) {
-      inCodeBlock = !inCodeBlock;
-      output.push(line);
-      continue;
-    }
-
-    // Inside code block: preserve everything
-    if (inCodeBlock) {
-      output.push(line);
-      continue;
-    }
-
-    // Check for opening DefaultDomain tag
-    if (trimmed.startsWith('<DefaultDomain')) {
-      // Check if it's a single-line tag: <DefaultDomain>content</DefaultDomain>
-      if (trimmed.includes('</DefaultDomain>')) {
-        // Single line - skip entirely
-        continue;
-      }
-      inDefaultDomain = true;
-      continue;
-    }
-
-    // Check for closing DefaultDomain tag
-    if (trimmed === '</DefaultDomain>') {
-      inDefaultDomain = false;
-      continue;
-    }
-
-    // Skip content inside DefaultDomain
-    if (inDefaultDomain) {
-      continue;
-    }
-
-    output.push(line);
-  }
-
-  return output.join('\n');
-}
+const IRRELEVANT_TAGS = ['DefaultDomain', 'Toctree', 'Facet', 'Contents', 'Seealso'];
 
 /**
- * Remove Toctree, Facet, and Contents tags.
- * These are navigation/metadata elements not needed for skills.
- * - Toctree: table of contents tree
- * - Facet: content categorization
- * - Contents: "On this page" navigation
+ * Remove irrelevant tags and their content entirely.
+ * Handles self-closing tags, single-line tags, and multi-line tags.
  */
-function removeMetadataTags(content: string): string {
+function removeIrrelevantTags(content: string): string {
   const lines = content.split('\n');
   const output: string[] = [];
 
   let inCodeBlock = false;
-  let inContents = false;
+  // Track which tag we're currently inside (null if none)
+  let insideTag: string | null = null;
 
   for (const line of lines) {
     const trimmed = line.trim();
@@ -593,38 +542,53 @@ function removeMetadataTags(content: string): string {
       continue;
     }
 
-    // Remove self-closing Toctree tags: <Toctree ... />
-    if (/^<Toctree\s[^>]*\/>$/.test(trimmed) || trimmed === '<Toctree />') {
-      continue;
-    }
+    // Check if this line should be skipped
+    let skipLine = false;
 
-    // Remove self-closing Facet tags: <Facet ... />
-    if (/^<Facet\s[^>]*\/>$/.test(trimmed) || trimmed === '<Facet />') {
-      continue;
-    }
-
-    // Handle Contents tags (can be multi-line)
-    if (trimmed.startsWith('<Contents')) {
-      // Check if it's a single-line tag: <Contents ...>content</Contents>
-      if (trimmed.includes('</Contents>')) {
-        continue;
+    for (const tagName of IRRELEVANT_TAGS) {
+      // Check for self-closing tag: <TagName ... /> or <TagName />
+      if (
+        new RegExp(`^<${tagName}\\s[^>]*/>$`).test(trimmed) ||
+        trimmed === `<${tagName} />`
+      ) {
+        skipLine = true;
+        break;
       }
-      // Check if it's self-closing: <Contents ... />
-      if (trimmed.endsWith('/>')) {
-        continue;
+
+      // Check for single-line tag: <TagName>...</TagName> or <TagName ...>...</TagName>
+      if (
+        new RegExp(`^<${tagName}[^>]*>.*</${tagName}>$`).test(trimmed)
+      ) {
+        skipLine = true;
+        break;
       }
-      inContents = true;
+
+      // Check for opening tag: <TagName> or <TagName ...>
+      if (
+        trimmed === `<${tagName}>` ||
+        new RegExp(`^<${tagName}\\s[^>]*>$`).test(trimmed)
+      ) {
+        insideTag = tagName;
+        skipLine = true;
+        break;
+      }
+
+      // Check for closing tag: </TagName>
+      if (trimmed === `</${tagName}>`) {
+        if (insideTag === tagName) {
+          insideTag = null;
+        }
+        skipLine = true;
+        break;
+      }
+    }
+
+    // Skip content inside a tag we're removing
+    if (insideTag !== null) {
       continue;
     }
 
-    // Check for closing Contents tag
-    if (trimmed === '</Contents>') {
-      inContents = false;
-      continue;
-    }
-
-    // Skip content inside Contents
-    if (inContents) {
+    if (skipLine) {
       continue;
     }
 
@@ -987,62 +951,6 @@ function processTabsTags(content: string): string {
     } else {
       output.push(line);
     }
-  }
-
-  return output.join('\n');
-}
-
-/**
- * Remove Seealso tags and all their content.
- * Seealso blocks contain references to related content that may not be
- * accessible through the skill, so we remove them entirely.
- */
-function removeSeealsoTags(content: string): string {
-  const lines = content.split('\n');
-  const output: string[] = [];
-
-  let inCodeBlock = false;
-  let inSeealso = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    // Track code block state
-    if (trimmed.startsWith('```')) {
-      inCodeBlock = !inCodeBlock;
-      output.push(line);
-      continue;
-    }
-
-    // Inside code block: preserve everything
-    if (inCodeBlock) {
-      output.push(line);
-      continue;
-    }
-
-    // Check for single-line Seealso tag
-    if (/^<Seealso>.*<\/Seealso>$/.test(trimmed)) {
-      continue;
-    }
-
-    // Check for opening Seealso tag
-    if (trimmed === '<Seealso>' || /^<Seealso\s[^>]*>$/.test(trimmed)) {
-      inSeealso = true;
-      continue;
-    }
-
-    // Check for closing Seealso tag
-    if (trimmed === '</Seealso>') {
-      inSeealso = false;
-      continue;
-    }
-
-    // Skip content inside Seealso
-    if (inSeealso) {
-      continue;
-    }
-
-    output.push(line);
   }
 
   return output.join('\n');
