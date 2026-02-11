@@ -45,20 +45,17 @@ export function postprocessMarkdown(content: string, repoRoot?: string): string 
   // Step 8: Process Heading tags (convert to markdown headings)
   result = processHeadingTags(result);
 
-  // Step 10: Process Reference tags (resolve to values from _references.ts)
+  // Step 9: Process Reference tags (resolve to values from _references.ts)
   result = processReferenceTags(result);
 
-  // Step 11: Process Note tags (remove tags, dedent content)
-  result = processNoteTags(result);
+  // Step 10: Process wrapper tags (Note, Extract - remove tags, dedent content)
+  result = processWrapperTags(result);
 
-  // Step 12: Process Tabs/Tab tags (convert to sections with headings)
+  // Step 11: Process Tabs/Tab tags (convert to sections with headings)
   result = processTabsTags(result);
 
-  // Step 13: Process IoCodeBlock/Input/Output tags (convert to labeled code blocks)
+  // Step 12: Process IoCodeBlock/Input/Output tags (convert to labeled code blocks)
   result = processIoCodeBlockTags(result);
-
-  // Step 15: Process Extract tags (remove tags, dedent content)
-  result = processExtractTags(result);
 
   // Final step: Normalize whitespace for readability
   result = normalizeWhitespace(result);
@@ -810,16 +807,27 @@ function processReferenceTags(content: string): string {
 }
 
 /**
- * Process Note tags: remove the tags and dedent the content.
- * Notes are callouts in MDX but we just want the plain text for skills.
+ * Tag names that wrap content and should be removed with their content dedented.
+ * These are container elements where we want to keep the content but remove the wrapper:
+ * - Note: callout boxes in MDX
+ * - Extract: content pulled from another source
+ *
+ * Content inside these tags is typically indented 2 spaces and should be dedented.
+ * Code blocks inside are also dedented.
  */
-function processNoteTags(content: string): string {
+const WRAPPER_TAGS = ['Note', 'Extract'];
+
+/**
+ * Process wrapper tags: remove the tags and dedent all content (including code blocks).
+ */
+function processWrapperTags(content: string): string {
   const lines = content.split('\n');
   const output: string[] = [];
 
   let inCodeBlock = false;
-  let inNote = false;
-  let noteIndent = 0;
+  // Track which wrapper tag we're inside (null if none)
+  let insideTag: string | null = null;
+  const dedentAmount = 2; // Content is typically indented 2 spaces
 
   for (const line of lines) {
     const trimmed = line.trim();
@@ -827,34 +835,55 @@ function processNoteTags(content: string): string {
     // Track code block state
     if (trimmed.startsWith('```')) {
       inCodeBlock = !inCodeBlock;
-      output.push(line);
+      // Dedent code block markers if inside a wrapper tag
+      if (insideTag !== null) {
+        output.push(line.slice(Math.min(dedentAmount, getLeadingSpaces(line))));
+      } else {
+        output.push(line);
+      }
       continue;
     }
 
-    // Inside code block: preserve everything
+    // Inside code block: dedent if inside a wrapper tag
     if (inCodeBlock) {
-      output.push(line);
+      if (insideTag !== null) {
+        output.push(line.slice(Math.min(dedentAmount, getLeadingSpaces(line))));
+      } else {
+        output.push(line);
+      }
       continue;
     }
 
-    // Check for opening Note tag
-    if (trimmed === '<Note>' || /^<Note\s[^>]*>$/.test(trimmed)) {
-      inNote = true;
-      noteIndent = 2; // Content is typically indented 2 spaces
+    // Check for wrapper tag open/close
+    let handled = false;
+    for (const tagName of WRAPPER_TAGS) {
+      // Check for opening tag: <TagName> or <TagName ...>
+      if (
+        trimmed === `<${tagName}>` ||
+        new RegExp(`^<${tagName}\\s[^>]*>$`).test(trimmed)
+      ) {
+        insideTag = tagName;
+        handled = true;
+        break;
+      }
+
+      // Check for closing tag: </TagName>
+      if (trimmed === `</${tagName}>`) {
+        if (insideTag === tagName) {
+          insideTag = null;
+        }
+        handled = true;
+        break;
+      }
+    }
+
+    if (handled) {
       continue;
     }
 
-    // Check for closing Note tag
-    if (trimmed === '</Note>') {
-      inNote = false;
-      noteIndent = 0;
-      continue;
-    }
-
-    // Dedent content inside Note
-    if (inNote) {
-      const dedented = line.slice(Math.min(noteIndent, getLeadingSpaces(line)));
-      output.push(dedented);
+    // Dedent content inside wrapper tags
+    if (insideTag !== null) {
+      output.push(line.slice(Math.min(dedentAmount, getLeadingSpaces(line))));
     } else {
       output.push(line);
     }
@@ -1255,70 +1284,6 @@ function processProcedureStepTags(content: string): string {
 
       // Regular content - dedent by 4 spaces
       const dedented = line.slice(Math.min(4, getLeadingSpaces(line)));
-      output.push(dedented);
-    } else {
-      output.push(line);
-    }
-  }
-
-  return output.join('\n');
-}
-
-/**
- * Process Extract tags: remove the tags and dedent the content.
- * Extract tags contain content pulled from another source, but we just want
- * the plain text for skills.
- */
-function processExtractTags(content: string): string {
-  const lines = content.split('\n');
-  const output: string[] = [];
-
-  let inCodeBlock = false;
-  let inExtract = false;
-  let extractIndent = 0;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    // Track code block state
-    if (trimmed.startsWith('```')) {
-      inCodeBlock = !inCodeBlock;
-      // If inside Extract, dedent the code block markers
-      if (inExtract) {
-        output.push(line.slice(Math.min(extractIndent, getLeadingSpaces(line))));
-      } else {
-        output.push(line);
-      }
-      continue;
-    }
-
-    // Inside code block: preserve content, dedent if in Extract
-    if (inCodeBlock) {
-      if (inExtract) {
-        output.push(line.slice(Math.min(extractIndent, getLeadingSpaces(line))));
-      } else {
-        output.push(line);
-      }
-      continue;
-    }
-
-    // Check for opening Extract tag
-    if (trimmed === '<Extract>' || /^<Extract\s[^>]*>$/.test(trimmed)) {
-      inExtract = true;
-      extractIndent = 2; // Content is typically indented 2 spaces
-      continue;
-    }
-
-    // Check for closing Extract tag
-    if (trimmed === '</Extract>') {
-      inExtract = false;
-      extractIndent = 0;
-      continue;
-    }
-
-    // Dedent content inside Extract
-    if (inExtract) {
-      const dedented = line.slice(Math.min(extractIndent, getLeadingSpaces(line)));
       output.push(dedented);
     } else {
       output.push(line);
