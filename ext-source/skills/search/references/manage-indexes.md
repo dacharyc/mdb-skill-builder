@@ -1,6 +1,6 @@
 # Manage Search Indexes
 
-To create a MongoDB Search index through the [Node Driver](https://www.mongodb.com/docs/drivers/node/current/):
+To create a MongoDB Search index through the Node Driver:
 
 - Define the search index from your application.
 
@@ -139,7 +139,7 @@ successfully. To determine the current status of the indexes, call the
   <index-name>
   ```
 
-To retrieve your MongoDB Search indexes through the [Node Driver](https://www.mongodb.com/docs/drivers/node/current/),
+To retrieve your MongoDB Search indexes through the Node Driver,
 use the `listSearchIndexes` helper method.
 
 ## Example
@@ -158,7 +158,7 @@ to return the indexes on your collection. Specify the following values:
 The `listSearchIndexes` command returns a cursor. As a result,
 it doesn't immediately return the indexes matched by the command.
 To access the results, use a cursor paradigm such
-as the `toArray()` method. To learn more, see [Access Data From a Cursor](https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/read-operations/cursor/).
+as the `toArray()` method. To learn more, see Access Data From a Cursor.
 
 ```javascript
 import { MongoClient } from "mongodb";
@@ -215,7 +215,7 @@ node list-indexes.js
 ]
 ```
 
-To edit a MongoDB Search index through the [Node Driver](https://www.mongodb.com/docs/drivers/node/current/),
+To edit a MongoDB Search index through the Node Driver,
 use the `updateSearchIndex` helper method.
 
 ### Example
@@ -278,10 +278,10 @@ node update-index.js
 The updateSearchIndex() method doesn't return an output. To view your
 index status, you can use the
 Atlas CLI to list MongoDB Search indexes. To learn more, see
-[atlas clusters search index list](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-clusters-search-indexes-list/) or [atlas
+[atlas clusters search index list](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-clusters-search-indexes-list.md) or [atlas
 deployments search index list](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-deployments-search-indexes-list/).
 
-To delete a MongoDB Search index through the [Node Driver](https://www.mongodb.com/docs/drivers/node/current/),
+To delete a MongoDB Search index through the Node Driver,
 use the `dropSearchIndex` helper method.
 
 #### Example
@@ -325,5 +325,5 @@ node drop-index.js
 The updateSearchIndex() method doesn't return an output. To view your
 index status, you can use the
 Atlas CLI to list MongoDB Search indexes. To learn more, see
-[atlas clusters search index list](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-clusters-search-indexes-list/) or [atlas
+[atlas clusters search index list](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-clusters-search-indexes-list.md) or [atlas
 deployments search index list](https://www.mongodb.com/docs/atlas/cli/current/command/atlas-deployments-search-indexes-list/).

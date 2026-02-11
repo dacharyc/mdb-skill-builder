@@ -9,6 +9,7 @@ import type {
 import { processContentSources } from "./content.js";
 import { TokenCounter, validateTokenBudget } from "./tokens.js";
 import { postprocessMarkdown } from "./postprocess.js";
+import { validateAndConvertDocsUrls } from "./url-validator.js";
 
 /**
  * Generate frontmatter for SKILL.md
@@ -68,6 +69,9 @@ export async function generateSkillFile(
   // Post-process to clean up MDX artifacts
   skillContent = postprocessMarkdown(skillContent, repoRoot);
 
+  // Validate and convert MongoDB docs URLs (async - checks for 404s)
+  skillContent = await validateAndConvertDocsUrls(skillContent, "SKILL.md");
+
   // Add skill frontmatter after postprocessing (so it doesn't get removed)
   skillContent = generateFrontmatter(manifest) + "\n\n" + skillContent;
 
@@ -114,6 +118,9 @@ export async function generateReferenceFile(
 
   // Post-process to clean up MDX artifacts
   refContent = postprocessMarkdown(refContent, repoRoot);
+
+  // Validate and convert MongoDB docs URLs (async - checks for 404s)
+  refContent = await validateAndConvertDocsUrls(refContent, reference.filename);
 
   // Validate token budget
   const { tokens, warning } = validateTokenBudget(

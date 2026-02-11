@@ -752,5 +752,5 @@ token.                          |
 ###### Learn More
 
 To learn more about analyzers, see
-[Analyzing Analyzers to Build The Right Search Index For Your App](https://www.mongodb.com/developer/products/atlas/analyzing-analyzers-build-search-index-app/)
+[Analyzing Analyzers to Build The Right Search Index For Your App](https://www.mongodb.com/developer/products/atlas/analyzing-analyzers-build-search-index-app.md)
 in the MongoDB Developer Center.
