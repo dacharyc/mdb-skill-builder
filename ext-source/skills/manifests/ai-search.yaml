@@ -20,6 +20,17 @@ mainContent:
         Operators for $search and $searchMeta queries:
     - path: content-mdx/atlas/_includes/search/search-operators-table.mdx
 
+    # Path construction - how to specify fields in queries (inlined due to small size)
+    - header: Query Path Construction
+      level: 2
+      content: |
+        The `path` parameter specifies fields to search:
+        - Single: `"path": "title"`
+        - Multiple: `"path": ["title", "plot"]`
+        - Nested: `"path": "address.city"`
+        - Wildcard: `"path": { "wildcard": "*" }`
+        - Multi-analyzer: `"path": { "value": "title", "multi": "english" }`
+
     # Collectors table from dedicated include
     - header: Collectors
       level: 2
@@ -77,22 +88,6 @@ references:
         content: |
           Basic text search for "baseball" in the plot field:
     maxTokens: 1500
-
-  # Path construction - how to specify fields in queries
-  - filename: path-construction.md
-    title: Query Path Construction
-    linkText: path construction
-    description: How to specify which fields to search using the path parameter, including single fields, multiple fields, nested fields, and wildcards.
-    sources:
-      - header: Query Path Construction
-        content: |
-          The `path` parameter specifies fields to search:
-          - Single: `"path": "title"`
-          - Multiple: `"path": ["title", "plot"]`
-          - Nested: `"path": "address.city"`
-          - Wildcard: `"path": { "wildcard": "*" }`
-          - Multi-analyzer: `"path": { "value": "title", "multi": "english" }`
-    maxTokens: 1000
 
   # Scoring Reference - how scoring works and how to modify it
   - filename: scoring.md

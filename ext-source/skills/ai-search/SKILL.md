@@ -54,6 +54,15 @@ Operators for $search and $searchMeta queries:
 | vectorSearch | Performs semantic search using lexical pre-filters. | vector |
 | wildcard | Supports special characters in the query string that can match any character. | string |
 
+## Query Path Construction
+
+The `path` parameter specifies fields to search:
+- Single: `"path": "title"`
+- Multiple: `"path": ["title", "plot"]`
+- Nested: `"path": "address.city"`
+- Wildcard: `"path": { "wildcard": "*" }`
+- Multi-analyzer: `"path": { "value": "title", "multi": "english" }`
+
 ## Collectors
 
 Collectors return metadata about query results:
@@ -69,7 +78,6 @@ Load these references for detailed information on specific topics:
 - [$search and $searchMeta stages](references/search-and-searchMeta.md): Use these aggregation stages to run Search queries. $search returns matching documents; $searchMeta returns only metadata like counts and facets.
 - [compound operator](references/compound-operator.md): Use the compound operator to combine multiple operators into a single query with must, mustNot, should, and filter clauses.
 - [text operator](references/text-operator.md): Use the text operator for full-text search on string fields. Supports fuzzy matching, synonyms, and score boosting.
-- [path construction](references/path-construction.md): How to specify which fields to search using the path parameter, including single fields, multiple fields, nested fields, and wildcards.
 - [scoring](references/scoring.md): Documents are scored by relevance. Use this reference to understand how scoring works and how to modify scores with boost, constant, and function options.
 - [field mappings](references/field-mappings.md): Define static or dynamic field mappings to control how fields are indexed. Required for specifying field types and analyzers.
 - [analyzers](references/analyzers.md): Analyzers process text during indexing and querying. Choose from built-in analyzers (standard, simple, whitespace, keyword, language) or create custom analyzers.
