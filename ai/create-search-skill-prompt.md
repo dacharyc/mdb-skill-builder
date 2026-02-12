@@ -6,13 +6,13 @@ The skill is called "search" and its description is "Implement and optimize Mong
 
 Refer to [ai/claude-skill-creator.md](ai/claude-skill-creator.md) for detailed instructions about the anatomy of a skill.
 
-Then, refer to the documentation content at /filepath/mdb-skill-builder/content/atlas/source/atlas-search
+Then, refer to the documentation content at /content/atlas/source/atlas-search
 
 Determine which content is relevant to the skill.
 
 Our process to create the skill refers to specific files.
 
-Write your proposed content to the empty file at: /filepath/mdb-skill-builder/search-skill-proposed-content.md
+Write your proposed content to the empty file at: search-skill-proposed-content.md
 
 For each bit of content we should include, write ONLY:
 
