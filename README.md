@@ -5,7 +5,7 @@ a subset of the content and tooling. The goal is to create a proof-of-concept
 of a "Skill Builder" pipeline that can generate a skill from documentation
 content.
 
-The pipeline uses the following tools:
+The pipeline uses the following extant tools to convert reStructuredText to markdown:
 
 - `platform/tools/snooty-ast-to-mdx` - Converts Snooty rST to MDX - run manually before generating skills to create the MDX content
 - `platform/tools/mdx-to-md` - Converts MDX to Markdown - this tool is invoked directly by the skill builder tool
@@ -33,6 +33,40 @@ When this is moved into the docs monorepo, we can use our copier tool to copy th
 `skills` content out to an external developer-facing repo for cloning and immediate
 use, and/or copy the content to MCP or other internal sources for repackaging in
 other ways.
+
+## Why a custom tool instead of LLM/Claude Skill Creator Skill/Skill Seekers?
+
+The [Claude Skill Creator Skill](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md)
+and [Skill Seekers](https://skillseekersweb.com/) are great tools for creating
+Agent Skills, but they are not a good fit for our use case for the following reasons:
+
+- They are not designed to work with our documentation content, which is in
+  reStructuredText and uses custom Snooty directives.
+- They are not easily configurable to produce the specific output we need for
+  our skills. Our skills need to be tightly controlled in terms of the content,
+  structure, and size to ensure they are useful to our users.
+- Skill creation via LLM, such as using the Claude Skill Creator Skill, is
+  non-deterministic, and therefore not a good fit for a production environment where
+  we need to be able to reproduce the same skill output consistently as input
+  sources are updated and features are added/deprecated.
+
+We _can_ use the Claude Skill Creator Skill as _context_ for having an LLM help
+us identify content that we might want to include in a skill. I experimented
+with this approach in the following pipeline:
+
+1. Copied [a truncated version of the Claude Skill Creator content](/ai/claude-skill-creator.md) into this repo
+2. Created this prompt asking an LLM to read the content and create a skill for
+   creating a MongoDB Atlas Search skill: [ai/create-search-skill-prompt.md](ai/create-search-skill-prompt.md)
+3. The LLM output was [ai/search-skill-proposed-content.md](ai/search-skill-proposed-content.md)
+4. I then refined the content with another prompt: [ai/refine-search-skill-prompt.md](ai/refine-search-skill-prompt.md)
+5. I had an LLM create the `ext-source/skills/manifests/ai-search.yaml` file based on the
+   refined content.
+6. I generated the Skill content, and then tweaked the manifest and regenerated the Skill repeatedly to reduce token counts and refine the content as needed.
+
+This gives us the benefit of the Claude Skill Creator content as a reference for
+how to structure skills, and the LLM output as a starting point for the Skill
+content, but we still need a custom tool to extract and compose the content in
+a deterministic way that can be used and maintained in production.
 
 ## YAML Configuration File
 
