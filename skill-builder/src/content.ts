@@ -1,7 +1,161 @@
 import { readFile } from "fs/promises";
-import { resolve, extname, dirname } from "path";
+import { resolve, extname } from "path";
 import { mdxToMarkdown } from "mdx-to-md";
 import type { ContentSource, ProcessedContent } from "./types.js";
+
+/**
+ * Parse a markdown heading line and return its level (1-6) and text.
+ * Returns null if the line is not a heading.
+ */
+function parseMarkdownHeading(
+  line: string
+): { level: number; text: string } | null {
+  const match = line.match(/^(#{1,6})\s+(.+)$/);
+  if (!match) {
+    return null;
+  }
+  return {
+    level: match[1].length,
+    text: match[2].trim(),
+  };
+}
+
+/**
+ * Extract heading text from MDX <Heading> tags.
+ * The heading content may span multiple lines between <Heading> and </Heading>.
+ * Returns the collected text if found, null otherwise.
+ */
+function extractMdxHeadingText(
+  lines: string[],
+  startIndex: number
+): { text: string; endIndex: number } | null {
+  const line = lines[startIndex].trim();
+
+  // Check for opening <Heading> tag
+  if (line !== "<Heading>" && !/^<Heading\s[^>]*>$/.test(line)) {
+    return null;
+  }
+
+  // Collect content until </Heading>
+  const contentLines: string[] = [];
+  let i = startIndex + 1;
+
+  while (i < lines.length) {
+    const currentLine = lines[i].trim();
+    if (currentLine === "</Heading>") {
+      return {
+        text: contentLines.join(" ").trim(),
+        endIndex: i,
+      };
+    }
+    if (currentLine) {
+      contentLines.push(currentLine);
+    }
+    i++;
+  }
+
+  return null;
+}
+
+/**
+ * Remove sections from markdown content based on heading text.
+ *
+ * Handles both markdown headings (## Heading) and MDX <Heading> tags.
+ *
+ * For markdown headings: removes the heading and all content until the next
+ * heading of the same or higher level (fewer #s), or end of file.
+ *
+ * For MDX <Heading> tags: removes the enclosing <Section> block containing
+ * the heading, including all nested content.
+ *
+ * @param content - The markdown content to process
+ * @param headingsToExclude - Array of heading texts to exclude (exact match, case-sensitive)
+ * @returns The content with specified sections removed
+ */
+export function excludeSectionsByHeading(
+  content: string,
+  headingsToExclude: string[]
+): string {
+  if (!headingsToExclude || headingsToExclude.length === 0) {
+    return content;
+  }
+
+  const lines = content.split("\n");
+  const result: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmedLine = line.trim();
+
+    // Check for markdown heading
+    const mdHeading = parseMarkdownHeading(trimmedLine);
+    if (mdHeading && headingsToExclude.includes(mdHeading.text)) {
+      // Found a markdown heading to exclude - skip it and all content until
+      // next heading of same or higher level
+      const excludeLevel = mdHeading.level;
+      i++;
+
+      while (i < lines.length) {
+        const nextHeading = parseMarkdownHeading(lines[i].trim());
+        if (nextHeading && nextHeading.level <= excludeLevel) {
+          break;
+        }
+        i++;
+      }
+      continue;
+    }
+
+    // Check for MDX <Heading> tag
+    const mdxHeading = extractMdxHeadingText(lines, i);
+    if (mdxHeading && headingsToExclude.includes(mdxHeading.text)) {
+      // Found an MDX heading to exclude - we need to find and remove the
+      // enclosing <Section> block
+      // First, look backwards for the opening <Section> tag
+      let sectionStartIndex = -1;
+      for (let j = result.length - 1; j >= 0; j--) {
+        const prevLine = result[j].trim();
+        if (prevLine === "<Section>" || /^<Section\s[^>]*>$/.test(prevLine)) {
+          sectionStartIndex = j;
+          break;
+        }
+        // Stop if we hit another closing section (we're in a different section)
+        if (prevLine === "</Section>") {
+          break;
+        }
+      }
+
+      // Remove the <Section> tag and everything after it from result
+      if (sectionStartIndex !== -1) {
+        result.splice(sectionStartIndex);
+      }
+
+      // Skip forward until we find the matching </Section>
+      let sectionDepth = 1;
+      i = mdxHeading.endIndex + 1;
+
+      while (i < lines.length && sectionDepth > 0) {
+        const currentLine = lines[i].trim();
+        if (
+          currentLine === "<Section>" ||
+          /^<Section\s[^>]*>$/.test(currentLine)
+        ) {
+          sectionDepth++;
+        } else if (currentLine === "</Section>") {
+          sectionDepth--;
+        }
+        i++;
+      }
+      continue;
+    }
+
+    // Keep this line
+    result.push(line);
+    i++;
+  }
+
+  return result.join("\n");
+}
 
 /**
  * Determine if a file is an MDX file
@@ -139,6 +293,11 @@ export async function processContentSource(
   } else if (source.content) {
     sourceInfo = "inline content";
     content += source.content.trim();
+  }
+
+  // Apply section exclusions if specified
+  if (source.excludeSections && source.excludeSections.length > 0) {
+    content = excludeSectionsByHeading(content, source.excludeSections);
   }
 
   return {

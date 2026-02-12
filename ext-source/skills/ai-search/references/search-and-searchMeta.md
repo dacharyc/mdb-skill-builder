@@ -234,11 +234,6 @@ see:
 
 - Facet Example
 
-#### Troubleshooting
-
-If you are experiencing issues with your MongoDB Search $search
-queries, see Troubleshoot Queries.
-
 ## $searchMeta Stage
 
 ### `$searchMeta`
@@ -375,8 +370,3 @@ db.movies.aggregate([
 ```json
 [ { count: { total: Long("552") } } ]
 ```
-
-###### Troubleshooting
-
-If you are experiencing issues with your MongoDB Search $search
-queries, see Troubleshoot Queries.

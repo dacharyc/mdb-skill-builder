@@ -42,8 +42,12 @@ references:
     sources:
       - path: content-mdx/atlas/atlas-search/aggregation-stages/search.mdx
         header: $search Stage
+        excludeSections:
+          - Troubleshooting
       - path: content-mdx/atlas/atlas-search/aggregation-stages/searchMeta.mdx
         header: $searchMeta Stage
+        excludeSections:
+          - Troubleshooting
     maxTokens: 3000
 
   # compound operator - for combining multiple query clauses

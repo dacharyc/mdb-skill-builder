@@ -7,7 +7,11 @@
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import * as fs from "fs/promises";
-import { processContentSource, processContentSources } from "../src/content.js";
+import {
+  processContentSource,
+  processContentSources,
+  excludeSectionsByHeading,
+} from "../src/content.js";
 import type { ContentSource } from "../src/types.js";
 
 // Mock fs/promises
@@ -305,5 +309,418 @@ describe("content", () => {
       expect(result.tokens).toBe(0);
     });
   });
-});
 
+  describe("excludeSectionsByHeading", () => {
+    it("returns content unchanged when no headings to exclude", () => {
+      const content = "# Title\n\nSome content\n\n## Section\n\nMore content";
+
+      const result = excludeSectionsByHeading(content, []);
+
+      expect(result).toBe(content);
+    });
+
+    it("returns content unchanged when headingsToExclude is undefined-like", () => {
+      const content = "# Title\n\nContent";
+
+      // Test with empty array (the only valid falsy case after type checks)
+      expect(excludeSectionsByHeading(content, [])).toBe(content);
+    });
+
+    it("removes a section and its content until next same-level heading", () => {
+      const content = `# Document
+
+## Keep This
+Content to keep.
+
+## Remove This
+Content to remove.
+More content to remove.
+
+## Also Keep
+Content to also keep.`;
+
+      const result = excludeSectionsByHeading(content, ["Remove This"]);
+
+      expect(result).toContain("## Keep This");
+      expect(result).toContain("Content to keep.");
+      expect(result).not.toContain("## Remove This");
+      expect(result).not.toContain("Content to remove.");
+      expect(result).not.toContain("More content to remove.");
+      expect(result).toContain("## Also Keep");
+      expect(result).toContain("Content to also keep.");
+    });
+
+    it("removes section until higher-level heading", () => {
+      const content = `# Main Title
+
+## Section
+
+### Subsection to Remove
+Subsection content.
+More subsection content.
+
+## Next Section
+This should be kept.`;
+
+      const result = excludeSectionsByHeading(content, ["Subsection to Remove"]);
+
+      expect(result).toContain("# Main Title");
+      expect(result).toContain("## Section");
+      expect(result).not.toContain("### Subsection to Remove");
+      expect(result).not.toContain("Subsection content.");
+      expect(result).toContain("## Next Section");
+      expect(result).toContain("This should be kept.");
+    });
+
+    it("removes section to end of file if no subsequent heading", () => {
+      const content = `# Title
+
+## First Section
+First content.
+
+## Troubleshooting
+If you have issues, see elsewhere.`;
+
+      const result = excludeSectionsByHeading(content, ["Troubleshooting"]);
+
+      expect(result).toContain("# Title");
+      expect(result).toContain("## First Section");
+      expect(result).toContain("First content.");
+      expect(result).not.toContain("## Troubleshooting");
+      expect(result).not.toContain("If you have issues");
+    });
+
+    it("is case-sensitive", () => {
+      const content = `## Troubleshooting
+Content here.
+
+## troubleshooting
+Other content.`;
+
+      const result = excludeSectionsByHeading(content, ["Troubleshooting"]);
+
+      expect(result).not.toContain("## Troubleshooting");
+      expect(result).toContain("## troubleshooting");
+      expect(result).toContain("Other content.");
+    });
+
+    it("requires exact heading match", () => {
+      const content = `## Troubleshooting Guide
+Guide content.
+
+## Troubleshooting
+Exact match content.`;
+
+      const result = excludeSectionsByHeading(content, ["Troubleshooting"]);
+
+      expect(result).toContain("## Troubleshooting Guide");
+      expect(result).toContain("Guide content.");
+      expect(result).not.toContain("Exact match content.");
+    });
+
+    it("removes multiple sections", () => {
+      const content = `# Doc
+
+## Section A
+Content A.
+
+## Section B
+Content B.
+
+## Section C
+Content C.`;
+
+      const result = excludeSectionsByHeading(content, ["Section A", "Section C"]);
+
+      expect(result).not.toContain("## Section A");
+      expect(result).not.toContain("Content A.");
+      expect(result).toContain("## Section B");
+      expect(result).toContain("Content B.");
+      expect(result).not.toContain("## Section C");
+      expect(result).not.toContain("Content C.");
+    });
+
+    it("preserves nested subsections when parent is kept", () => {
+      const content = `## Parent
+Parent content.
+
+### Child
+Child content.
+
+## Next
+Next content.`;
+
+      const result = excludeSectionsByHeading(content, ["Next"]);
+
+      expect(result).toContain("## Parent");
+      expect(result).toContain("### Child");
+      expect(result).toContain("Child content.");
+      expect(result).not.toContain("## Next");
+    });
+
+    it("removes nested subsections when parent is excluded", () => {
+      const content = `## Parent
+Parent content.
+
+### Child
+Child content.
+
+## Next
+Next content.`;
+
+      const result = excludeSectionsByHeading(content, ["Parent"]);
+
+      expect(result).not.toContain("## Parent");
+      expect(result).not.toContain("### Child");
+      expect(result).not.toContain("Child content.");
+      expect(result).toContain("## Next");
+    });
+
+    it("handles heading at very start of content", () => {
+      const content = `## Remove Me
+Content to remove.
+
+## Keep Me
+Content to keep.`;
+
+      const result = excludeSectionsByHeading(content, ["Remove Me"]);
+
+      expect(result).not.toContain("## Remove Me");
+      expect(result).toContain("## Keep Me");
+    });
+
+    it("only matches heading lines, not content containing heading text", () => {
+      const content = `## Troubleshooting
+Real troubleshooting section.
+
+## Help
+For Troubleshooting guidance, see above.`;
+
+      const result = excludeSectionsByHeading(content, ["Troubleshooting"]);
+
+      expect(result).not.toContain("## Troubleshooting");
+      expect(result).not.toContain("Real troubleshooting section.");
+      expect(result).toContain("## Help");
+      // This line contains "Troubleshooting" but is not a heading, so it's kept
+      expect(result).toContain("For Troubleshooting guidance");
+    });
+
+    // MDX <Heading> tag tests
+    it("removes MDX <Section> containing matching <Heading>", () => {
+      const content = `Some content before
+
+<Section>
+  <Heading>
+    Troubleshooting
+  </Heading>
+
+  If you have issues, see docs.
+</Section>
+
+<Section>
+  <Heading>
+    Next Section
+  </Heading>
+
+  Keep this content.
+</Section>`;
+
+      const result = excludeSectionsByHeading(content, ["Troubleshooting"]);
+
+      expect(result).not.toContain("Troubleshooting");
+      expect(result).not.toContain("If you have issues");
+      expect(result).toContain("Next Section");
+      expect(result).toContain("Keep this content.");
+    });
+
+    it("handles MDX <Heading> with attributes", () => {
+      const content = `<Section>
+  <Heading level="2">
+    Remove Me
+  </Heading>
+  Content to remove.
+</Section>
+
+<Section>
+  <Heading>
+    Keep Me
+  </Heading>
+  Content to keep.
+</Section>`;
+
+      const result = excludeSectionsByHeading(content, ["Remove Me"]);
+
+      expect(result).not.toContain("Remove Me");
+      expect(result).not.toContain("Content to remove.");
+      expect(result).toContain("Keep Me");
+      expect(result).toContain("Content to keep.");
+    });
+
+    it("handles nested MDX sections correctly", () => {
+      const content = `<Section>
+  <Heading>
+    Parent
+  </Heading>
+
+  <Section>
+    <Heading>
+      Troubleshooting
+    </Heading>
+    Nested content to remove.
+  </Section>
+
+  More parent content.
+</Section>`;
+
+      const result = excludeSectionsByHeading(content, ["Troubleshooting"]);
+
+      expect(result).toContain("Parent");
+      expect(result).not.toContain("Troubleshooting");
+      expect(result).not.toContain("Nested content to remove.");
+      expect(result).toContain("More parent content.");
+    });
+
+    it("handles MDX heading text spanning multiple lines", () => {
+      const content = `<Section>
+  <Heading>
+    Long Heading
+    Text
+  </Heading>
+  Content here.
+</Section>`;
+
+      const result = excludeSectionsByHeading(content, ["Long Heading Text"]);
+
+      expect(result).not.toContain("Long Heading");
+      expect(result).not.toContain("Content here.");
+    });
+
+    it("is case-sensitive for MDX headings", () => {
+      const content = `<Section>
+  <Heading>
+    Troubleshooting
+  </Heading>
+  Remove this.
+</Section>
+
+<Section>
+  <Heading>
+    troubleshooting
+  </Heading>
+  Keep this.
+</Section>`;
+
+      const result = excludeSectionsByHeading(content, ["Troubleshooting"]);
+
+      expect(result).not.toContain("Remove this.");
+      expect(result).toContain("troubleshooting");
+      expect(result).toContain("Keep this.");
+    });
+
+    it("handles mixed markdown headings and MDX headings", () => {
+      const content = `## Markdown Section
+Markdown content.
+
+<Section>
+  <Heading>
+    MDX Section
+  </Heading>
+  MDX content.
+</Section>
+
+## Another Markdown
+More markdown.`;
+
+      const result = excludeSectionsByHeading(content, [
+        "Markdown Section",
+        "MDX Section",
+      ]);
+
+      expect(result).not.toContain("## Markdown Section");
+      expect(result).not.toContain("Markdown content.");
+      expect(result).not.toContain("MDX Section");
+      expect(result).not.toContain("MDX content.");
+      expect(result).toContain("## Another Markdown");
+      expect(result).toContain("More markdown.");
+    });
+
+    it("preserves content before MDX section to remove", () => {
+      const content = `# Title
+
+Introduction paragraph.
+
+<Section>
+  <Heading>
+    Remove This
+  </Heading>
+  Bad content.
+</Section>`;
+
+      const result = excludeSectionsByHeading(content, ["Remove This"]);
+
+      expect(result).toContain("# Title");
+      expect(result).toContain("Introduction paragraph.");
+      expect(result).not.toContain("Remove This");
+      expect(result).not.toContain("Bad content.");
+    });
+  });
+
+  describe("processContentSource with excludeSections", () => {
+    it("applies excludeSections to inline content", async () => {
+      const source: ContentSource = {
+        content: `# Title
+
+## Keep
+Keep this.
+
+## Remove
+Remove this.`,
+        excludeSections: ["Remove"],
+      };
+
+      const result = await processContentSource(source, "/repo");
+
+      expect(result.content).toContain("## Keep");
+      expect(result.content).toContain("Keep this.");
+      expect(result.content).not.toContain("## Remove");
+      expect(result.content).not.toContain("Remove this.");
+    });
+
+    it("applies excludeSections to file content", async () => {
+      vi.mocked(fs.readFile).mockResolvedValue(`## Section
+Content.
+
+## Troubleshooting
+See help docs.`);
+
+      const source: ContentSource = {
+        path: "content/doc.txt",
+        excludeSections: ["Troubleshooting"],
+      };
+
+      const result = await processContentSource(source, "/repo");
+
+      expect(result.content).toContain("## Section");
+      expect(result.content).not.toContain("## Troubleshooting");
+    });
+
+    it("preserves header added by source.header when using excludeSections", async () => {
+      const source: ContentSource = {
+        header: "My Header",
+        level: 2,
+        content: `## Keep
+Content.
+
+## Remove
+Bad content.`,
+        excludeSections: ["Remove"],
+      };
+
+      const result = await processContentSource(source, "/repo");
+
+      expect(result.content).toContain("## My Header");
+      expect(result.content).toContain("## Keep");
+      expect(result.content).not.toContain("## Remove");
+    });
+  });
+});

@@ -14,6 +14,13 @@ export interface ContentSource {
   header?: string;
   /** Header level (1-6, default: 2 for ##) */
   level?: number;
+  /**
+   * List of section headings to exclude from the processed content.
+   * Each heading must be an exact, case-sensitive match.
+   * When a heading is matched, the heading and all content until the next
+   * heading of the same or higher level (or end of file) will be removed.
+   */
+  excludeSections?: string[];
 }
 
 /**
