@@ -824,6 +824,52 @@ Some content.
     });
   });
 
+  describe("Important tag processing", () => {
+    it("removes Important tags and dedents content", () => {
+      const input = `Some content before.
+
+<Important>
+  This is important information.
+</Important>
+
+Content after the important block.`;
+
+      const result = postprocessMarkdown(input);
+
+      expect(result).not.toContain("<Important>");
+      expect(result).not.toContain("</Important>");
+      expect(result).toContain("This is important information.");
+      expect(result).toContain("Content after the important block.");
+    });
+
+    it("handles multi-line Important content", () => {
+      const input = `<Important>
+  First line of the important block.
+  Second line of the important block.
+</Important>`;
+
+      const result = postprocessMarkdown(input);
+
+      expect(result).not.toContain("<Important>");
+      expect(result).not.toContain("</Important>");
+      expect(result).toContain("First line of the important block.");
+      expect(result).toContain("Second line of the important block.");
+    });
+
+    it("preserves Important tags inside code blocks", () => {
+      const input = `\`\`\`jsx
+<Important>
+  This is inside a code block.
+</Important>
+\`\`\``;
+
+      const result = postprocessMarkdown(input);
+
+      expect(result).toContain("<Important>");
+      expect(result).toContain("</Important>");
+    });
+  });
+
   describe("Extract tag processing", () => {
     it("removes Extract tags and dedents content", () => {
       const input = `Some content before.

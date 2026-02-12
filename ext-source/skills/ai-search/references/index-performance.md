@@ -6,13 +6,11 @@
 
 ### Index Size and Configuration
 
-<Important>
-  If you create a MongoDB Search index for a collection that has or will soon
-  have more than 2.1 billion index objects, use the numPartitions
-  index option to partition your index
-  or Deploy a Sharded Cluster. Index partitions
-  are limited to 2.1 billion objects per partition.
-</Important>
+If you create a MongoDB Search index for a collection that has or will soon
+have more than 2.1 billion index objects, use the numPartitions
+index option to partition your index
+or Deploy a Sharded Cluster. Index partitions
+are limited to 2.1 billion objects per partition.
 
 When you create a MongoDB Search index a MongoDB Search index, field mapping
 defaults to dynamic mappings, which means that
@@ -259,7 +257,7 @@ Consider the following:
   might be large and your query might be complex.
 
 To learn more about these data models and index definitions, see the
-[MongoDB blog](https://www.mongodb.com/developer/products/atlas/atlas-search-multi-language-data-modeling.md).
+MongoDB blog.
 
 ###### Synonym Collections
 

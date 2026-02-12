@@ -815,7 +815,7 @@ function processReferenceTags(content: string): string {
  * Content inside these tags is typically indented 2 spaces and should be dedented.
  * Code blocks inside are also dedented.
  */
-const WRAPPER_TAGS = ['Note', 'Extract'];
+const WRAPPER_TAGS = ['Note', 'Extract', 'Important'];
 
 /**
  * Process wrapper tags: remove the tags and dedent all content (including code blocks).
