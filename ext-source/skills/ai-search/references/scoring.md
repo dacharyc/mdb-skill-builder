@@ -167,12 +167,3 @@ to exclude documents by their `_id`.
 
 When querying array values, MongoDB Search assigns higher scores if more values
 in the array match the query.
-
-###### Tutorials
-
-| For examples on how to use additional
-score options in your MongoDB Search queries, see
-the following pages: | Modify the ScoreReturn the Score DetailsExample Queries              |
-| -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| For examples on how to use the score field
-in some common MongoDB Search queries, see the following pages:       | Compound Query ExamplesEmbedded Document ExamplesString Sort Example |

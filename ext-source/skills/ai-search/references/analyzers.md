@@ -156,9 +156,3 @@ normalizers:
 single token for the whole string. |
 | none       | Doesn't perform any transformation, but still creates a single
 token.                          |
-
-###### Learn More
-
-To learn more about analyzers, see
-Analyzing Analyzers to Build The Right Search Index For Your App
-in the MongoDB Developer Center.

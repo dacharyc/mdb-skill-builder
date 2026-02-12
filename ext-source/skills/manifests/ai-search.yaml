@@ -102,6 +102,8 @@ references:
     sources:
       - path: content-mdx/atlas/atlas-search/scoring.mdx
         header: Scoring Overview
+        excludeSections:
+          - Tutorials
     maxTokens: 2500
 
   # Field Mappings Reference
@@ -139,6 +141,8 @@ references:
     sources:
       - path: content-mdx/atlas/atlas-search/analyzers.mdx
         header: Analyzer Types
+        excludeSections:
+          - Learn More
     maxTokens: 2000
 
   # Synonyms Reference - using focused mongosh examples instead of full page
