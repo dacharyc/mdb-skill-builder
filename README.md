@@ -59,9 +59,12 @@ with this approach in the following pipeline:
    creating a MongoDB Atlas Search skill: [ai/create-search-skill-prompt.md](ai/create-search-skill-prompt.md)
 3. The LLM output was [ai/search-skill-proposed-content.md](ai/search-skill-proposed-content.md)
 4. I then refined the content with another prompt: [ai/refine-search-skill-prompt.md](ai/refine-search-skill-prompt.md)
-5. I had an LLM create the `ext-source/skills/manifests/ai-search.yaml` file based on the
-   refined content.
-6. I generated the Skill content, and then tweaked the manifest and regenerated the Skill repeatedly to reduce token counts and refine the content as needed.
+5. I had an LLM create the [ext-source/skills/manifests/ai-search.yaml](ext-source/skills/manifests/ai-search.yaml)
+   file based on the refined content.
+6. I used the skill builder tool to generate the Skill content at
+   [ext-source/skills/ai-search](ext-source/skills/ai-search) from this manifest,
+   and then tweaked the manifest and regenerated the Skill repeatedly to reduce
+   token counts and refine the content as needed.
 
 This gives us the benefit of the Claude Skill Creator content as a reference for
 how to structure skills, and the LLM output as a starting point for the Skill
